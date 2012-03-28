@@ -362,19 +362,7 @@ if($letPass || $is_Mod){
 					$Avatarname = $userinfo->username;
 					if($fbConfig->avatar_src == "clexuspm"){
 						$msg_avatar = '<span class="fb_avatar"><img src="' . MyPMSTools::getAvatarLinkWithID($fmessage->userid) . '" /></span><br/>';
-					} elseif($fbConfig->avatar_src == "cb"){
-						$database->setQuery("SELECT avatar FROM #__comprofiler WHERE user_id='$fmessage->userid' AND avatarapproved='1'");
-						$avatar = $database->loadResult();
-						if($avatar != ''){
-							$imgpath = JB_JLIVEURL . '/images/comprofiler/';
-							if(preg_match("#gallery/#", $avatar) == false) $imgpath .= "tn" . $avatar; else
-								$imgpath .= $avatar;
-							$msg_avatar = '<span class="fb_avatar"><img src="' . $imgpath . '" alt="" /></span><br/>';
-						} else{
-							$imgpath = JB_JLIVEURL . "/components/com_comprofiler/plugin/language/default_language/images/tnnophoto.jpg";
-							$msg_avatar = '<span class="fb_avatar"><img src="' . $imgpath . '" alt="" /></span><br/>';
-						}
-					} else{
+					}else{
 						$avatar = $userinfo->avatar;
 						if($avatar != ''){
 							$msg_avatar = '<span class="fb_avatar"><img border="0" src="' . FB_LIVEUPLOADEDPATH . '/avatars/' . $avatar . '" alt="" /></span><br/>';
@@ -563,18 +551,7 @@ if($letPass || $is_Mod){
 					}
 					unset ($mostables);
 				}
-				if($fbConfig->fb_profile == "cb"){
-					if($fbConfig->cb_profile && $fmessage->userid > 0){
-						$msg_prflink = sefRelToAbs('index.php?option=com_comprofiler&amp;task=userProfile&amp;user=' . $fmessage->userid . '');
-						$msg_profile = "<a href=\"" . sefRelToAbs('index.php?option=com_comprofiler&amp;task=userProfile&amp;user=' . $fmessage->userid . '') . "\">                                              <img src=\"";
-						if($fbIcons->userprofile){
-							$msg_profile .= JB_URLICONSPATH . "" . $fbIcons->userprofile;
-						} else{
-							$msg_profile .= JB_JLIVEURL . "/components/com_comprofiler/images/profiles.gif";
-						}
-						$msg_profile .= "\" alt=\"" . _VIEW_PROFILE . "\" border=\"0\" title=\"" . _VIEW_PROFILE . "\" /></a>";
-					}
-				} else if($fbConfig->fb_profile == "clexuspm"){
+				if($fbConfig->fb_profile == "clexuspm"){
 					$msg_prflink = MyPMSTools::getProfileLink($fmessage->userid);
 					$msg_profile = "<a href=\"" . MyPMSTools::getProfileLink($fmessage->userid) . "\"><img src=\"";
 					if($fbIcons->userprofile){

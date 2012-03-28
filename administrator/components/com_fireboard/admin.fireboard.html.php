@@ -316,50 +316,50 @@ class HTML_SIMPLEBOARD{
 					<table width="99%" align="center" cellpadding="0" cellspacing="0" border="0">
 						<tr>
 							<td width="100%" align="center" style="border-left:1px solid #DDDDDD;border-right:1px solid #DDDDDD;border-top:1px solid #DDDDDD;">
-							<br/>
-							<img
-								src="<?php echo JPATH_SITE; ?>/administrator/components/com_fireboard/images/logowm.gif"
-								alt="<?php echo _AFB_DONATE;?>" title="<?php echo _AFB_DONATE;?>"/>
-							<br/>
-							<strong><?php echo _AFB_DONATE;?></strong>
-						</td>
-					</tr>
-					<tr>
-						<td width="100%" align="center" style="border-left:1px solid #DDDDDD;border-right:1px solid #DDDDDD;">
-							<input name="LMI_PAYMENT_AMOUNT" type="text" size="3" value="10">
-							<input type="hidden" name="LMI_PAYMENT_DESC" value="Благодарность Автору">
-							<input type="hidden" name="LMI_PAYMENT_NO" value="1">
-							<input type="hidden" name="LMI_SIM_MODE" value="0">
-							<input type="hidden" name="LMI_SUCCESS_URL" value="http://adeptsite.info/">
-							<input type="hidden" name="LMI_SUCCESS_METHOD" value="2">
-							<input type="hidden" name="LMI_FAIL_URL" value="http://adeptsite.info/">
-							<input type="hidden" name="LMI_FAIL_METHOD" value="2">
-							<select name="LMI_PAYEE_PURSE" style="min-width:30px;">
-								<option value="Z336955269328">WMZ</option>
-								<option value="E103233136042">WME</option>
-								<option value="R270500581273">WMR</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td width="100%" align="center"
-							style="border-left:1px solid #DDDDDD;border-right:1px solid #DDDDDD;border-bottom:1px solid #DDDDDD;">
-							<br>
-							<input type="submit" class="button" value="<?php echo _GEN_CONTINUE;?>"><br/><br/>
-						</td>
-					</tr>
-				</table>
-			</form>
-		</div>
-		<!-- Begin : Fireboard Left Menu -->
-		<div id="fbmenu" class="togg1">
-			<?php $stask = mosGetParam($_REQUEST, "task", null);    ?>
-			<a class="fbmainmenu" href="index2.php?option=com_fireboard"><?php echo _FB_CP; ?></a>
-			<a class="fbmainmenu"
-			   href="index2.php?option=com_fireboard&task=showconfig"><?php echo _COM_C_FBCONFIG; ?></a>
-			<?php if($stask == 'showconfig'){
-			; ?>
-			<!--<a class="fbsubmenu" href = "#basics"><?php echo _COM_A_BASICS; ?></a>
+								<br/>
+								<img
+									src="<?php echo JPATH_SITE; ?>/administrator/components/com_fireboard/images/logowm.gif"
+									alt="<?php echo _AFB_DONATE;?>" title="<?php echo _AFB_DONATE;?>"/>
+								<br/>
+								<strong><?php echo _AFB_DONATE;?></strong>
+							</td>
+						</tr>
+						<tr>
+							<td width="100%" align="center" style="border-left:1px solid #DDDDDD;border-right:1px solid #DDDDDD;">
+								<input name="LMI_PAYMENT_AMOUNT" type="text" size="3" value="10">
+								<input type="hidden" name="LMI_PAYMENT_DESC" value="Благодарность Автору">
+								<input type="hidden" name="LMI_PAYMENT_NO" value="1">
+								<input type="hidden" name="LMI_SIM_MODE" value="0">
+								<input type="hidden" name="LMI_SUCCESS_URL" value="http://adeptsite.info/">
+								<input type="hidden" name="LMI_SUCCESS_METHOD" value="2">
+								<input type="hidden" name="LMI_FAIL_URL" value="http://adeptsite.info/">
+								<input type="hidden" name="LMI_FAIL_METHOD" value="2">
+								<select name="LMI_PAYEE_PURSE" style="min-width:30px;">
+									<option value="Z336955269328">WMZ</option>
+									<option value="E103233136042">WME</option>
+									<option value="R270500581273">WMR</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td width="100%" align="center"
+								style="border-left:1px solid #DDDDDD;border-right:1px solid #DDDDDD;border-bottom:1px solid #DDDDDD;">
+								<br>
+								<input type="submit" class="button" value="<?php echo _GEN_CONTINUE;?>"><br/><br/>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+			<!-- Begin : Fireboard Left Menu -->
+			<div id="fbmenu" class="togg1">
+				<?php $stask = mosGetParam($_REQUEST, "task", null);    ?>
+				<a class="fbmainmenu" href="index2.php?option=com_fireboard"><?php echo _FB_CP; ?></a>
+				<a class="fbmainmenu"
+				   href="index2.php?option=com_fireboard&task=showconfig"><?php echo _COM_C_FBCONFIG; ?></a>
+				<?php if($stask == 'showconfig'){
+				; ?>
+				<!--<a class="fbsubmenu" href = "#basics"><?php echo _COM_A_BASICS; ?></a>
                 <a class="fbsubmenu" href = "#frontend"><?php echo _COM_A_FRONTEND; ?></a>
                 <a class="fbsubmenu" href = "#security"><?php echo _COM_A_SECURITY; ?></a>
                 <a class="fbsubmenu" href = "#avatars"><?php echo _COM_A_AVATARS; ?></a>
@@ -367,34 +367,34 @@ class HTML_SIMPLEBOARD{
                 <a class="fbsubmenu" href = "#ranking"><?php echo _COM_A_RANKING; ?></a>
                 <a class="fbsubmenu" href = "#integration"><?php echo _COM_A_INTEGRATION; ?></a>
                 <a class="fbsubmenu" href = "#plugins"><?php echo _FB_ADMIN_CONFIG_PLUGINS; ?></a>-->
-			<?php } ?>
-			<a class="fbmainmenu"
-			   href="index2.php?option=com_fireboard&task=showAdministration"><?php echo _COM_C_FORUM; ?></a>
-			<a class="fbmainmenu"
-			   href="index2.php?option=com_fireboard&task=showprofiles"><?php echo _COM_C_USER; ?></a>
-			<a class="fbmainmenu"
-			   href="index2.php?option=com_fireboard&task=browseFiles"><?php echo _COM_C_FILES; ?> </a>
-			<a class="fbmainmenu"
-			   href="index2.php?option=com_fireboard&task=browseImages"><?php echo _COM_C_IMAGES; ?></a>
-			<a class="fbmainmenu" href="index2.php?option=com_fireboard&task=showCss"><?php echo _COM_C_CSS; ?></a>
-			<a class="fbmainmenu"
-			   href="index2.php?option=com_fireboard&task=pruneforum"><?php echo _COM_C_PRUNETAB; ?></a>
-			<a class="fbmainmenu"
-			   href="index2.php?option=com_fireboard&task=syncusers"><?php echo _FB_SYNC_USERS; ?></a>
-			<a class="fbmainmenu"
-			   href="index2.php?option=com_fireboard&task=showsmilies"><?php echo _FB_EMOTICONS_EDIT_SMILIES;?></a>
-			<a class="fbmainmenu" href="index2.php?option=com_fireboard&task=ranks"><?php echo _FB_RANKS_MANAGE; ?></a>
-			<a class="fbmainmenu"
-			   href="index2.php?option=com_fireboard&task=groups"><?php echo _AFB_GROUPS_MANAGE; ?></a>
-			<a class="fbmainmenu"
-			   href="index2.php?option=com_fireboard&amp;task=recount"><?php echo _FB_RECOUNTFORUMS; ?></a>
-			<a class="fbmainmenu"
-			   href="index2.php?option=com_fireboard&amp;task=loadSample"><?php echo _COM_C_LOADSAMPLE; ?></a>
-			<a class="fbmainmenu" href="index2.php?option=com_fireboard&amp;task=removeSample"
-			   onclick="return confirm('<?php echo _FB_CONFIRM_REMOVESAMPLEDATA?>');"><?php echo _COM_C_REMOVESAMPLE; ?></a>
-		</div>
-		<!-- Finish : Fireboard Left Menu -->
-	</td>
+				<?php } ?>
+				<a class="fbmainmenu"
+				   href="index2.php?option=com_fireboard&task=showAdministration"><?php echo _COM_C_FORUM; ?></a>
+				<a class="fbmainmenu"
+				   href="index2.php?option=com_fireboard&task=showprofiles"><?php echo _COM_C_USER; ?></a>
+				<a class="fbmainmenu"
+				   href="index2.php?option=com_fireboard&task=browseFiles"><?php echo _COM_C_FILES; ?> </a>
+				<a class="fbmainmenu"
+				   href="index2.php?option=com_fireboard&task=browseImages"><?php echo _COM_C_IMAGES; ?></a>
+				<a class="fbmainmenu" href="index2.php?option=com_fireboard&task=showCss"><?php echo _COM_C_CSS; ?></a>
+				<a class="fbmainmenu"
+				   href="index2.php?option=com_fireboard&task=pruneforum"><?php echo _COM_C_PRUNETAB; ?></a>
+				<a class="fbmainmenu"
+				   href="index2.php?option=com_fireboard&task=syncusers"><?php echo _FB_SYNC_USERS; ?></a>
+				<a class="fbmainmenu"
+				   href="index2.php?option=com_fireboard&task=showsmilies"><?php echo _FB_EMOTICONS_EDIT_SMILIES;?></a>
+				<a class="fbmainmenu" href="index2.php?option=com_fireboard&task=ranks"><?php echo _FB_RANKS_MANAGE; ?></a>
+				<a class="fbmainmenu"
+				   href="index2.php?option=com_fireboard&task=groups"><?php echo _AFB_GROUPS_MANAGE; ?></a>
+				<a class="fbmainmenu"
+				   href="index2.php?option=com_fireboard&amp;task=recount"><?php echo _FB_RECOUNTFORUMS; ?></a>
+				<a class="fbmainmenu"
+				   href="index2.php?option=com_fireboard&amp;task=loadSample"><?php echo _COM_C_LOADSAMPLE; ?></a>
+				<a class="fbmainmenu" href="index2.php?option=com_fireboard&amp;task=removeSample"
+				   onclick="return confirm('<?php echo _FB_CONFIRM_REMOVESAMPLEDATA?>');"><?php echo _COM_C_REMOVESAMPLE; ?></a>
+			</div>
+			<!-- Finish : Fireboard Left Menu -->
+		</td>
     <td valign="top" class="fbright">
     <!-- Begin: AdminRight -->
 		<?php
@@ -908,8 +908,7 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top"><?php echo $lists['enableRSS']; ?>
 					</td>
 					<td align="left" valign="top">
-						<img
-							src="<?php echo JPATH_SITE;?>/images/M_images/rss.png"/> <?php echo _COM_A_RSS_DESC ?>
+						<img src="<?php echo JPATH_SITE;?>/images/M_images/rss.png"/> <?php echo _COM_A_RSS_DESC ?>
 					</td>
 				</tr>
 				<tr align="center" valign="middle">
@@ -918,8 +917,7 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top"><?php echo $lists['enablePDF']; ?>
 					</td>
 					<td align="left" valign="top">
-						<img
-							src="<?php echo JPATH_SITE;?>/images/M_images/pdf_button.png"/> <?php echo _COM_A_PDF_DESC ?>
+						<img src="<?php echo JPATH_SITE;?>/images/M_images/pdf_button.png"/> <?php echo _COM_A_PDF_DESC ?>
 					</td>
 				</tr>
 				<tr align="center" valign="middle">
@@ -1804,29 +1802,6 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top" width="25%"><?php echo $lists['pm_component']; ?>
 					</td>
 					<td align="left" valign="top"><?php echo _COM_A_PMS_DESC ?>
-					</td>
-				</tr>
-			</table>
-		</fieldset>
-		<fieldset>
-			<legend> <?php echo _COM_A_COMBUILDER_TITLE ?></legend>
-			<table cellpadding="4" cellspacing="0" border="0" width="100%" class="fbadminform">
-				<tr align="center" valign="middle">
-					<td align="left" valign="top" width="25%"><?php echo _COM_A_COMBUILDER ?>
-					</td>
-					<td align="left" valign="top" width="25%"><?php echo $lists['cb_profile']; ?>
-					</td>
-					<td align="left" valign="top"><?php echo _COM_A_COMBUILDER_DESC ?>
-					</td>
-				</tr>
-				<tr align="center" valign="middle">
-					<td align="left" valign="top"><?php echo _COM_A_COMBUILDER_PROFILE ?>
-					</td>
-					<td align="left" valign="top">
-						<a href="index2.php?option=com_fireboard&amp;task=loadCBprofile" style="text-decoration:none;"
-						   title="<?php echo _COM_A_COMBUILDER_PROFILE_DESC;?>"><?php echo _COM_A_COMBUILDER_PROFILE_CLICK ?></a>
-					</td>
-					<td align="left" valign="top"><?php echo _COM_A_COMBUILDER_PROFILE_DESC ?>
 					</td>
 				</tr>
 			</table>

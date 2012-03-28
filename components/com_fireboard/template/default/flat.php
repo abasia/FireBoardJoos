@@ -99,13 +99,7 @@ if(count($messages[0]) > 0){
 			$database->setQuery("SELECT * FROM #__fb_users as su" . "\nLEFT JOIN #__users as u on u.id=su.userid WHERE su.userid={$leaf->userid}");
 			$database->loadObject($CatUser);
 			$javatar = $CatUser->avatar;
-			if($fbConfig->avatar_src == "cb"){
-				$database->setQuery("SELECT avatar FROM #__comprofiler WHERE user_id={$leaf->userid}");
-				$javatar = $database->loadResult();
-			}
-			if($fbConfig->avatar_src == "cb" and $javatar != false){
-				$bof_avatar = '<img class="catavatar" src="images/comprofiler/' . $javatar . '" alt=" " />';
-			} elseif($javatar != false){
+			if($javatar != false){
 				if($my->id){
 					$uslink = sefReltoAbs('index.php?option=com_fireboard&amp;Itemid=' . $Itemid . '&amp;func=fbprofile&amp;task=showprf&amp;userid=' . $leaf->userid);
 					$bof_avatar = '<a href="' . $uslink . '" title="">';

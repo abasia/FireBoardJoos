@@ -50,17 +50,10 @@ $yesterdaystitle = $database->loadResult();
 $PopUserCount = $fbConfig->PopUserCount;
 $database->setQuery("SELECT p.userid, p.posts, u.username FROM #__fb_users AS p" . "\n LEFT JOIN #__users AS u ON u.id = p.userid" . "\n WHERE p.posts > 0 ORDER BY p.posts DESC LIMIT $PopUserCount");
 $topposters = $database->loadObjectList();
-if($fbConfig->fb_profile == "cb"){
-	$database->setQuery("SELECT u.username AS user, p.hits, p.user_id FROM #__users AS u" . "\n LEFT JOIN #__comprofiler AS p ON p.user_id = u.id" . "\n WHERE p.hits > 0 ORDER BY p.hits DESC LIMIT $PopUserCount");
-	$topprofiles = $database->loadObjectList();
-	$database->setQuery("SELECT p.hits FROM #__comprofiler AS p" . "\n LEFT JOIN #__users AS u ON u.id = p.user_id" . "\n WHERE p.hits > 0 ORDER BY p.hits DESC LIMIT 1");
-	$topprofil = $database->loadResult();
-} else{
-	$database->setQuery("SELECT u.uhits AS hits, u.userid AS user_id, j.username AS user  FROM #__fb_users AS u" . "\n LEFT JOIN #__users AS j ON j.id = u.userid" . "\n WHERE u.uhits > 0 ORDER BY u.uhits DESC LIMIT $PopUserCount");
-	$topprofiles = $database->loadObjectList();
-	$database->setQuery("SELECT uhits FROM #__fb_users" . "\n WHERE uhits > 0 ORDER BY uhits DESC LIMIT 1");
-	$topprofil = $database->loadResult();
-}
+$database->setQuery("SELECT u.uhits AS hits, u.userid AS user_id, j.username AS user  FROM #__fb_users AS u" . "\n LEFT JOIN #__users AS j ON j.id = u.userid" . "\n WHERE u.uhits > 0 ORDER BY u.uhits DESC LIMIT $PopUserCount");
+$topprofiles = $database->loadObjectList();
+$database->setQuery("SELECT uhits FROM #__fb_users" . "\n WHERE uhits > 0 ORDER BY uhits DESC LIMIT 1");
+$topprofil = $database->loadResult();
 $database->setQuery("SELECT posts FROM #__fb_users WHERE posts > 0 ORDER BY posts DESC LIMIT 0,1");
 $topmessage = $database->loadResult();
 $PopSubjectCount = $fbConfig->PopSubjectCount;

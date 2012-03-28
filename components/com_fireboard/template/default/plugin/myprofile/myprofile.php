@@ -26,10 +26,7 @@ if($my->id != "" && $my->id != 0){
 		if($fbConfig->avatar_src == "clexuspm"){
 			$database->setQuery("SELECT picture FROM #__mypms_profiles WHERE userid='$my->id'");
 			$avatar = $database->loadResult();
-		} elseif($fbConfig->avatar_src == "cb"){
-			$database->setQuery("SELECT avatar FROM #__comprofiler WHERE user_id='$my->id'");
-			$avatar = $database->loadResult();
-		} else{
+		}else{
 			$avatar = $fbavatar;
 		}
 		$ugid = $userinfo->gid;

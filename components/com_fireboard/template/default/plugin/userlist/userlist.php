@@ -305,22 +305,7 @@ class HTML_userlist_content{
 			$uslavatar = '';
 			if($fbConfig->avatar_src == "clexuspm"){
 				$uslavatar = '<img  border="0" class="usl_avatar" src="' . MyPMSTools::getAvatarLinkWithID($ulrow->id, "s") . '" alt="" />';
-			} else if($fbConfig->avatar_src == "cb"){
-				$database->setQuery("SELECT avatar FROM #__comprofiler WHERE user_id='$ulrow->id' AND avatarapproved='1'");
-				$avatar = $database->loadResult();
-				$imgpath = JB_JLIVEURL . '/images/comprofiler/';
-				if($avatar != ''){
-					if(preg_match("#gallery/#", $avatar) == false){
-						$imgpath .= "tn" . $avatar;
-					} else{
-						$imgpath .= $avatar;
-					}
-					$uslavatar = '<img  border="0" class="usl_avatar" src="' . $imgpath . '" alt="" />';
-				} else{
-					$imgpath = JB_JLIVEURL . "/components/com_comprofiler/plugin/language/default_language/images/tnnophoto.jpg";
-					$uslavatar = '<img  border="0" class="usl_avatar" src="' . $imgpath . '" alt="" />';
-				}
-			} else{
+			}else{
 				$database->setQuery("SELECT avatar FROM #__fb_users WHERE userid='$ulrow->id'");
 				$avatar = $database->loadResult();
 				if($avatar != ''){

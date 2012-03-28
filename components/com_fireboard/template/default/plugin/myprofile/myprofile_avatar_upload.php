@@ -72,18 +72,6 @@ if($do == 'init'){
 											<img src="<?php echo MyPMSTools::getAvatarLinkWithID($my->id)?>" alt=""/>
 											<!--<br/><a href = "<?php echo sefRelToAbs('index.php?option=com_mypms&amp;task=upload&amp;Itemid=' . _CLEXUSPM_ITEMID);?>"><?php echo _SET_NEW_AVATAR; ?></a>-->
 											<?php
-										} elseif($fbConfig->avatar_src == "cb"){
-											if($avatar != ""){
-												?>
-												<img src="components/com_comprofiler/images/<?php echo $avatar;?>" alt=""/>
-												<!--<br/> <a href = "<?php echo sefRelToAbs('index.php?option=com_comprofiler&amp;Itemid=117&amp;task=userAvatar');?>"><?php echo _SET_NEW_AVATAR; ?></a>-->
-												<?php
-											} else{
-												echo _NON_SELECTED;
-												?>
-												<!--<a href = "<?php echo sefRelToAbs('index.php?option=com_comprofiler&amp;Itemid=117&amp;task=userAvatar');?>"><?php echo _SET_NEW_AVATAR; ?></a>-->
-												<?php
-											}
 										} else{
 											if($avatar != ""){
 												?>

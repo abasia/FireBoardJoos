@@ -34,10 +34,7 @@ if($my->id){
 			if($fbConfig->avatar_src == "pmspro"){
 				$database->setQuery("SELECT picture FROM #__mypms_profiles WHERE name='$username'");
 				$avatar = $database->loadResult();
-			} elseif($fbConfig->avatar_src == "cb"){
-				$database->setQuery("SELECT avatar FROM #__comprofiler WHERE user_id='$my->id'");
-				$avatar = $database->loadResult();
-			} else{
+			}else{
 				$avatar = $fbavatar;
 			}
 		}
@@ -208,21 +205,7 @@ if($my->id){
 												<br/> <a
 													href="<?php echo sefRelToAbs('index.php?option=com_mypms&amp;task=upload&amp;Itemid=' . _CLEXUSPM_ITEMID);?>"><?php echo _SET_NEW_AVATAR; ?></a>
 												<?php
-											} elseif($fbConfig->avatar_src == "cb"){
-												if($avatar != ""){
-													?>
-													<img src="components/com_comprofiler/images/<?php echo $avatar;?>"
-														 alt=""/>
-													<br/> <a
-														href="<?php echo sefRelToAbs('index.php?option=com_comprofiler&amp;Itemid=117&amp;task=userAvatar');?>"><?php echo _SET_NEW_AVATAR; ?></a>
-													<?php
-												} else{
-													echo _NON_SELECTED;
-													?>
-													<a href="<?php echo sefRelToAbs('index.php?option=com_comprofiler&amp;Itemid=117&amp;task=userAvatar');?>"><?php echo _SET_NEW_AVATAR; ?></a>
-													<?php
-												}
-											} else{
+											}else{
 												if($avatar != ""){
 													?>
 													<img src="components/com_fireboard/avatars/<?php echo $avatar;?>"

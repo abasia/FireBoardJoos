@@ -305,7 +305,6 @@ class FBJConfig{
 		$avlist = array();
 		$avlist[] = mosHTML::makeOption('fb', _FB_FIREBOARD);
 		$avlist[] = mosHTML::makeOption('clexuspm', _FB_CLEXUS);
-		$avlist[] = mosHTML::makeOption('cb', _FB_CB);
 		// build the html select list
 		$lists['avatar_src'] = mosHTML::selectList($avlist, 'cfg_avatar_src', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->avatar_src);
 		// private messaging system to use
@@ -322,7 +321,6 @@ class FBJConfig{
 		$prflist = array();
 		$prflist[] = mosHTML::makeOption('fb', _FB_FIREBOARD);
 		$prflist[] = mosHTML::makeOption('clexuspm', _FB_CLEXUS);
-		$prflist[] = mosHTML::makeOption('cb', _FB_CB);
 		$lists['fb_profile'] = mosHTML::selectList($prflist, 'cfg_fb_profile', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->fb_profile);
 		$yesno = array();
 		$yesno[] = mosHTML::makeOption('0', _COM_A_NO);

@@ -26,13 +26,7 @@ if(!defined("FB_FB_ITEMID")){
 	}
 	define("FB_FB_ITEMID", (int)$Itemid);
 	define("FB_FB_ITEMID_SUFFIX", "&amp;Itemid=" . FB_FB_ITEMID);
-	//Community Builder
-	if($fbConfig->cb_profile || $fbConfig->fb_profile == "cb"){
-		$database->setQuery("SELECT id FROM #__menu WHERE link = 'index.php?option=com_comprofiler' AND published=1");
-		$CB_Itemid = $database->loadResult();
-		define("FB_CB_ITEMID", (int)$CB_Itemid);
-		define("FB_CB_ITEMID_SUFFIX", "&amp;Itemid=" . FB_CB_ITEMID);
-	}
+
 	//Clexus PM
 	if($fbConfig->pm_component == 'clexuspm' || $fbConfig->fb_profile == "clexuspm"){
 		$database->setQuery("SELECT id FROM #__menu WHERE link = 'index.php?option=com_mypms' AND published=1");
@@ -55,10 +49,7 @@ if(!defined("FB_FB_ITEMID")){
 		define("FB_MISSUS_ITEMID_SUFFIX", "&amp;Itemid=" . FB_MISSUS_ITEMID);
 	}
 	// PROFILE LINK
-	if($fbConfig->fb_profile == "cb"){
-		$profilelink = 'index.php?option=com_comprofiler&amp;task=userProfile&amp;user=';
-		define("FB_PROFILE_LINK_SUFFIX", "index.php?option=com_comprofiler&amp;task=userProfile&amp;Itemid=" . FB_CB_ITEMID . "&amp;user=");
-	} else if($fbConfig->fb_profile == "clexuspm"){
+	if($fbConfig->fb_profile == "clexuspm"){
 		$profilelink = 'index.php?option=com_mypms&amp;task=showprofile&amp;user=';
 		define("FB_PROFILE_LINK_SUFFIX", "index.php?option=com_mypms&amp;task=showprofile&amp;Itemid=" . FB_CPM_ITEMID . "&amp;user=");
 	} else{

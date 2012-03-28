@@ -55,19 +55,7 @@ function showprf($userid){
 		$Avatarname = $userinfo->username;
 		if($fbConfig->avatar_src == "clexuspm"){
 			$msg_avatar = '<span class="fb_avatar"><img src="' . MyPMSTools::getAvatarLinkWithID($userid, "b") . '" alt="" /></span>';
-		} elseif($fbConfig->avatar_src == "cb"){
-			$database->setQuery("SELECT avatar FROM #__comprofiler WHERE user_id=$userid AND avatarapproved=1");
-			$avatar = $database->loadResult();
-			if($avatar != ''){
-				$imgpath = JB_JLIVEURL . '/images/comprofiler/';
-				if(preg_match("#gallery/#", $avatar) == false) $imgpath .= "tn" . $avatar; else
-					$imgpath .= $avatar;
-				$msg_avatar = '<span class="fb_avatar"><img src="' . $imgpath . '"  alt="" /></span>';
-			} else{
-				$imgpath = JB_JLIVEURL . "/components/com_comprofiler/plugin/language/default_language/images/nophoto.jpg";
-				$msg_avatar = '<span class="fb_avatar"><img src="' . $imgpath . '"  alt="" /></span>';
-			}
-		} else{
+		}else{
 			$avatar = $userinfo->avatar;
 			if($avatar != ''){
 				if(!file_exists(FB_ABSUPLOADEDPATH . '/avatars/l_' . $avatar)){
