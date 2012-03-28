@@ -23,7 +23,7 @@ if($my->id != "" && $my->id != 0){
 		$juserinfo->load($my->id);
 		$userinfo = new fbUserprofile($database);
 		$userinfo->load($my->id);
-		if($fbConfig->avatar_src == "clexuspm"){
+		if($fbConfig->avatar_src == "joostina"){
 			$database->setQuery("SELECT picture FROM #__mypms_profiles WHERE userid='$my->id'");
 			$avatar = $database->loadResult();
 		}else{

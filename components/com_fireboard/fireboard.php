@@ -72,10 +72,7 @@ if(file_exists(JB_ABSADMPATH . '/language/' . JB_LANG . '.php')){
 } else{
 	include_once (JB_ABSADMPATH . '/language/english.php');
 }
-if($fbConfig->pm_component == "clexuspm"){
-	require_once ($mosConfig_absolute_path . '/components/com_mypms/class.mypms.php');
-	$ClexusPMconfig = new ClexusPMConfig();
-}
+
 include_once (JB_ABSSOURCESPATH . 'fb_timeformat.class.php');
 define ('JB_SECONDS_IN_HOUR', 3600);
 define ('JB_SECONDS_IN_YEAR', 31536000);
@@ -133,7 +130,6 @@ if($func == "getpreview"){
 		include (JB_ABSPATH . '/template/default/smile.class.php');
 	}
 	$message = jsEscape_decode($msgpreview, $ch_sfb);
-	$msgbody = smile::smileReplace($message, 0, _CLEXUSPM_LIVEPATH, $ClexusPMconfig->show_smiles);
 	$msgbody = smile::htmlwrap($msgbody, $fbConfig->wrap);
 	header("Content-Type: text/html; " . _ISO);
 	echo $msgbody;

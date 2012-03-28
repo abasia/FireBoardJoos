@@ -28,7 +28,8 @@ $fbavatar = $_user->avatar;
 $jr_username = $_user->username;
 $avatar = $fbavatar;
 $jr_avatar = '';
-if($fbConfig->avatar_src == "clexuspm"){
+
+if($fbConfig->avatar_src == "joostina"){
 	$jr_avatar = '<img src="' . MyPMSTools::getAvatarLinkWithID($my->id) . '" alt=" " />';
 	$jr_profilelink = '<a href="' . sefRelToAbs(JB_LIVEURLREL . '&amp;func=myprofile&amp;do=show') . '" >' . _PROFILEBOX_MYPROFILE . '</a>';
 }else{

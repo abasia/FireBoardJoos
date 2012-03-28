@@ -27,13 +27,6 @@ if(!defined("FB_FB_ITEMID")){
 	define("FB_FB_ITEMID", (int)$Itemid);
 	define("FB_FB_ITEMID_SUFFIX", "&amp;Itemid=" . FB_FB_ITEMID);
 
-	//Clexus PM
-	if($fbConfig->pm_component == 'clexuspm' || $fbConfig->fb_profile == "clexuspm"){
-		$database->setQuery("SELECT id FROM #__menu WHERE link = 'index.php?option=com_mypms' AND published=1");
-		$CPM_Itemid = $database->loadResult();
-		define("FB_CPM_ITEMID", (int)$CPM_Itemid);
-		define("FB_CPM_ITEMID_SUFFIX", "&amp;Itemid=" . FB_CPM_ITEMID);
-	}
 	// UddeIM
 	if($fbConfig->pm_component == 'uddeim'){
 		$database->setQuery('SELECT id FROM #__menu WHERE link=`index.php?option=com_uddeim`');
@@ -48,8 +41,8 @@ if(!defined("FB_FB_ITEMID")){
 		define("FB_MISSUS_ITEMID", (int)$MISSUS_itemid);
 		define("FB_MISSUS_ITEMID_SUFFIX", "&amp;Itemid=" . FB_MISSUS_ITEMID);
 	}
-	// PROFILE LINK
-	if($fbConfig->fb_profile == "clexuspm"){
+	// Ссылка на профиль
+	if($fbConfig->fb_profile == "joostina"){
 		$profilelink = 'index.php?option=com_mypms&amp;task=showprofile&amp;user=';
 		define("FB_PROFILE_LINK_SUFFIX", "index.php?option=com_mypms&amp;task=showprofile&amp;Itemid=" . FB_CPM_ITEMID . "&amp;user=");
 	} else{
@@ -80,7 +73,7 @@ if(!defined("JB_JCSSURL")){
 	define('JB_JCSSURL', JB_JLIVEURL . '/templates/' . $current_stylesheet . '/css/template_css.css');
 }
 // fireboard uploaded files directory
-define('FB_ABSUPLOADEDPATH', JB_JABSPATH . '/images/fbfiles');
+define('FB_ABSUPLOADEDPATH', JB_JABSPATH . DS . 'images'.DS.'fbfiles');
 define('FB_LIVEUPLOADEDPATH', JB_JLIVEURL . '/images/fbfiles');
 // now continue with other paths
 $fb_user_template = strval(mosGetParam($_COOKIE, 'fb_user_template', ''));
@@ -144,7 +137,7 @@ function FB_fmodReplace($x, $y){
 	return $x - $i * $y;
 }
 
-function FB_check_image_type(&$type){
+function FB_check_image_type($type){
 	switch($type){
 		case 'jpeg':
 		case 'pjpeg':
@@ -232,7 +225,7 @@ class FBTools{
 	function reCountBoards(){
 		$database = FBJConfig::database();
 		include_once (JB_ABSSOURCESPATH . 'fb_db_iterator.class.php');
-		$database->setQuery("UPDATE `#__fb_categories` SET `id_last_msg`='0',`time_last_msg`='0',`numTopics`='0',`numPosts`='0'");
+		$database->setQuery("UPDATE #__fb_categories SET id_last_msg='0', time_last_msg='0', numTopics='0', numPosts ='0'");
 		$database->query();
 		$database->setQuery("select id, time, parent, catid from #__fb_messages order by id asc");
 		$messages_iter = new fb_DB_Iterator($database);

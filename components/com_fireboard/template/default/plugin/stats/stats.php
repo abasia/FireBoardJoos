@@ -19,7 +19,7 @@ defined('_VALID_MOS') or die('Direct Access to this location is not allowed.');
 $Itemid = FBJConfig::getItemid();
 $fbConfig = FBJConfig::getInstance();
 $forumurl = sefReltoAbs(JB_LIVEURLREL);
-if($fbConfig->fb_profile == "clexuspm"){
+if($fbConfig->fb_profile == "joostina"){
 	$profilelink = sefReltoAbs('index.php?option=com_mypms&amp;task=showprofile&amp;user=');
 } else{
 	$userlist = sefReltoAbs('index.php?option=com_fireboard&amp;Itemid=' . $Itemid . '&amp;func=userlist');

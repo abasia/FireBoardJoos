@@ -303,7 +303,7 @@ class HTML_userlist_content{
 			$nr = $i + $limitstart;
 			$profilelink = sefRelToAbs(FB_PROFILE_LINK_SUFFIX . "" . $ulrow->id);
 			$uslavatar = '';
-			if($fbConfig->avatar_src == "clexuspm"){
+			if($fbConfig->avatar_src == "joostina"){
 				$uslavatar = '<img  border="0" class="usl_avatar" src="' . MyPMSTools::getAvatarLinkWithID($ulrow->id, "s") . '" alt="" />';
 			}else{
 				$database->setQuery("SELECT avatar FROM #__fb_users WHERE userid='$ulrow->id'");

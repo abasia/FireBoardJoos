@@ -535,7 +535,7 @@ DEFINE('_COM_A_RANKING_SETTINGS','Установки рангов');
 DEFINE('_COM_A_RANKS_SETTINGS','Настройка рангов');
 DEFINE('_COM_A_AVATAR_INTEGRATION','Установка интеграции аватаров');
 DEFINE('_FB_FIREBOARD','FireBoardRE');
-DEFINE('_FB_CLEXUS','Clexus');
+DEFINE('_FB_JOOSTINA','Joostina');
 DEFINE('_FB_FORUMPRF_TITLE','Установка интеграции титулов');
 DEFINE('_FB_FORUMPRF','Использовать титулы из');
 DEFINE('_FB_FORUMPRRDESC','Если у Вас установлены нужные компоненты, FireBoardRE можно настроить таким образом, чтобы в профиле компонента, в качестве  титула, использовался выбранный форумом');
@@ -1103,8 +1103,6 @@ DEFINE('_USRL_VIEWBLOG','Посмотреть блог');
 DEFINE('_USRL_NOBLOG','Блоги отсутствуют');
 
 DEFINE('_USRL_MYHOMEPAGE','MyHompage');
-
-DEFINE ('_USRL_MYPMSPRO','Clexus PM');
 
 DEFINE ('_USRL_MYPMSPRO_ADD_BUDDY','Добавить в Блок-лист');
 

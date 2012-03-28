@@ -80,7 +80,6 @@ class FBJConfig{
 	public $allowAvatar;
 	public $allowAvatarUpload;
 	public $allowAvatarGallery;
-	public $imageProcessor;
 	public $avatarSmallHeight;
 	public $avatarSmallWidth;
 	public $avatarHeight;
@@ -225,7 +224,6 @@ class FBJConfig{
 		$config->allowAvatar = (isset($t['allowAvatar'])) ? $t['allowAvatar'] : '1';
 		$config->allowAvatarUpload = (isset($t['allowAvatarUpload'])) ? $t['allowAvatarUpload'] : '1';
 		$config->allowAvatarGallery = (isset($t['allowAvatarGallery'])) ? $t['allowAvatarGallery'] : '1';
-		$config->imageProcessor = (isset($t['imageProcessor'])) ? $t['imageProcessor'] : 'gd2';
 		$config->avatarSmallHeight = (isset($t['avatarSmallHeight'])) ? $t['avatarSmallHeight'] : '50';
 		$config->avatarSmallWidth = (isset($t['avatarSmallWidth'])) ? $t['avatarSmallWidth'] : '50';
 		$config->avatarHeight = (isset($t['avatarHeight'])) ? $t['avatarHeight'] : '100';
@@ -304,14 +302,13 @@ class FBJConfig{
 		// source of avatar picture
 		$avlist = array();
 		$avlist[] = mosHTML::makeOption('fb', _FB_FIREBOARD);
-		$avlist[] = mosHTML::makeOption('clexuspm', _FB_CLEXUS);
+		$avlist[] = mosHTML::makeOption('joostina', _FB_JOOSTINA);
 		// build the html select list
 		$lists['avatar_src'] = mosHTML::selectList($avlist, 'cfg_avatar_src', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->avatar_src);
 		// private messaging system to use
 		$pmlist = array();
 		$pmlist[] = mosHTML::makeOption('no', _COM_A_NO);
 		$pmlist[] = mosHTML::makeOption('pms', _FB_MYPMS);
-		$pmlist[] = mosHTML::makeOption('clexuspm', _FB_CLEXUS);
 		$pmlist[] = mosHTML::makeOption('uddeim', _FB_UDDEIM);
 		$pmlist[] = mosHTML::makeOption('jim', _FB_JIM);
 		$pmlist[] = mosHTML::makeOption('missus', _FB_MISSUS);
@@ -320,7 +317,6 @@ class FBJConfig{
 		// Profile select
 		$prflist = array();
 		$prflist[] = mosHTML::makeOption('fb', _FB_FIREBOARD);
-		$prflist[] = mosHTML::makeOption('clexuspm', _FB_CLEXUS);
 		$lists['fb_profile'] = mosHTML::selectList($prflist, 'cfg_fb_profile', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->fb_profile);
 		$yesno = array();
 		$yesno[] = mosHTML::makeOption('0', _COM_A_NO);
@@ -378,10 +374,6 @@ class FBJConfig{
 		$lists['allowAvatarUpload'] = mosHTML::selectList($yesno, 'cfg_allowAvatarUpload', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->allowAvatarUpload);
 		$lists['allowAvatarGallery'] = mosHTML::selectList($yesno, 'cfg_allowAvatarGallery', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->allowAvatarGallery);
 		$lists['avatar_src'] = mosHTML::selectList($avlist, 'cfg_avatar_src', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->avatar_src);
-		$ip_opt[] = mosHTML::makeOption('gd2', 'GD2');
-		$ip_opt[] = mosHTML::makeOption('gd1', 'GD1');
-		$ip_opt[] = mosHTML::makeOption('none', _FB_IMAGE_PROCESSOR_NONE);
-		$lists['imageProcessor'] = mosHTML::selectList($ip_opt, 'cfg_imageProcessor', 'class="inputbox"', 'value', 'text', $fbConfig->imageProcessor);
 		$lists['showstats'] = mosHTML::selectList($yesno, 'cfg_showstats', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->showstats);
 		$lists['showranking'] = mosHTML::selectList($yesno, 'cfg_showranking', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->showranking);
 		$lists['rankimages'] = mosHTML::selectList($yesno, 'cfg_rankimages', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->rankimages);

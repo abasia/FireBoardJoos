@@ -197,19 +197,15 @@ if($my->id){
 										<?php
 										if($fbConfig->allowAvatar){
 											echo _YOUR_AVATAR . "</td><td class=\"td-2\">";
-
-											if($fbConfig->avatar_src == "clexuspm"){
+											if($fbConfig->avatar_src == "joostina"){
 												?>
-												<img src="<?php echo MyPMSTools::getAvatarLinkWithID($my->id)?>"
-													 alt=""/>
-												<br/> <a
-													href="<?php echo sefRelToAbs('index.php?option=com_mypms&amp;task=upload&amp;Itemid=' . _CLEXUSPM_ITEMID);?>"><?php echo _SET_NEW_AVATAR; ?></a>
+												<img src="<?php echo MyPMSTools::getAvatarLinkWithID($my->id)?>" alt=""/>
+												<br/> <a href="<?php echo sefRelToAbs('index.php?option=com_mypms&amp;task=upload&amp;Itemid=' . _CLEXUSPM_ITEMID);?>"><?php echo _SET_NEW_AVATAR; ?></a>
 												<?php
 											}else{
 												if($avatar != ""){
 													?>
-													<img src="components/com_fireboard/avatars/<?php echo $avatar;?>"
-														 alt=""/>
+													<img src="components/com_fireboard/avatars/<?php echo $avatar;?>" alt=""/>
 													<br/>
 													<a href="<?php echo sefRelToAbs(JB_LIVEURLREL . '&amp;func=upload');?>"> <?php echo _SET_NEW_AVATAR; ?></a>
 													<br/> <input type="checkbox" value="1" name="deleteAvatar">

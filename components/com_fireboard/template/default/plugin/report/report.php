@@ -122,9 +122,6 @@ function SendReporttoPM($sender, $subject, $message, $msglink, $mods, $admins){
 		case 'pms':
 			SendPMS();
 			break;
-		case 'clexuspm':
-			SendClexusPM($reporter, $subject, $message, $msglink, $mods, $admins);
-			break;
 		case 'uddeim':
 			SendUddeIM();
 			break;
@@ -207,19 +204,3 @@ function ReportForm($msg_id, $catid){
 </div>
 <?php
 }
-
-function SendClexusPM($reporter, $subject, $message, $msglink, $mods, $admins){
-	$database = FBJConfig::database();
-	$time = mosFormatDate(FBTools::fbGetInternalTime(), '%Y-%m-%d %H:%M:%S');
-	foreach($admins as $admin){
-		$database->setQuery("INSERT INTO #__mypms" . "\n ( `userid` , `whofrom` , `time` , `readstate` , `subject` , `message` , `owner` , `folder` , `sent_id` , `replyid` , `ip` , `alert` , `flag` , `pm_notify` , `email_notify` )" . "\n VALUES ('$admin->id', '$reporter', '$time', '0', '$subject', '$message', '$admin->id', NULL , '0', '0', NULL , '0', '0', '0', '1'");
-		$database->query();
-	}
-	foreach($mods as $mod){
-		$database->setQuery("INSERT INTO #__mypms" . "\n ( `userid` , `whofrom` , `time` , `readstate` , `subject` , `message` , `owner` , `folder` , `sent_id` , `replyid` , `ip` , `alert` , `flag` , `pm_notify` , `email_notify` )" . "\n VALUES ('$mod->id', '$reporter', '$time', '0', '$subject', '$message', '$mod->id', NULL , '0', '0', NULL , '0', '0', '0', '1'");
-		$database->query();
-	}
-	mosErrorAlert('' . _FB_REPORT_SUCCESS . '', 'window.history.go(-2);');
-}
-
-?>

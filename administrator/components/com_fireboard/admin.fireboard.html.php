@@ -1555,25 +1555,6 @@ class HTML_SIMPLEBOARD{
 					</td>
 				</tr>
 				<tr align="center" valign="middle">
-					<td align="left" valign="top"><?php echo _FB_IMAGE_PROCESSOR ?>
-					</td>
-					<td align="left" valign="top">
-						<?php echo $lists['imageProcessor']; ?>
-					</td>
-					<td align="left" valign="top"><?php
-						$fb_gd = intval(FB_gdVersion());
-						if($fb_gd > 0){
-							$fbmsg = _FB_GD_INSTALLED . $fb_gd;
-						} elseif($gdver == -1){
-							$fbmsg = _FB_GD_NO_VERSION;
-						} else{
-							$fbmsg = _FB_GD_NOT_INSTALLED . '<a href="http://www.php.net/gd" target="_blank">http://www.php.net/gd</a>';
-						}
-						echo $fbmsg;
-						?>
-					</td>
-				</tr>
-				<tr align="center" valign="middle">
 					<td align="left" valign="top"><?php echo _FB_AVATAR_SMALL_HEIGHT ?>
 					</td>
 					<td align="left" valign="top">

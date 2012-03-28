@@ -53,7 +53,7 @@ function showprf($userid){
 	$msg_username = ($fmessage->email != "" && $my->id > 0 && $fbConfig->showemail == '1') ? "<a href=\"mailto:" . stripslashes($fmessage->email) . "\">" . stripslashes($fb_username) . "</a>" : stripslashes($fb_username);
 	if($fbConfig->allowAvatar){
 		$Avatarname = $userinfo->username;
-		if($fbConfig->avatar_src == "clexuspm"){
+		if($fbConfig->avatar_src == "joostina"){
 			$msg_avatar = '<span class="fb_avatar"><img src="' . MyPMSTools::getAvatarLinkWithID($userid, "b") . '" alt="" /></span>';
 		}else{
 			$avatar = $userinfo->avatar;
@@ -188,40 +188,7 @@ function showprf($userid){
 			$msg_online .= $fbIcons->offlineicon ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->offlineicon . '" border="0" alt="' . _MODLIST_OFFLINE . '" />' : '  <img src="' . JB_URLEMOTIONSPATH . 'offlineicon.gif" border="0"  alt="' . _MODLIST_OFFLINE . '" />';
 		}
 	}
-	if($fbConfig->pm_component == "clexuspm"){
-		$PMSName = $userinfo->aid;
-		$msg_pms = "<a href=\"" . sefRelToAbs('index.php?option=com_mypms&amp;task=new&amp;to=' . $userid . '' . $fmessage->subject) . "\"><img src=\"";
-		if($fbIcons->pms){
-			$msg_pms .= JB_URLICONSPATH . "" . $fbIcons->pms;
-		} else{
-			$msg_pms .= JB_JLIVEURL . "/components/com_mypms/images/icons/message_12px.gif";
-		}
-		$msg_pms .= "\" alt=\"" . _VIEW_PMS . "\" border=\"0\" title=\"" . _VIEW_PMS . "\" /></a>";
-		$msg_profile = "<a href=\"" . MyPMSTools::getProfileLink($userid) . "\"><img src=\"";
-		if($fbIcons->userprofile){
-			$msg_profile .= JB_URLICONSPATH . '' . $fbIcons->userprofile;
-		} else{
-			$msg_profile .= JB_JLIVEURL . "/components/com_mypms/images/managecontact_icon.gif";
-		}
-		$msg_profile .= "\" alt=\"" . _VIEW_PROFILE . "\" border=\"0\" title=\"" . _VIEW_PROFILE . "\" /></a>";
-		$msg_buddy = "<a href=\"" . sefRelToAbs('index.php?option=com_mypms&amp;user=' . $PMSName . '&amp;task=addbuddy') . "\"><img src=\"";
-		if($fbIcons->pms2buddy){
-			$msg_buddy .= JB_URLICONSPATH . "" . $fbIcons->pms2buddy;
-		} else{
-			$msg_buddy .= JB_JLIVEURL . "/components/com_mypms/images/messages/addbuddy.gif";
-		}
-		$msg_buddy .= "\" alt=\"" . _VIEW_ADDBUDDY . "\" border=\"0\" title=\"" . _VIEW_ADDBUDDY . "\" /></a>";
-		$database->setQuery("SELECT icq,ym,msn,aim,website,location FROM #__mypms_profiles WHERE user='" . $PMSName . "'");
-		$mostables = $database->loadObjectList();
-		foreach($mostables as $mostable){
-			if($mostable->aim) $msg_aim = "<a href=\"aim:goim?screenname=" . str_replace(" ", "+", $mostable->aim) . "\"><img src=\"" . JB_URLEMOTIONSPATH . "aim.png\" border=0 alt=\"\" /></a>";
-			if($mostable->icq) $msg_icq = "<a href=\"http://www.icq.com/whitepages/wwp.php?uin=" . $mostable->icq . "\"><img src=\"" . JB_URLEMOTIONSPATH . "icq.png\" border=0 alt=\"\" /></a>";
-			if($mostable->msn) $msg_msn = "<a href=\"" . sefRelToAbs('index.php?option=com_mypms&amp;task=showprofile&amp;user=' . $PMSName) . "\"><img src=\"" . JB_URLEMOTIONSPATH . "msn.png\" border=0 alt=\"\" /></a>";
-			if($mostable->ym) $msg_yahoo = "<a href=\"http://edit.yahoo.com/config/send_webmesg?.target=" . $mostable->ym . "&.src=pg\"><img src=\"http://opi.yahoo.com/online?u=" . $mostable->ym . "&m=g&t=0\" border=0 alt=\"\" /></a>";
-			if($mostable->location) $msg_loc = $mostable->location;
-		}
-		unset($mostables);
-	}
+
 	if($fbConfig->cb_profile && $userid > 0){
 		$msg_profile = "<a href=\"" . sefRelToAbs('index.php?option=com_comprofiler&amp;task=userProfile&amp;user=' . $userid . '&amp;Itemid=1') . "\"><img src=\"";
 		if($fbIcons->userprofile){

@@ -67,7 +67,7 @@ if($do == 'init'){
 									<?php
 									if($fbConfig->allowAvatar){
 										echo _YOUR_AVATAR . "</td><td >";
-										if($fbConfig->avatar_src == "clexuspm"){
+										if($fbConfig->avatar_src == "joostina"){
 											?>
 											<img src="<?php echo MyPMSTools::getAvatarLinkWithID($my->id)?>" alt=""/>
 											<!--<br/><a href = "<?php echo sefRelToAbs('index.php?option=com_mypms&amp;task=upload&amp;Itemid=' . _CLEXUSPM_ITEMID);?>"><?php echo _SET_NEW_AVATAR; ?></a>-->
@@ -239,158 +239,98 @@ if($do == 'init'){
 		<?php
 	}
 } else if($do == 'validate'){
-	$filename = explode("\.", $_FILES['avatar']['name']);
-	$numExtensions = (count($filename)) - 1;
-	$avatarName = $filename[0];
-	$avatarExt = $filename[$numExtensions];
-	$newFileName = $my->id . "." . $avatarExt;
-	$imageType = array(1 => 'GIF', 2 => 'JPG', 3 => 'PNG', 4 => 'SWF', 5 => 'PSD', 6 => 'BMP', 7 => 'TIFF', 8 => 'TIFF', 9 => 'JPC', 10 => 'JP2', 11 => 'JPX', 12 => 'JB2', 13 => 'SWC', 14 => 'IFF');
-	//Filename Medium + proper path
-	$fileLocation = FB_ABSUPLOADEDPATH . "/avatars/$newFileName";
-	//Filename Small + proper path
-	$fileLocation_s = FB_ABSUPLOADEDPATH . "/avatars/s_$newFileName";
-	//Filename Large + proper path
-	$fileLocation_l = FB_ABSUPLOADEDPATH . "/avatars/l_$newFileName";
-	echo '<table width = "100%" border = "0" cellspacing = "0" cellpadding = "0">';
-	echo '<tr><td><div><div><div><div><table><tbody><tr><td>';
-	//Avatar Size
-	$avatarSize = $_FILES['avatar']['size'];
-	//check for empty file
 	if(empty($_FILES['avatar']['name'])){
 		mosRedirect(JB_LIVEURL . '&amp;func=uploadavatar', _UPLOAD_ERROR_EMPTY);
 	}
-	//check for allowed file type (jpeg, gif, png)
-	if(!($imgtype = FB_check_image_type($avatarExt))){
+
+	$imageType = array(1 => 'gif', 2 => 'jpg', 3 => 'png');
+	$imgInfo = getimagesize($_FILES['avatar']['tmp_name']);
+
+	if(!$imgInfo OR ($imgInfo[2] < 1 OR $imgInfo[2] > 3)){
 		mosRedirect(JB_LIVEURL . '&amp;func=uploadavatar', _UPLOAD_ERROR_TYPE);
 	}
-	//check file name characteristics
-	if(preg_match("#[^0-9a-zA-Z_]#", $avatarExt)){
-		mosRedirect(JB_LIVEURL . '&amp;func=uploadavatar', _UPLOAD_ERROR_NAME);
-	}
-	//check filesize
+	$avatarExt = $imageType[$imgInfo[2]];
+	// имя загружаемого аватара
+	$newFileName = $my->id . "." . $avatarExt;
+	//Filename Medium + proper path
+	$fileLocation = FB_ABSUPLOADEDPATH . DS ."avatars".DS . $newFileName;
+	//Filename Small + proper path
+	$fileLocation_s = FB_ABSUPLOADEDPATH . DS . "avatars".DS."s_".$newFileName;
+	//Filename Large + proper path
+	$fileLocation_l = FB_ABSUPLOADEDPATH . DS . "avatars".DS."l_" .$newFileName;
+
 	$maxAvSize = $fbConfig->avatarSize * 1024;
-	if($avatarSize > $maxAvSize){
-		mosRedirect(JB_LIVEURL . '&amp;func=uploadavatar', _UPLOAD_ERROR_SIZE . " (" . $fbConfig->avatarSize . " KiloBytes)");
-		return;
+	if($_FILES['avatar']['size'] > $maxAvSize){
+		mosRedirect(JB_LIVEURL . '&amp;func=uploadavatar', _UPLOAD_ERROR_SIZE . " (" . $fbConfig->avatarSize . " Kb)");
 	}
-	$imgInfo = getimagesize($_FILES['avatar']['tmp_name']);
-	$imgInfo[2] = $imageType[$imgInfo[2]];
+	//echo '<table width = "100%" border = "0" cellspacing = "0" cellpadding = "0">';
+	//echo '<tr><td><div><div><div><div><table><tbody><tr><td>';
+
 	$srcWidth = $imgInfo[0];
 	$srcHeight = $imgInfo[1];
 	$src_file = $_FILES['avatar']['tmp_name'];
-	switch($fbConfig->imageProcessor){
-		case 'gd1' :
-			if(!function_exists('imagecreatefromjpeg')){
-				die(_FB_AVATAR_GDIMAGE_NOT);
-			}
-			if($imgInfo[2] == 'JPG'){
-				$src_img = imagecreatefromjpeg($src_file);
-			} elseif($imgInfo[2] == 'PNG'){
-				$src_img = imagecreatefrompng($src_file);
-			} else{
-				$src_img = imagecreatefromgif($src_file);
-			}
-			// Create Medium Image
-			if(($srcWidth > $fbConfig->avatarWidth) || ($srcHeight > $fbConfig->avatarHeight)){
-				$dst_img = imagecreate($fbConfig->avatarWidth, $fbConfig->avatarHeight);
-				imagecopyresized($dst_img, $src_img, 0, 0, 0, 0, $fbConfig->avatarWidth, (int)$fbConfig->avatarHeight, $srcWidth, $srcHeight);
-				imagejpeg($dst_img, $fileLocation, $fbConfig->avatarQuality);
-				imagedestroy($dst_img);
-			} else{
-				if(!move_uploaded_file($_FILES['avatar']['tmp_name'], $fileLocation)) echo _UPLOAD_ERROR_GENERAL;
-				$moved = true;
-
-			}
-			// Create Small Image
-			if(($srcWidth > $fbConfig->avatarSmallWidth) || ($srcHeight > $fbConfig->avatarSmallHeight)){
-				$dst_img = imagecreate($fbConfig->avatarSmallWidth, $fbConfig->avatarSmallHeight);
-				imagecopyresized($dst_img, $src_img, 0, 0, 0, 0, $fbConfig->avatarSmallWidth, (int)$fbConfig->avatarSmallHeight, $srcWidth, $srcHeight);
-				imagejpeg($dst_img, $fileLocation_s, $fbConfig->avatarQuality);
-				imagedestroy($dst_img);
-			} else{
-				if($moved){
-					copy($fileLocation, $fileLocation_s);
-				} else{
-					if(!move_uploaded_file($_FILES['avatar']['tmp_name'], $fileLocation_s)) echo _UPLOAD_ERROR_GENERAL;
-					$moved = true;
-				}
-			}
-			// Create Large Image
-			if(($srcWidth > $fbConfig->avatarLargeWidth) || ($srcHeight > $fbConfig->avatarLargeHeight)){
-				$dst_img = imagecreate($fbConfig->avatarLargeWidth, $fbConfig->avatarLargeHeight);
-				imagecopyresized($dst_img, $src_img, 0, 0, 0, 0, $fbConfig->avatarLargeWidth, (int)$fbConfig->avatarLargeHeight, $srcWidth, $srcHeight);
-				imagejpeg($dst_img, $fileLocation_l, $fbConfig->avatarQuality);
-				imagedestroy($dst_img);
-			} else{
-				if($moved){
-					copy($fileLocation, $fileLocation_l);
-				} else{
-					if(!move_uploaded_file($_FILES['avatar']['tmp_name'], $fileLocation_l)) echo _UPLOAD_ERROR_GENERAL;
-				}
-			}
-			imagedestroy($src_img);
-			break;
-		case 'gd2' :
-			if(!function_exists('imagecreatefromjpeg')){
-				die(_FB_AVATAR_GDIMAGE_NOT);
-			}
-			if(!function_exists('imagecreatetruecolor')){
-				die(_FB_AVATAR_GD2IMAGE_NOT);
-			}
-			if($imgInfo[2] == 'JPG'){
-				$src_img = imagecreatefromjpeg($src_file);
-			} elseif($imgInfo[2] == 'PNG'){
-				$src_img = imagecreatefrompng($src_file);
-			} else{
-				$src_img = imagecreatefromgif($src_file);
-			}
-			// Create Medium Image
-			if(($srcWidth > $fbConfig->avatarWidth) || ($srcHeight > $fbConfig->avatarHeight)){
-				$dst_img = imagecreate($fbConfig->avatarWidth, $fbConfig->avatarHeight);
-				$dst_img = imagecreatetruecolor($fbConfig->avatarWidth, $fbConfig->avatarHeight);
-				imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $fbConfig->avatarWidth, (int)$fbConfig->avatarHeight, $srcWidth, $srcHeight);
-				imagejpeg($dst_img, $fileLocation, $fbConfig->avatarQuality);
-				imagedestroy($dst_img);
-			} else{
-				if(!move_uploaded_file($_FILES['avatar']['tmp_name'], $fileLocation)) echo _UPLOAD_ERROR_GENERAL;
-				$moved = true;
-			}
-			// Create Small Image
-			if(($srcWidth > $fbConfig->avatarSmallWidth) || ($srcHeight > $fbConfig->avatarSmallHeight)){
-				$dst_img = imagecreatetruecolor($fbConfig->avatarSmallWidth, $fbConfig->avatarSmallHeight);
-				imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $fbConfig->avatarSmallWidth, (int)$fbConfig->avatarSmallHeight, $srcWidth, $srcHeight);
-				imagejpeg($dst_img, $fileLocation_s, $fbConfig->avatarQuality);
-				;
-				imagedestroy($dst_img);
-			} else{
-				if($moved){
-					copy($fileLocation, $fileLocation_s);
-				} else{
-					if(!move_uploaded_file($_FILES['avatar']['tmp_name'], $fileLocation_s)) echo _UPLOAD_ERROR_GENERAL;
-					$moved = true;
-				}
-			}
-			// Create Large Image
-			if(($srcWidth > $fbConfig->avatarLargeWidth) || ($srcHeight > $fbConfig->avatarLargeHeight)){
-				$dst_img = imagecreatetruecolor($fbConfig->avatarLargeWidth, $fbConfig->avatarLargeHeight);
-				imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $fbConfig->avatarLargeWidth, (int)$fbConfig->avatarLargeHeight, $srcWidth, $srcHeight);
-				imagejpeg($dst_img, $fileLocation_l, $fbConfig->avatarQuality);
-				imagedestroy($dst_img);
-			} else{
-				if($moved){
-					copy($fileLocation, $fileLocation_l);
-				} else{
-					if(!move_uploaded_file($_FILES['avatar']['tmp_name'], $fileLocation_l)) echo _UPLOAD_ERROR_GENERAL;
-				}
-			}
-			imagedestroy($src_img);
-			break;
+	if(!function_exists('imagecreatefromjpeg')){
+		die(_FB_AVATAR_GDIMAGE_NOT);
 	}
+	if(!function_exists('imagecreatetruecolor')){
+		die(_FB_AVATAR_GD2IMAGE_NOT);
+	}
+
+	if($imgInfo[2] == 2){
+		$src_img = imagecreatefromjpeg($src_file);
+	} elseif($imgInfo[2] == 3){
+		$src_img = imagecreatefrompng($src_file);
+	} else{
+		$src_img = imagecreatefromgif($src_file);
+	}
+
+	// Создание маленького изображения
+	if(($srcWidth > $fbConfig->avatarSmallWidth) || ($srcHeight > $fbConfig->avatarSmallHeight)){
+		$dst_img = imagecreatetruecolor($fbConfig->avatarSmallWidth, $fbConfig->avatarSmallHeight);
+		imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $fbConfig->avatarSmallWidth, (int)$fbConfig->avatarSmallHeight, $srcWidth, $srcHeight);
+		imagejpeg($dst_img, $fileLocation_s, $fbConfig->avatarQuality);
+		;
+		imagedestroy($dst_img);
+	} else{
+		if($moved){
+			copy($fileLocation, $fileLocation_s);
+		} else{
+			if(!move_uploaded_file($_FILES['avatar']['tmp_name'], $fileLocation_s)) echo _UPLOAD_ERROR_GENERAL;
+			$moved = true;
+		}
+	}
+
+	// Создание среднего изображения
+	if(($srcWidth > $fbConfig->avatarWidth) || ($srcHeight > $fbConfig->avatarHeight)){
+		$dst_img = imagecreate($fbConfig->avatarWidth, $fbConfig->avatarHeight);
+		$dst_img = imagecreatetruecolor($fbConfig->avatarWidth, $fbConfig->avatarHeight);
+		imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $fbConfig->avatarWidth, (int)$fbConfig->avatarHeight, $srcWidth, $srcHeight);
+		imagejpeg($dst_img, $fileLocation, $fbConfig->avatarQuality);
+		imagedestroy($dst_img);
+	} else{
+		if(!move_uploaded_file($_FILES['avatar']['tmp_name'], $fileLocation)) echo _UPLOAD_ERROR_GENERAL;
+		$moved = true;
+	}
+
+	// Создание большого изображения
+	if(($srcWidth > $fbConfig->avatarLargeWidth) || ($srcHeight > $fbConfig->avatarLargeHeight)){
+		$dst_img = imagecreatetruecolor($fbConfig->avatarLargeWidth, $fbConfig->avatarLargeHeight);
+		imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $fbConfig->avatarLargeWidth, (int)$fbConfig->avatarLargeHeight, $srcWidth, $srcHeight);
+		imagejpeg($dst_img, $fileLocation_l, $fbConfig->avatarQuality);
+		imagedestroy($dst_img);
+	} else{
+		if($moved){
+			copy($fileLocation, $fileLocation_l);
+		} else{
+			if(!move_uploaded_file($_FILES['avatar']['tmp_name'], $fileLocation_l)) echo _UPLOAD_ERROR_GENERAL;
+		}
+	}
+	imagedestroy($src_img);
 	@chmod($fileLocation, 0777);
 	@chmod($fileLocation_l, 0777);
 	@chmod($fileLocation_s, 0777);
 	$newFileName = FBTools::fbRemoveXSS($newFileName);
-	$database->setQuery("UPDATE #__fb_users SET avatar='{$newFileName}' WHERE userid={$my->id}");
+	$database->setQuery("UPDATE #__fb_users SET avatar='".$newFileName."' WHERE userid=".$my->id);
 	$database->query();
 	echo " <strong>" . _UPLOAD_UPLOADED . "</strong>...<br/><br/>";
 	echo '<a href="' . sefRelToAbs(JB_LIVEURLREL . '&amp;func=myprofile&amp;do=show') . '">' . _GEN_CONTINUE . ".</a>";
