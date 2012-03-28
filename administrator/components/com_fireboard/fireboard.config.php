@@ -20,8 +20,6 @@ class FBJConfig{
 	public $default_view;
 	public $enableRSS;
 	public $enablePDF;
-	public $chat;
-	public $chat_guests;
 	public $polls;
 	public $pollmax;
 	public $threads_per_page;
@@ -167,8 +165,6 @@ class FBJConfig{
 		$config->default_view = (isset($t['default_view'])) ? $t['default_view'] : 'flat';
 		$config->enableRSS = (isset($t['enableRSS'])) ? $t['enableRSS'] : '1';
 		$config->enablePDF = (isset($t['enablePDF'])) ? $t['enablePDF'] : '1';
-		$config->chat = (isset($t['chat'])) ? $t['chat'] : '1';
-		$config->chat_guests = (isset($t['chat_guests'])) ? $t['chat_guests'] : '1';
 		$config->polls = (isset($t['polls'])) ? $t['polls'] : '1';
 		$config->pollmax = (isset($t['pollmax'])) ? $t['pollmax'] : '5';
 		$config->threads_per_page = (isset($t['threads_per_page'])) ? $t['threads_per_page'] : '20';
@@ -425,8 +421,6 @@ class FBJConfig{
 		$lists['reportmsg'] = mosHTML::selectList($yesno, 'cfg_reportmsg', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->reportmsg);
 		$lists['captcha'] = mosHTML::selectList($yesno, 'cfg_captcha', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->captcha);
 		$lists['mailfull'] = mosHTML::selectList($yesno, 'cfg_mailfull', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->mailfull);
-		$lists['chat'] = mosHTML::selectList($yesno, 'cfg_chat', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->chat);
-		$lists['chat_guests'] = mosHTML::selectList($yesno, 'cfg_chat_guests', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->chat_guests);
 		$lists['polls'] = mosHTML::selectList($yesno, 'cfg_polls', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->polls);
 		$lists['fm'] = mosHTML::selectList($yesno, 'cfg_fm', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->fm);
 		$lists['fm_guests'] = mosHTML::selectList($yesno, 'cfg_fm_guests', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->fm_guests);

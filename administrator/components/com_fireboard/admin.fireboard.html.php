@@ -923,24 +923,6 @@ class HTML_SIMPLEBOARD{
 					</td>
 				</tr>
 				<tr align="center" valign="middle">
-					<td align="left" valign="top"><?php echo _FB_ALLOWCHAT;?>
-					</td>
-					<td align="left" valign="top"><?php echo $lists['chat']; ?>
-					</td>
-					<td align="left" valign="top">
-						<?php echo _FB_ALLOWCHAT_DESC;?>
-					</td>
-				</tr>
-				<tr align="center" valign="middle">
-					<td align="left" valign="top"><?php echo _FB_ALLOWCHAT_GUEST;?>
-					</td>
-					<td align="left" valign="top"><?php echo $lists['chat_guests']; ?>
-					</td>
-					<td align="left" valign="top">
-						<?php echo _FB_ALLOWCHAT_GUEST_DESC;?>
-					</td>
-				</tr>
-				<tr align="center" valign="middle">
 					<td align="left" valign="top"><?php echo _FB_ALLOWPOLLS;?>
 					</td>
 					<td align="left" valign="top"><?php echo $lists['polls']; ?>

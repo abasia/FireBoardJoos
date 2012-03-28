@@ -337,13 +337,7 @@ if($fbConfig->regonly && !$my_id){
 	} else{
 		include (JB_ABSPATH . '/template/default/plugin/profilebox/profilebox.php');
 	}
-	//BEGIN: CHAT
-	if($fbConfig->chat){
-		if($func == 'view' OR $func == 'listcat' OR $func == '' OR $func == NULL){
-			if(file_exists(JB_ABSPATH . '/template/default/plugin/chat/chatmy.php')) include (JB_ABSPATH . '/template/default/plugin/chat/chatmy.php');
-		}
-	}
-	//FINISH: CHAT
+
 	switch(strtolower($func)){
 		case 'who':
 			if(file_exists(JB_ABSTMPLTPATH . '/plugin/who/who.php')){

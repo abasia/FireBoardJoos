@@ -278,7 +278,6 @@
 		<filename>template/default/listcat.php</filename>
 		<filename>template/default/message.php</filename>
 		<filename>template/default/moderate_messages.php</filename>
-		<filename>template/default/plugin/chat/index.php</filename>
 		<filename>template/default/plugin/announcement/announcement.php</filename>
 		<filename>template/default/plugin/announcement/announcementbox.php</filename>
 		<filename>template/default/plugin/announcement/index.php</filename>
@@ -348,7 +347,7 @@
 			<filename>bb_adm.js</filename>
 			<filename>fb_cpanel.php</filename>
 			<filename>fireboard.xml</filename>
-			<filename>fireboard_config.php</filename>
+			<filename>fireboard.config.php</filename>
 			<filename>fireboard_mosbot_help.php</filename>
 			<filename>images/fbconfig.png</filename>
 			<filename>images/fbconfig1.png</filename>

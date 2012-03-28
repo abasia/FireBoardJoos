@@ -43,8 +43,6 @@ INSERT INTO `jos_fb_config` (`name`, `value`) VALUES
 ('CatImagePath', 'category_images/'),
 ('cb_profile', '0'),
 ('changename', '0'),
-('chat', '1'),
-('chat_guests', '1'),
 ('default_view', 'flat'),
 ('discussBot', '0'),
 ('disemoticons', '0'),
