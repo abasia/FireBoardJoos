@@ -60,6 +60,9 @@ $view = mosGetParam($_REQUEST, 'view', '');
 $msgpreview = mosGetParam($_REQUEST, 'msgpreview', '');
 
 require_once (JPATH_BASE . DS . 'administrator' . DS . 'components' . DS . 'com_fireboard' . DS . 'fireboard.config.php');
+// Загрузка конфигурации
+FBJConfig::loadConfig();
+
 $fbConfig = FBJConfig::getInstance();
 
 require_once (JPATH_BASE . DS . 'components' . DS . 'com_fireboard' . DS . 'class.fireboard.php');

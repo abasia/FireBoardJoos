@@ -75,6 +75,7 @@ DEFINE('_AFB_RANG', 'Ранг');
 DEFINE('_FB_RANKS', 'Имя ранга');
 DEFINE('_FB_USRL_USERTYPE', 'Ранг');
 DEFINE('_FB_USRL_NEVER', 'Никогда');
+
 DEFINE('_FB_ALLOWCHAT','Разрешить чат');
 DEFINE('_FB_ALLOWCHAT_DESC','Отображать панель чата для пользователей?');
 DEFINE('_FB_ALLOWCHAT_GUEST','Разрешить чат для Гостей');
@@ -102,6 +103,7 @@ DEFINE('_FB_CHAT_BAN','ID забаненных пользователей');
 DEFINE('_FB_CHAT_BAN_DESC','Введите через запятую ID пользователей, которым запрещено пользование чатом.');
 DEFINE('_FB_CHAT_BANNED','Вам временно запрещено пользоваться чатом.');
 DEFINE('_FB_CHAT_ACCEPT','Отправлено успешно!');
+
 DEFINE('_AFB_GROUPS_MANAGE', 'Управление группами');
 DEFINE('_FB_GROUPSIMAGE', 'Изображение группы');
 DEFINE('_FB_GROUPNAME', 'Название группы');

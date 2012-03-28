@@ -701,7 +701,7 @@ if($letPass || $is_Mod){
 					if($topicLock == 1){
 						$msg_closed = _POST_LOCK_SET;
 					} else{
-						$msg_closed = '<a href="' . sefReltoAbs('index.php?option=com_registration&amp;task=register&amp;Itemid=' . $Itemid) . '" title="" style="font-size:11px;">' . _VIEW_DISABLED . '</a>';
+						$msg_closed = '<a href="' . sefReltoAbs('index.php?option=com_users&amp;task=register&amp;Itemid=' . $Itemid) . '" title="" style="font-size:11px;">' . _VIEW_DISABLED . '</a>';
 					}
 				}
 				$showedEdit = 0; //reset this value

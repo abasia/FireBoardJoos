@@ -955,7 +955,7 @@ function hasPostPermission($database, $catid, $replyto, $userid, $pubwrite, $ism
 			if($fbConfig->cb_profile){
 				echo '<a href="' . sefRelToAbs('index.php?option=com_comprofiler&amp;task=registers') . '">' . _POST_NO_PUBACCESS3 . '</a><br /></p>';
 			} else{
-				echo '<a href="' . sefRelToAbs('index.php?option=com_registration&amp;task=register') . '">' . _POST_NO_PUBACCESS3 . '</a><br /></p>';
+				echo '<a href="' . sefRelToAbs('index.php?option=com_users&amp;task=register') . '">' . _POST_NO_PUBACCESS3 . '</a><br /></p>';
 			}
 		}
 		return 0;

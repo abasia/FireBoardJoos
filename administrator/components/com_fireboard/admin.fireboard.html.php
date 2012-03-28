@@ -825,7 +825,7 @@ class HTML_SIMPLEBOARD{
 
 	function showConfig($lists, $option){
 		$fbConfig = FBJConfig::getInstance();
-		$tabs = new mosTabs(2);
+		//$tabs = new mosTabs(2);
 		?>
 	<div id="fbcongifcover">
 	<div class="fbfunctitle">

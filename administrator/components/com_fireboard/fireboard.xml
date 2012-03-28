@@ -1,14 +1,14 @@
 <?xml version="1.0"  encoding="utf-8"?>
 <mosinstall type="component">
 	<name>fireboard</name>
-	<version>2.0</version>
+	<version>1.0 Joos</version>
 	<creationDate>april 2008</creationDate>
 	<author>Best Of Joomla! &amp; Adeptus</author>
 	<authorEmail>adeptus@adeptsite.info</authorEmail>
 	<authorUrl>http://www.adeptsite.info</authorUrl>
 	<copyright>Bestofjoomla &amp; Adeptus</copyright>
 	<license>GNU/GPL</license>
-	<description>FireBoard RE 2.0 - новая версия самого популярного Форума для Joomla!</description>
+	<description>FireBoard 1.0 Joos - версия самого популярного Форума для Joostina 1.3-1.4!</description>
 	<files>
 		<filename>template/default/images/b.png</filename>
 		<filename>template/default/images/bl.png</filename>

@@ -101,8 +101,8 @@ else
 {
 	$loginlink = sefRelToAbs('index.php?option=com_login&amp;Itemid=' . $Itemid);
 	$logoutlink = sefRelToAbs('index.php?option=logout');
-	$registerlink = sefRelToAbs('index.php?option=com_registration&amp;task=register&amp;Itemid=' . $Itemid);
-	$lostpasslink = sefRelToAbs('index.php?option=com_registration&amp;task=lostPassword&amp;Itemid=' . $Itemid);
+	$registerlink = sefRelToAbs('index.php?option=com_users&amp;task=register&amp;Itemid=' . $Itemid);
+	$lostpasslink = sefRelToAbs('index.php?option=com_users&amp;task=lostPassword&amp;Itemid=' . $Itemid);
 	if($j15)
 	{
 		$loginlink = sefRelToAbs('index.php?option=com_user&amp;view=login');
