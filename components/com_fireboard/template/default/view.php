@@ -16,13 +16,14 @@
  *
  **/
 defined('_VALID_MOS') or die('Direct Access to this location is not allowed.');
-global $fbConfig;
-if($fbConfig['jmambot']){
+$fbConfig = FBJConfig::getInstance();
+
+if($fbConfig->jmambot){
 	class t{
 		var $text = "";
 	}
 }
-global $acl;
+$acl = gacl::getInstance();
 $catid = (int)$catid;
 $id = (int)$id;
 $smileyList = smile::getEmoticons(0);
@@ -31,7 +32,7 @@ $myresult = mosGetParam($_REQUEST, "otvet");
 $showedEdit = 0;
 require_once (JB_ABSSOURCESPATH . 'fb_auth.php');
 require_once (JB_ABSSOURCESPATH . 'fb_statsbar.php');
-if($fbConfig['badwords']){
+if($fbConfig->badwords){
 	if(is_file($mosConfig_absolute_path . '/components/com_badword/class.badword.php')){
 		require_once ($mosConfig_absolute_path . '/components/com_badword/class.badword.php');
 	}
@@ -90,7 +91,7 @@ if($letPass || $is_Mod){
 			$database->query();
 		}
 		$i = 0;
-		if($fbConfig['cb_profile'] && $my->id != 0){
+		if($fbConfig->cb_profile && $my->id != 0){
 			$database->setQuery("SELECT fbordering from #__comprofiler where user_id=$my->id");
 			$fbordering = $database->loadResult();
 			if($fbordering == "_UE_FB_ORDERING_OLDEST"){
@@ -117,7 +118,7 @@ if($letPass || $is_Mod){
 			}
 		}
 		if($view == "flat"){
-			$limit = $fbConfig['messages_per_page'];
+			$limit = $fbConfig->messages_per_page;
 			if($idmatch >= $limit){
 				$limitstart = (floor($idmatch / $limit)) * $limit;
 			} else{
@@ -168,15 +169,15 @@ if($letPass || $is_Mod){
 			<td class="jr-topnav-left">
 				<?php
 				echo '<a name="forumtop" /> <a href="' . htmlspecialchars(sefRelToAbs("index.php?" . $_SERVER["QUERY_STRING"])) . '#forumbottom" >';
-				echo $fbIcons['bottomarrow'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['bottomarrow'] . '" border="0" alt="' . _GEN_GOTOBOTTOM . '" title="' . _GEN_GOTOBOTTOM . '"/>' : _GEN_GOTOBOTTOM;
+				echo $fbIcons->bottomarrow ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->bottomarrow . '" border="0" alt="' . _GEN_GOTOBOTTOM . '" title="' . _GEN_GOTOBOTTOM . '"/>' : _GEN_GOTOBOTTOM;
 				echo '</a>';
 				$topicLock = $this_message->locked;
-				if((($fbConfig['pubwrite'] == 0 && $my_id != 0) || $fbConfig['pubwrite'] == 1) && ($topicLock == 0 || ($topicLock == 1 && $is_moderator))){
+				if((($fbConfig->pubwrite == 0 && $my_id != 0) || $fbConfig->pubwrite == 1) && ($topicLock == 0 || ($topicLock == 1 && $is_moderator))){
 					echo '<a href="' . sefRelToAbs(JB_LIVEURLREL . '&amp;func=post&amp;do=reply&amp;replyto=' . $thread . '&amp;catid=' . $catid) . '" >';
-					echo $fbIcons['topicreply'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['topicreply'] . '" border="0" alt="' . _GEN_POST_REPLY . '" title="' . _GEN_POST_REPLY . '"/>' : _GEN_POST_REPLY;
+					echo $fbIcons->topicreply ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->topicreply . '" border="0" alt="' . _GEN_POST_REPLY . '" title="' . _GEN_POST_REPLY . '"/>' : _GEN_POST_REPLY;
 					echo '</a>';
 				}
-				if($fbConfig['allowsubscriptions'] == 1 && ("" != $my_id || 0 != $my_id)){
+				if($fbConfig->allowsubscriptions == 1 && ("" != $my_id || 0 != $my_id)){
 					$database->setQuery("SELECT thread from #__fb_subscriptions where userid=$my_id and thread='$thread'");
 					$fb_subscribed = $database->loadResult();
 					if($fb_subscribed == ""){
@@ -185,19 +186,19 @@ if($letPass || $is_Mod){
 						$fb_cansubscribe = 0;
 					}
 				}
-				if($my_id != 0 && $fbConfig['allowsubscriptions'] == 1 && $fb_cansubscribe == 1){
+				if($my_id != 0 && $fbConfig->allowsubscriptions == 1 && $fb_cansubscribe == 1){
 					?>
 					<a href="<?php echo sefRelToAbs(JB_LIVEURLREL . '&amp;func=post&amp;do=subscribe&amp;catid=' . $catid . '&amp;id=' . $id . '&amp;fb_thread=' . $thread);?>">
-						<?php echo $fbIcons['subscribe'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['subscribe'] . '" border="0" title="' . _VIEW_SUBSCRIBETXT . '" alt="' . _VIEW_SUBSCRIBETXT . '" />' : _VIEW_SUBSCRIBE; ?></a>
+						<?php echo $fbIcons->subscribe ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->subscribe . '" border="0" title="' . _VIEW_SUBSCRIBETXT . '" alt="' . _VIEW_SUBSCRIBETXT . '" />' : _VIEW_SUBSCRIBE; ?></a>
 					<?php
 				}
-				if($my_id != 0 && $fbConfig['allowsubscriptions'] == 1 && $fb_cansubscribe == 0){
+				if($my_id != 0 && $fbConfig->allowsubscriptions == 1 && $fb_cansubscribe == 0){
 					?>
 					<a href="<?php echo sefRelToAbs(JB_LIVEURLREL . '&amp;func=myprofile&amp;do=unsubscribeitem&amp;thread=' . $thread);?>">
-						<?php echo $fbIcons['unsubscribe'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['unsubscribe'] . '" border="0" title="' . _VIEW_UNSUBSCRIBETXT . '" alt="' . _VIEW_UNSUBSCRIBETXT . '" />' : _VIEW_UNSUBSCRIBE; ?></a>
+						<?php echo $fbIcons->unsubscribe ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->unsubscribe . '" border="0" title="' . _VIEW_UNSUBSCRIBETXT . '" alt="' . _VIEW_UNSUBSCRIBETXT . '" />' : _VIEW_UNSUBSCRIBE; ?></a>
 					<?php
 				}
-				if($fbConfig['allowfavorites'] == 1 && ("" != $my_id || 0 != $my_id)){
+				if($fbConfig->allowfavorites == 1 && ("" != $my_id || 0 != $my_id)){
 					$database->setQuery("SELECT thread from #__fb_favorites where userid=$my_id and thread='$thread'");
 					$fb_favorited = $database->loadResult();
 					if($fb_favorited == ""){
@@ -206,16 +207,16 @@ if($letPass || $is_Mod){
 						$fb_canfavorite = 0;
 					}
 				}
-				if($my_id != 0 && $fbConfig['allowfavorites'] == 1 && $fb_canfavorite == 1){
+				if($my_id != 0 && $fbConfig->allowfavorites == 1 && $fb_canfavorite == 1){
 					?>
 					<a href="<?php echo sefRelToAbs(JB_LIVEURLREL . '&amp;func=post&amp;do=favorite&amp;catid=' . $catid . '&amp;id=' . $id . '&amp;fb_thread=' . $thread);?>">
-						<?php echo $fbIcons['favorite'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['favorite'] . '" border="0" title="' . _VIEW_FAVORITETXT . '" alt="' . _VIEW_FAVORITETXT . '" />' : _VIEW_FAVORITE; ?></a>
+						<?php echo $fbIcons->favorite ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->favorite . '" border="0" title="' . _VIEW_FAVORITETXT . '" alt="' . _VIEW_FAVORITETXT . '" />' : _VIEW_FAVORITE; ?></a>
 					<?php
 				}
-				if($my_id != 0 && $fbConfig['allowfavorites'] == 1 && $fb_canfavorite == 0){
+				if($my_id != 0 && $fbConfig->allowfavorites == 1 && $fb_canfavorite == 0){
 					?>
 					<a href="<?php echo sefRelToAbs(JB_LIVEURLREL . '&amp;func=myprofile&amp;do=unfavoriteitem&amp;thread=' . $thread);?>">
-						<?php echo $fbIcons['unfavorite'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['unfavorite'] . '" border="0" title="' . _VIEW_UNFAVORITETXT . '" alt="' . _VIEW_UNFAVORITETXT . '" />' : _VIEW_UNFAVORITE; ?></a>
+						<?php echo $fbIcons->unfavorite ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->unfavorite . '" border="0" title="' . _VIEW_UNFAVORITETXT . '" alt="' . _VIEW_UNFAVORITETXT . '" />' : _VIEW_UNFAVORITE; ?></a>
 					<?php
 					$database->setQuery("SELECT COUNT(*) FROM #__fb_favorites where thread='$thread'");
 					$fb_totalfavorited = $database->loadResult();
@@ -249,7 +250,7 @@ if($letPass || $is_Mod){
 	</table>
 	<!-- /top nav -->
 	<?php //////////////////////////// adept poll
-		if($fbConfig['polls'] == 1 && $my->id != 0){
+		if($fbConfig->polls == 1 && $my->id != 0){
 			if($poll == 'answer'){
 				$database->setQuery("INSERT INTO #__fb_pollsresults (threadid,answeruserid,answer) VALUES ($thread,$my->id,$myresult)");
 				$database->query();
@@ -278,8 +279,7 @@ if($letPass || $is_Mod){
 		}
 		//////////////////////////// adept poll
 		?>
-	<table class="fb_blocktable<?php echo $objCatInfo->class_sfx; ?>" id="fb_views" cellpadding="0" cellspacing="0"
-		   border="0" width="100%">
+	<table class="fb_blocktable<?php echo $objCatInfo->class_sfx; ?>" id="fb_views" cellpadding="0" cellspacing="0" border="0" width="100%">
 	<thead>
 	<tr>
 		<th align="left">
@@ -326,8 +326,8 @@ if($letPass || $is_Mod){
 				} else{
 					$fb_thread = $fmessage->thread;
 				}
-				if($fbConfig['jmambot']){
-					global $_MAMBOTS;
+				if($fbConfig->jmambot){
+					$_MAMBOTS = mosMambotHandler::getInstance();
 					$row = new t();
 					$row->text = $sb_message_txt;
 					$_MAMBOTS->loadBotGroup('content');
@@ -336,7 +336,7 @@ if($letPass || $is_Mod){
 					$msg_text = $row->text;
 				}
 				if($leaf->parent == 0){
-					$mainframe->setPageTitle($fmessage->subject . ' - ' . $fbConfig['board_title']);
+					$mainframe->setPageTitle($fmessage->subject . ' - ' . $fbConfig->board_title);
 				}
 				$fmessage->name = htmlspecialchars($fmessage->name);
 				$fmessage->email = htmlspecialchars($fmessage->email);
@@ -345,24 +345,24 @@ if($letPass || $is_Mod){
 				$database->setQuery("SELECT  a.*,b.name,b.username,b.gid FROM #__fb_users as a LEFT JOIN #__users as b on b.id=a.userid where a.userid='$fmessage->userid'");
 				$database->loadObject($userinfo);
 				$fb_username = "";
-				if($fbConfig['username']){
+				if($fbConfig->username){
 					$fb_queryName = "username";
 				} else{
 					$fb_queryName = "name";
 				}
 				$fb_username = $userinfo->$fb_queryName;
-				if($fb_username == "" || $fbConfig['changename']){
+				if($fb_username == "" || $fbConfig->changename){
 					$fb_username = $fmessage->name;
 				}
 				$msg_id = $fmessage->id;
 				$lists["userid"] = $fmessage->userid;
-				$msg_username = $fmessage->email != "" && $my_id > 0 && $fbConfig['showemail'] == '1' ? "<a href=\"mailto:" . stripslashes($fmessage->email) . "\">" . stripslashes($fb_username) . "</a>" : stripslashes($fb_username);
+				$msg_username = $fmessage->email != "" && $my_id > 0 && $fbConfig->showemail == '1' ? "<a href=\"mailto:" . stripslashes($fmessage->email) . "\">" . stripslashes($fb_username) . "</a>" : stripslashes($fb_username);
 
-				if($fbConfig['allowAvatar']){
+				if($fbConfig->allowAvatar){
 					$Avatarname = $userinfo->username;
-					if($fbConfig['avatar_src'] == "clexuspm"){
+					if($fbConfig->avatar_src == "clexuspm"){
 						$msg_avatar = '<span class="fb_avatar"><img src="' . MyPMSTools::getAvatarLinkWithID($fmessage->userid) . '" /></span><br/>';
-					} elseif($fbConfig['avatar_src'] == "cb"){
+					} elseif($fbConfig->avatar_src == "cb"){
 						$database->setQuery("SELECT avatar FROM #__comprofiler WHERE user_id='$fmessage->userid' AND avatarapproved='1'");
 						$avatar = $database->loadResult();
 						if($avatar != ''){
@@ -383,7 +383,7 @@ if($letPass || $is_Mod){
 						}
 					}
 				}
-				if($fbConfig['showstats']){
+				if($fbConfig->showstats){
 					$ugid = $userinfo->gid;
 					$uIsMod = 0;
 					$uIsAdm = 0;
@@ -405,7 +405,7 @@ if($letPass || $is_Mod){
 					}
 					if($fmessage->userid){
 						$numPosts = (int)$userinfo->posts;
-						if($fbConfig['showranking']){
+						if($fbConfig->showranking){
 							if($userinfo->rank == '0') $userinfo->rank = 1;
 							if($userinfo->rank != '0'){
 								$database->setQuery("SELECT * FROM #__fb_ranks WHERE rank_id = '$userinfo->rank'");
@@ -429,12 +429,12 @@ if($letPass || $is_Mod){
 							$rText = _RANK_ADMINISTRATOR;
 							$rImg = JB_URLRANKSPATH . 'rankadmin.gif';
 						}
-						if($fbConfig['rankimages']){
+						if($fbConfig->rankimages){
 							$msg_userrankimg = '<img src="' . $rImg . '" alt="" />';
 						}
 						$msg_userrank = $rText;
 						$useGraph = 0;
-						if(!$fbConfig['postStats']){
+						if(!$fbConfig->postStats){
 							$msg_posts = '<div class="viewcover">' . "<table  border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\"><tr>" . "<strong>" . _POSTS . " $numPosts" . "</strong>" . "</td></tr>" . "</table></div>";
 
 							$useGraph = 0;
@@ -442,7 +442,7 @@ if($letPass || $is_Mod){
 							$myGraph = new phpGraph;
 							$myGraph->AddValue(_POSTS, $numPosts);
 							$myGraph->SetRowSortMode(0);
-							$myGraph->SetBarImg(JB_URLGRAPHPATH . "col" . $fbConfig['statsColor'] . "m.png");
+							$myGraph->SetBarImg(JB_URLGRAPHPATH . "col" . $fbConfig->statsColor . "m.png");
 							$myGraph->SetBarImg2(JB_URLEMOTIONSPATH . "graph.gif");
 							$myGraph->SetMaxVal($maxPosts);
 							$myGraph->SetShowCountsMode(2);
@@ -454,65 +454,65 @@ if($letPass || $is_Mod){
 						}
 					}
 				}
-				if($fbConfig['showkarma'] && $fmessage->userid != '0'){
+				if($fbConfig->showkarma && $fmessage->userid != '0'){
 					$karmaPoints = $userinfo->karma;
 					$karmaPoints = (int)$karmaPoints;
 					$msg_karma = "<strong>" . _KARMA . ":</strong> $karmaPoints";
 					if($my->id != '0' && $my->id != $fmessage->userid){
 						$msg_karmaminus = "<a href=\"" . sefRelToAbs(JB_LIVEURLREL . '&amp;func=karma&amp;do=decrease&amp;userid=' . $fmessage->userid . '&amp;pid=' . $fmessage->id . '&amp;catid=' . $catid . '') . "\"><img src=\"";
-						if($fbIcons['karmaminus']){
-							$msg_karmaminus .= JB_URLICONSPATH . "" . $fbIcons['karmaminus'];
+						if($fbIcons->karmaminus){
+							$msg_karmaminus .= JB_URLICONSPATH . "" . $fbIcons->karmaminus;
 						} else{
 							$msg_karmaminus .= JB_URLEMOTIONSPATH . "karmaminus.gif";
 						}
 						$msg_karmaminus .= "\" alt=\"Karma-\" border=\"0\" title=\"" . _KARMA_SMITE . "\" align=\"middle\" /></a>";
 						$msg_karmaplus = "<a href=\"" . sefRelToAbs(JB_LIVEURLREL . '&amp;func=karma&amp;do=increase&amp;userid=' . $fmessage->userid . '&amp;pid=' . $fmessage->id . '&amp;catid=' . $catid . '') . "\"><img src=\"";
-						if($fbIcons['karmaplus']){
-							$msg_karmaplus .= JB_URLICONSPATH . "" . $fbIcons['karmaplus'];
+						if($fbIcons->karmaplus){
+							$msg_karmaplus .= JB_URLICONSPATH . "" . $fbIcons->karmaplus;
 						} else{
 							$msg_karmaplus .= JB_URLEMOTIONSPATH . "karmaplus.gif";
 						}
 						$msg_karmaplus .= "\" alt=\"Karma+\" border=\"0\" title=\"" . _KARMA_APPLAUD . "\" align=\"middle\" /></a>";
 					}
 				}
-				if($fbConfig['pm_component'] == "missus" && $fmessage->userid && $my->id && $fmessage->userid != $my->id){
+				if($fbConfig->pm_component == "missus" && $fmessage->userid && $my->id && $fmessage->userid != $my->id){
 					$PMSName = $userinfo->username;
 					$msg_pms = "<a href=\"" . sefRelToAbs('index.php?option=com_missus&amp;func=newmsg&amp;user=' . $fmessage->userid . '&amp;subject=' . _GEN_FORUM . ': ' . urlencode(utf8_encode($fmessage->subject))) . "\"><img src='";
-					if($fbIcons['pms']){
-						$msg_pms .= JB_URLICONSPATH . "" . $fbIcons['pms'];
+					if($fbIcons->pms){
+						$msg_pms .= JB_URLICONSPATH . "" . $fbIcons->pms;
 					} else{
-						$msg_pms .= JB_URLICONSPATH . $fbIcons['pms'];
+						$msg_pms .= JB_URLICONSPATH . $fbIcons->pms;
 						;
 					}
 					$msg_pms .= "' alt=\"" . _VIEW_PMS . "\" border=\"0\" title=\"" . _VIEW_PMS . "\" /></a>";
 				}
-				if($fbConfig['pm_component'] == "jim" && $fmessage->userid && $my->id && $fmessage->userid != $my->id){
+				if($fbConfig->pm_component == "jim" && $fmessage->userid && $my->id && $fmessage->userid != $my->id){
 					$PMSName = $userinfo->username;
 					$msg_pms = "<a href=\"" . sefRelToAbs('index.php?option=com_jim&amp;page=new&amp;id=' . $PMSName . '&title=' . $fmessage->subject) . "\"><img src='";
-					if($fbIcons['pms']){
-						$msg_pms .= JB_URLICONSPATH . "" . $fbIcons['pms'];
+					if($fbIcons->pms){
+						$msg_pms .= JB_URLICONSPATH . "" . $fbIcons->pms;
 					} else{
-						$msg_pms .= JB_URLICONSPATH . $fbIcons['pms'];
+						$msg_pms .= JB_URLICONSPATH . $fbIcons->pms;
 						;
 					}
 
 					$msg_pms .= "' alt=\"" . _VIEW_PMS . "\" border=\"0\" title=\"" . _VIEW_PMS . "\" /></a>";
 				}
-				if($fbConfig['pm_component'] == "uddeim" && $fmessage->userid && $my->id && $fmessage->userid != $my->id){
+				if($fbConfig->pm_component == "uddeim" && $fmessage->userid && $my->id && $fmessage->userid != $my->id){
 					$PMSName = $userinfo->username;
 					$msg_pms = "<a href=\"" . sefRelToAbs('index.php?option=com_uddeim&amp;task=new&recip=' . $fmessage->userid) . "\"><img src=\"";
-					if($fbIcons['pms']){
-						$msg_pms .= JB_URLICONSPATH . '' . $fbIcons['pms'];
+					if($fbIcons->pms){
+						$msg_pms .= JB_URLICONSPATH . '' . $fbIcons->pms;
 					} else{
 						$msg_pms .= JB_URLEMOTIONSPATH . "sendpm.gif";
 					}
 					$msg_pms .= "\" alt=\"" . _VIEW_PMS . "\" border=\"0\" title=\"" . _VIEW_PMS . "\" /></a>";
 				}
-				if($fbConfig['pm_component'] == "pms" && $fmessage->userid && $my->id && $fmessage->userid != $my->id){
+				if($fbConfig->pm_component == "pms" && $fmessage->userid && $my->id && $fmessage->userid != $my->id){
 					$PMSName = $userinfo->username;
 					$msg_pms = "<a href=\"" . sefRelToAbs('index.php?option=com_pms&amp;page=new&amp;id=' . $PMSName . '&title=' . $fmessage->subject) . "\"><img src=\"";
-					if($fbIcons['pms']){
-						$msg_pms .= JB_URLICONSPATH . "" . $fbIcons['pms'];
+					if($fbIcons->pms){
+						$msg_pms .= JB_URLICONSPATH . "" . $fbIcons->pms;
 					} else{
 						$msg_pms .= JB_URLEMOTIONSPATH . "sendpm.gif";
 					}
@@ -523,31 +523,31 @@ if($letPass || $is_Mod){
 					$database->setQuery($sql);
 					$isonline = $database->loadResult();
 					if($isonline && $userinfo->showOnline == 1){
-						$msg_online .= $fbIcons['onlineicon'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['onlineicon'] . '" border="0" alt="' . _MODLIST_ONLINE . '" />' : '  <img src="' . JB_URLEMOTIONSPATH . 'onlineicon.gif" border="0"  alt="' . _MODLIST_ONLINE . '" />';
+						$msg_online .= $fbIcons->onlineicon ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->onlineicon . '" border="0" alt="' . _MODLIST_ONLINE . '" />' : '  <img src="' . JB_URLEMOTIONSPATH . 'onlineicon.gif" border="0"  alt="' . _MODLIST_ONLINE . '" />';
 					} else{
-						$msg_online .= $fbIcons['offlineicon'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['offlineicon'] . '" border="0" alt="' . _MODLIST_OFFLINE . '" />' : '  <img src="' . JB_URLEMOTIONSPATH . 'offlineicon.gif" border="0"  alt="' . _MODLIST_OFFLINE . '" />';
+						$msg_online .= $fbIcons->offlineicon ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->offlineicon . '" border="0" alt="' . _MODLIST_OFFLINE . '" />' : '  <img src="' . JB_URLEMOTIONSPATH . 'offlineicon.gif" border="0"  alt="' . _MODLIST_OFFLINE . '" />';
 					}
 				}
-				if($fbConfig['pm_component'] == "clexuspm" && $fmessage->userid && $my->id && $fmessage->userid != $my->id){
+				if($fbConfig->pm_component == "clexuspm" && $fmessage->userid && $my->id && $fmessage->userid != $my->id){
 					$PMSName = $userinfo->aid;
 					$msg_pms = "<a href=\"" . sefRelToAbs('index.php?option=com_mypms&amp;task=new&amp;to=' . $fmessage->userid . '&title=' . $fmessage->subject) . "\"><img src=\"";
-					if($fbIcons['pms']){
-						$msg_pms .= JB_URLICONSPATH . "" . $fbIcons['pms'];
+					if($fbIcons->pms){
+						$msg_pms .= JB_URLICONSPATH . "" . $fbIcons->pms;
 					} else{
 						$msg_pms .= JB_JLIVEURL . "/components/com_mypms/images/icons/message_12px.gif";
 					}
 					$msg_pms .= "\" alt=\"" . _VIEW_PMS . "\" border=\"0\" title=\"" . _VIEW_PMS . "\" /></a>";
 					$msg_profile = "<a href=\"" . MyPMSTools::getProfileLink($fmessage->userid) . "\"><img src=\"";
-					if($fbIcons['userprofile']){
-						$msg_profile .= JB_URLICONSPATH . '' . $fbIcons['userprofile'];
+					if($fbIcons->userprofile){
+						$msg_profile .= JB_URLICONSPATH . '' . $fbIcons->userprofile;
 					} else{
 						$msg_profile .= JB_JLIVEURL . "/components/com_mypms/images/managecontact_icon.gif";
 					}
 
 					$msg_profile .= "\" alt=\"" . _VIEW_PROFILE . "\" border=\"0\" title=\"" . _VIEW_PROFILE . "\" /></a>";
 					$msg_buddy = "<a href=\"" . sefRelToAbs('index.php?option=com_mypms&amp;user=' . $PMSName . '&amp;task=addbuddy') . "\"><img src=\"";
-					if($fbIcons['pms2buddy']){
-						$msg_buddy .= JB_URLICONSPATH . "" . $fbIcons['pms2buddy'];
+					if($fbIcons->pms2buddy){
+						$msg_buddy .= JB_URLICONSPATH . "" . $fbIcons->pms2buddy;
 					} else{
 						$msg_buddy .= JB_JLIVEURL . "/components/com_mypms/images/messages/addbuddy.gif";
 					}
@@ -563,22 +563,22 @@ if($letPass || $is_Mod){
 					}
 					unset ($mostables);
 				}
-				if($fbConfig['fb_profile'] == "cb"){
-					if($fbConfig['cb_profile'] && $fmessage->userid > 0){
+				if($fbConfig->fb_profile == "cb"){
+					if($fbConfig->cb_profile && $fmessage->userid > 0){
 						$msg_prflink = sefRelToAbs('index.php?option=com_comprofiler&amp;task=userProfile&amp;user=' . $fmessage->userid . '');
 						$msg_profile = "<a href=\"" . sefRelToAbs('index.php?option=com_comprofiler&amp;task=userProfile&amp;user=' . $fmessage->userid . '') . "\">                                              <img src=\"";
-						if($fbIcons['userprofile']){
-							$msg_profile .= JB_URLICONSPATH . "" . $fbIcons['userprofile'];
+						if($fbIcons->userprofile){
+							$msg_profile .= JB_URLICONSPATH . "" . $fbIcons->userprofile;
 						} else{
 							$msg_profile .= JB_JLIVEURL . "/components/com_comprofiler/images/profiles.gif";
 						}
 						$msg_profile .= "\" alt=\"" . _VIEW_PROFILE . "\" border=\"0\" title=\"" . _VIEW_PROFILE . "\" /></a>";
 					}
-				} else if($fbConfig['fb_profile'] == "clexuspm"){
+				} else if($fbConfig->fb_profile == "clexuspm"){
 					$msg_prflink = MyPMSTools::getProfileLink($fmessage->userid);
 					$msg_profile = "<a href=\"" . MyPMSTools::getProfileLink($fmessage->userid) . "\"><img src=\"";
-					if($fbIcons['userprofile']){
-						$msg_profile .= JB_URLICONSPATH . '' . $fbIcons['userprofile'];
+					if($fbIcons->userprofile){
+						$msg_profile .= JB_URLICONSPATH . '' . $fbIcons->userprofile;
 					} else{
 						$msg_profile .= JB_JLIVEURL . "/components/com_mypms/images/managecontact_icon.gif";
 					}
@@ -588,8 +588,8 @@ if($letPass || $is_Mod){
 					$msg_prflink = sefRelToAbs(JB_LIVEURLREL . '&amp;func=fbprofile&amp;task=showprf&amp;userid=' . $fmessage->userid);
 					$msg_profile = "<a href=\"" . sefRelToAbs(JB_LIVEURLREL . '&amp;func=fbprofile&amp;task=showprf&amp;userid=' . $fmessage->userid) . "\"> <img src=\"";
 
-					if($fbIcons['userprofile']){
-						$msg_profile .= JB_URLICONSPATH . "" . $fbIcons['userprofile'];
+					if($fbIcons->userprofile){
+						$msg_profile .= JB_URLICONSPATH . "" . $fbIcons->userprofile;
 					} else{
 						$msg_profile .= JB_URLICONSPATH . "profile.gif";
 					}
@@ -599,11 +599,11 @@ if($letPass || $is_Mod){
 					$gender = _FB_NOGENDER;
 					if($userinfo->gender == 1){
 						$gender = '' . _FB_MYPROFILE_MALE . '';
-						$msg_gender = $fbIcons['msgmale'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['msgmale'] . '" border="0" alt="' . _FB_MYPROFILE_GENDER . ': ' . $gender . '" title="' . _FB_MYPROFILE_GENDER . ': ' . $gender . '" />' : '' . _FB_MYPROFILE_GENDER . ': ' . $gender . '';
+						$msg_gender = $fbIcons->msgmale ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->msgmale . '" border="0" alt="' . _FB_MYPROFILE_GENDER . ': ' . $gender . '" title="' . _FB_MYPROFILE_GENDER . ': ' . $gender . '" />' : '' . _FB_MYPROFILE_GENDER . ': ' . $gender . '';
 					}
 					if($userinfo->gender == 2){
 						$gender = '' . _FB_MYPROFILE_FEMALE . '';
-						$msg_gender = $fbIcons['msgfemale'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['msgfemale'] . '" border="0" alt="' . _FB_MYPROFILE_GENDER . ': ' . $gender . '" title="' . _FB_MYPROFILE_GENDER . ': ' . $gender . '" />' : '' . _FB_MYPROFILE_GENDER . ': ' . $gender . '';
+						$msg_gender = $fbIcons->msgfemale ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->msgfemale . '" border="0" alt="' . _FB_MYPROFILE_GENDER . ': ' . $gender . '" title="' . _FB_MYPROFILE_GENDER . ': ' . $gender . '" />' : '' . _FB_MYPROFILE_GENDER . ': ' . $gender . '';
 					}
 				}
 				if($userinfo->personalText != ''){
@@ -613,36 +613,36 @@ if($letPass || $is_Mod){
 					$msg_icq = '<a href="http://www.icq.com/people/cmd.php?uin=' . $userinfo->ICQ . '&action=message"><img src="' . JB_URLEMOTIONSPATH . 'icq.png"  border="0" alt="" /></a>';
 				}
 				if($userinfo->location != ''){
-					$msg_location = $fbIcons['msglocation'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['msglocation'] . '" border="0" alt="' . _FB_MYPROFILE_LOCATION . ': ' . $userinfo->location . '" title="' . _FB_MYPROFILE_LOCATION . ': ' . $userinfo->location . '" />' : ' ' . _FB_MYPROFILE_LOCATION . ': ' . $userinfo->location . '';
+					$msg_location = $fbIcons->msglocation ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->msglocation . '" border="0" alt="' . _FB_MYPROFILE_LOCATION . ': ' . $userinfo->location . '" title="' . _FB_MYPROFILE_LOCATION . ': ' . $userinfo->location . '" />' : ' ' . _FB_MYPROFILE_LOCATION . ': ' . $userinfo->location . '';
 				}
 				if($userinfo->birthdate != '0001-01-01' AND $userinfo->birthdate != '0000-00-00'){
-					$msg_birthdate = $fbIcons['msgbirthdate'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['msgbirthdate'] . '" border="0" alt="' . _FB_MYPROFILE_BIRTHDATE . ': ' . $userinfo->birthdate . '" title="' . _FB_MYPROFILE_BIRTHDATE . ': ' . $userinfo->birthdate . '" />' : ' ' . _FB_MYPROFILE_BIRTHDATE . ': ' . $userinfo->birthdate . '';
+					$msg_birthdate = $fbIcons->msgbirthdate ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->msgbirthdate . '" border="0" alt="' . _FB_MYPROFILE_BIRTHDATE . ': ' . $userinfo->birthdate . '" title="' . _FB_MYPROFILE_BIRTHDATE . ': ' . $userinfo->birthdate . '" />' : ' ' . _FB_MYPROFILE_BIRTHDATE . ': ' . $userinfo->birthdate . '';
 				}
 				if($userinfo->AIM != ''){
-					$msg_aim = $fbIcons['msgaim'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['msgaim'] . '" border="0" alt="' . $userinfo->AIM . '" title="AIM: ' . $userinfo->AIM . '" />' : 'AIM: ' . $userinfo->AIM . '';
+					$msg_aim = $fbIcons->msgaim ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->msgaim . '" border="0" alt="' . $userinfo->AIM . '" title="AIM: ' . $userinfo->AIM . '" />' : 'AIM: ' . $userinfo->AIM . '';
 				}
 				if($userinfo->MSN != ''){
-					$msg_msn = $fbIcons['msgmsn'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['msgmsn'] . '" border="0" alt="' . $userinfo->MSN . '" title="MSN: ' . $userinfo->MSN . '" />' : 'MSN: ' . $userinfo->MSN . '';
+					$msg_msn = $fbIcons->msgmsn ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->msgmsn . '" border="0" alt="' . $userinfo->MSN . '" title="MSN: ' . $userinfo->MSN . '" />' : 'MSN: ' . $userinfo->MSN . '';
 				}
 				if($userinfo->YIM != ''){
-					$msg_yim = $fbIcons['msgyim'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['msgyim'] . '" border="0" alt="' . $userinfo->YIM . '" title="YIM: ' . $userinfo->YIM . '" />' : ' YIM: ' . $userinfo->YIM . '';
+					$msg_yim = $fbIcons->msgyim ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->msgyim . '" border="0" alt="' . $userinfo->YIM . '" title="YIM: ' . $userinfo->YIM . '" />' : ' YIM: ' . $userinfo->YIM . '';
 				}
 				if($userinfo->SKYPE != ''){
-					$msg_skype = $fbIcons['msgskype'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['msgskype'] . '" border="0" alt="' . $userinfo->SKYPE . '" title="SKYPE: ' . $userinfo->SKYPE . '" />' : 'SKYPE: ' . $userinfo->SKYPE . '';
+					$msg_skype = $fbIcons->msgskype ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->msgskype . '" border="0" alt="' . $userinfo->SKYPE . '" title="SKYPE: ' . $userinfo->SKYPE . '" />' : 'SKYPE: ' . $userinfo->SKYPE . '';
 				}
 				if($userinfo->GTALK != ''){
-					$msg_gtalk = $fbIcons['msggtalk'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['msggtalk'] . '" border="0" alt="' . $userinfo->GTALK . '" title="GTALK: ' . $userinfo->GTALK . '" />' : 'GTALK: ' . $userinfo->GTALK . '';
+					$msg_gtalk = $fbIcons->msggtalk ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->msggtalk . '" border="0" alt="' . $userinfo->GTALK . '" title="GTALK: ' . $userinfo->GTALK . '" />' : 'GTALK: ' . $userinfo->GTALK . '';
 				}
 				if($userinfo->websiteurl != ''){
-					$msg_website = $fbIcons['msgwebsite'] ? '<a href="http://' . $userinfo->websiteurl . '" target="_blank"><img src="' . JB_URLICONSPATH . '' . $fbIcons['msgwebsite'] . '" border="0" alt="' . $userinfo->websitename . '" title="' . $userinfo->websitename . '" /></a>' : '<a href="http://' . $userinfo->websiteurl . '" target="_blank">' . $userinfo->websitename . '</a>';
+					$msg_website = $fbIcons->msgwebsite ? '<a href="http://' . $userinfo->websiteurl . '" target="_blank"><img src="' . JB_URLICONSPATH . '' . $fbIcons->msgwebsite . '" border="0" alt="' . $userinfo->websitename . '" title="' . $userinfo->websitename . '" /></a>' : '<a href="http://' . $userinfo->websiteurl . '" target="_blank">' . $userinfo->websitename . '</a>';
 				}
 				if($is_admin || $is_moderator){
 					$msg_ip = 'IP: ' . $fmessage->ip;
 					$msg_ip_link = '<a href="http://openrbl.org/dnsbl?i=' . $fmessage->ip . '&amp;f=2" target="_blank">';
 				}
 				$msg_foto = '';
-				$allowed_groups = explode(',', $fbConfig['foto_groups']);
-				if($fbConfig['foto'] && in_array($userinfo->group_id, $allowed_groups)){
+				$allowed_groups = explode(',', $fbConfig->foto_groups);
+				if($fbConfig->foto && in_array($userinfo->group_id, $allowed_groups)){
 					$msg_foto = $fmessage->userid;
 				}
 				$fb_subject_txt = $fmessage->subject;
@@ -653,14 +653,14 @@ if($letPass || $is_Mod){
 				$msg_subject = stripslashes($fb_subject_txt);
 				$msg_date = date(_DATETIME, $fmessage->time);
 				$fb_message_txt = stripslashes($fmessage->message);
-				$fb_message_txt = smile::smileReplace($fb_message_txt, 0, $fbConfig['disemoticons'], $smileyList);
-				if($fbConfig['badwords']){
+				$fb_message_txt = smile::smileReplace($fb_message_txt, 0, $fbConfig->disemoticons, $smileyList);
+				if($fbConfig->badwords){
 					$badwords = Badword::filter($fb_message_txt, $my);
 				}
-				$fb_message_txt = smile::htmlwrap($fb_message_txt, $fbConfig['wrap']);
+				$fb_message_txt = smile::htmlwrap($fb_message_txt, $fbConfig->wrap);
 				$msg_text = $fb_message_txt;
-				if($fbConfig['jmambot']){
-					global $_MAMBOTS;
+				if($fbConfig->jmambot){
+					$_MAMBOTS = mosMambotHandler::getInstance();
 					$row = new t();
 					$row->text = $fb_message_txt;
 					$_MAMBOTS->loadBotGroup('content');
@@ -671,28 +671,28 @@ if($letPass || $is_Mod){
 				if($badwords == "true"){
 					$msg_text = _COM_A_BADWORDS_NOTICE;
 				}
-				if($fbConfig['cb_profile']){
+				if($fbConfig->cb_profile){
 					$database->setQuery("select fbsignature from #__comprofiler where user_id=$fmessage->userid");
 					$signature = $database->loadResult();
 				} else{
 					$signature = $userinfo->signature;
 				}
 				if($signature){
-					$signature = stripslashes(smile::smileReplace($signature, 0, $fbConfig['disemoticons'], $smileyList));
-					$signature = smile::htmlwrap($signature, $fbConfig['wrap']);
+					$signature = stripslashes(smile::smileReplace($signature, 0, $fbConfig->disemoticons, $smileyList));
+					$signature = smile::htmlwrap($signature, $fbConfig->wrap);
 					$msg_signature = stripslashes($signature);
 				}
-				if((($fbConfig['pubwrite'] == 0 && $my_id != 0) || $fbConfig['pubwrite'] == 1) && ($topicLock == 0 || ($topicLock == 1 && $is_moderator))){
+				if((($fbConfig->pubwrite == 0 && $my_id != 0) || $fbConfig->pubwrite == 1) && ($topicLock == 0 || ($topicLock == 1 && $is_moderator))){
 					$msg_reply = "<a href=\"" . sefRelToAbs(JB_LIVEURLREL . '&amp;func=post&amp;do=reply&amp;replyto=' . $fmessage->id . '&amp;catid=' . $catid) . "\">";
-					if($fbIcons['reply']){
-						$msg_reply .= '<img src="' . JB_URLICONSPATH . '' . $fbIcons['reply'] . "\" alt=\"" . _VIEW_REPLY . "\" border=\"0\" title=\"" . _VIEW_REPLY . "\" />";
+					if($fbIcons->reply){
+						$msg_reply .= '<img src="' . JB_URLICONSPATH . '' . $fbIcons->reply . "\" alt=\"" . _VIEW_REPLY . "\" border=\"0\" title=\"" . _VIEW_REPLY . "\" />";
 					} else{
 						$msg_reply .= _GEN_REPLY;
 					}
 					$msg_reply .= "</a>";
 					$msg_quote = "<a href=\"" . sefRelToAbs(JB_LIVEURLREL . '&amp;func=post&amp;do=quote&amp;replyto=' . $fmessage->id . '&amp;catid=' . $catid) . "\" title=\"" . _VIEW_QUOTE . "\">";
-					if($fbIcons['quote']){
-						$msg_quote .= '<img src="' . JB_URLICONSPATH . '' . $fbIcons['quote'] . "\" alt=\"" . _GEN_QUOTE . "\" border=\"0\" title=\"" . _VIEW_QUOTE . "\" />";
+					if($fbIcons->quote){
+						$msg_quote .= '<img src="' . JB_URLICONSPATH . '' . $fbIcons->quote . "\" alt=\"" . _GEN_QUOTE . "\" border=\"0\" title=\"" . _VIEW_QUOTE . "\" />";
 					} else{
 						$msg_quote .= _GEN_QUOTE;
 					}
@@ -707,32 +707,32 @@ if($letPass || $is_Mod){
 				$showedEdit = 0; //reset this value
 				if($is_moderator){
 					$msg_delete = "<a href=\"" . sefRelToAbs(JB_LIVEURLREL . '&amp;func=post&amp;do=delete&amp;id=' . $fmessage->id . '&amp;catid=' . $catid) . "\">";
-					if($fbIcons['delete']){
-						$msg_delete .= '<img src="' . JB_URLICONSPATH . '' . $fbIcons['delete'] . "\" alt=\"" . _VIEW_DELETE . "\" border=\"0\" title=\"" . _VIEW_DELETE . "\" />";
+					if($fbIcons->delete){
+						$msg_delete .= '<img src="' . JB_URLICONSPATH . '' . $fbIcons->delete . "\" alt=\"" . _VIEW_DELETE . "\" border=\"0\" title=\"" . _VIEW_DELETE . "\" />";
 					} else{
 						$msg_delete .= _GEN_DELETE;
 					}
 					$msg_delete .= "</a>";
 				}
-				if($fbConfig['useredit'] == 1 && $my_id != ""){
+				if($fbConfig->useredit == 1 && $my_id != ""){
 					$allowEdit = 0;
 					if($my_id == $fmessage->userid){
-						if(((int)$fbConfig['usereditTime']) == 0){
+						if(((int)$fbConfig->usereditTime) == 0){
 							$allowEdit = 1;
 						} else{
 							$modtime = $fmessage->modified_time;
 							if(!$modtime){
 								$modtime = $fmessage->time;
 							}
-							if(($modtime + ((int)$fbConfig['usereditTime'])) >= FBTools::fbGetInternalTime()){
+							if(($modtime + ((int)$fbConfig->usereditTime)) >= FBTools::fbGetInternalTime()){
 								$allowEdit = 1;
 							}
 						}
 					}
 					if($allowEdit){
 						$msg_edit = "<a href=\"" . sefRelToAbs(JB_LIVEURLREL . '&amp;func=post&amp;do=edit&amp;id=' . $fmessage->id . '&amp;catid=' . $catid) . "\">";
-						if($fbIcons['edit']){
-							$msg_edit .= '<img src="' . JB_URLICONSPATH . '' . $fbIcons['edit'] . "\" alt=\"" . _VIEW_EDIT . "\" border=\"0\" title=\"" . _VIEW_EDIT . "\" />";
+						if($fbIcons->edit){
+							$msg_edit .= '<img src="' . JB_URLICONSPATH . '' . $fbIcons->edit . "\" alt=\"" . _VIEW_EDIT . "\" border=\"0\" title=\"" . _VIEW_EDIT . "\" />";
 							$showedEdit = 1;
 						} else{
 							$msg_edit .= _GEN_EDIT;
@@ -743,8 +743,8 @@ if($letPass || $is_Mod){
 				}
 				if($is_moderator && $showedEdit != 1){
 					$msg_edit = "<a href=\"" . sefRelToAbs(JB_LIVEURLREL . '&amp;func=post&amp;do=edit&amp;id=' . $fmessage->id . '&amp;catid=' . $catid) . "\">";
-					if($fbIcons['edit']){
-						$msg_edit .= '<img src="' . JB_URLICONSPATH . '' . $fbIcons['edit'] . "\" alt=\"" . _VIEW_EDIT . "\" border=\"0\" title=\"" . _VIEW_EDIT . "\" />";
+					if($fbIcons->edit){
+						$msg_edit .= '<img src="' . JB_URLICONSPATH . '' . $fbIcons->edit . "\" alt=\"" . _VIEW_EDIT . "\" border=\"0\" title=\"" . _VIEW_EDIT . "\" />";
 					} else{
 						$msg_edit .= _GEN_EDIT;
 					}
@@ -752,16 +752,16 @@ if($letPass || $is_Mod){
 				}
 				if($is_moderator && $fmessage->parent == '0'){
 					$msg_move = "<a href=\"" . sefRelToAbs(JB_LIVEURLREL . '&amp;func=post&amp;do=move&amp;id=' . $fmessage->id . '&amp;catid=' . $catid . '&amp;name=' . $fmessage->name) . "\">";
-					if($fbIcons['move']){
-						$msg_move .= '<img src="' . JB_URLICONSPATH . '' . $fbIcons['move'] . "\" alt=\"" . _VIEW_MOVE . "\" border=\"0\" title=\"" . _VIEW_MOVE . "\" />";
+					if($fbIcons->move){
+						$msg_move .= '<img src="' . JB_URLICONSPATH . '' . $fbIcons->move . "\" alt=\"" . _VIEW_MOVE . "\" border=\"0\" title=\"" . _VIEW_MOVE . "\" />";
 					} else{
 						$msg_move .= _GEN_MOVE;
 					}
 					$msg_move .= "</a>";
 					if($fmessage->ordering == 0){
 						$msg_sticky = "<a href=\"" . sefRelToAbs(JB_LIVEURLREL . '&amp;func=post&amp;do=sticky&amp;id=' . $fmessage->id . '&amp;catid=' . $catid) . "\">";
-						if($fbIcons['sticky']){
-							$msg_sticky .= '<img src="' . JB_URLICONSPATH . '' . $fbIcons['sticky'] . "\" alt=\"" . _VIEW_STICKY . "\" border=\"0\" title=\"" . _VIEW_STICKY . "\" />";
+						if($fbIcons->sticky){
+							$msg_sticky .= '<img src="' . JB_URLICONSPATH . '' . $fbIcons->sticky . "\" alt=\"" . _VIEW_STICKY . "\" border=\"0\" title=\"" . _VIEW_STICKY . "\" />";
 						} else{
 							$msg_sticky .= _GEN_STICKY;
 						}
@@ -769,8 +769,8 @@ if($letPass || $is_Mod){
 						$msg_sticky .= "</a>";
 					} else{
 						$msg_sticky = "<a href=\"" . sefRelToAbs(JB_LIVEURLREL . '&amp;func=post&amp;do=unsticky&amp;id=' . $fmessage->id . '&amp;catid=' . $catid) . "\">";
-						if($fbIcons['unsticky']){
-							$msg_sticky .= '<img src="' . JB_URLICONSPATH . '' . $fbIcons['unsticky'] . "\" alt=\"" . _VIEW_UNSTICKY . "\" border=\"0\" title=\"" . _VIEW_UNSTICKY . "\" />";
+						if($fbIcons->unsticky){
+							$msg_sticky .= '<img src="' . JB_URLICONSPATH . '' . $fbIcons->unsticky . "\" alt=\"" . _VIEW_UNSTICKY . "\" border=\"0\" title=\"" . _VIEW_UNSTICKY . "\" />";
 						} else{
 							$msg_sticky .= _GEN_UNSTICKY;
 						}
@@ -778,16 +778,16 @@ if($letPass || $is_Mod){
 					}
 					if($fmessage->locked == 0){
 						$msg_lock = "<a href=\"" . sefRelToAbs(JB_LIVEURLREL . '&amp;func=post&amp;do=lock&amp;id=' . $fmessage->id . '&amp;catid=' . $catid) . "\">";
-						if($fbIcons['lock']){
-							$msg_lock .= '<img src="' . JB_URLICONSPATH . '' . $fbIcons['lock'] . "\" alt=\"" . _VIEW_LOCK . "\" border=\"0\" title=\"" . _VIEW_LOCK . "\" />";
+						if($fbIcons->lock){
+							$msg_lock .= '<img src="' . JB_URLICONSPATH . '' . $fbIcons->lock . "\" alt=\"" . _VIEW_LOCK . "\" border=\"0\" title=\"" . _VIEW_LOCK . "\" />";
 						} else{
 							$msg_lock .= _GEN_LOCK;
 						}
 						$msg_lock .= "</a>";
 					} else{
 						$msg_lock = "<a href=\"" . sefRelToAbs(JB_LIVEURLREL . '&amp;func=post&amp;do=unlock&amp;id=' . $fmessage->id . '&amp;catid=' . $catid) . "\">";
-						if($fbIcons['unlock']){
-							$msg_lock .= '<img src="' . JB_URLICONSPATH . '' . $fbIcons['unlock'] . "\" alt=\"" . _VIEW_UNLOCK . "\" border=\"0\" title=\"" . _VIEW_UNLOCK . "\" />";
+						if($fbIcons->unlock){
+							$msg_lock .= '<img src="' . JB_URLICONSPATH . '' . $fbIcons->unlock . "\" alt=\"" . _VIEW_UNLOCK . "\" border=\"0\" title=\"" . _VIEW_UNLOCK . "\" />";
 						} else{
 							$msg_lock .= _GEN_UNLOCK;
 						}
@@ -831,14 +831,14 @@ if($letPass || $is_Mod){
 			<td class="jr-topnav-left">
 				<?php
 				echo '<a name="forumbottom" /><a href="' . htmlspecialchars(sefRelToAbs("index.php?" . $_SERVER["QUERY_STRING"])) . '#forumtop">';
-				echo $fbIcons['toparrow'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['toparrow'] . '" border="0" alt="' . _GEN_GOTOTOP . '" title="' . _GEN_GOTOTOP . '"/>' : _GEN_GOTOTOP;
+				echo $fbIcons->toparrow ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->toparrow . '" border="0" alt="' . _GEN_GOTOTOP . '" title="' . _GEN_GOTOTOP . '"/>' : _GEN_GOTOTOP;
 				echo '</a>';
-				if((($fbConfig['pubwrite'] == 0 && $my_id != 0) || $fbConfig['pubwrite'] == 1) && ($topicLock == 0 || ($topicLock == 1 && $is_moderator))){
+				if((($fbConfig->pubwrite == 0 && $my_id != 0) || $fbConfig->pubwrite == 1) && ($topicLock == 0 || ($topicLock == 1 && $is_moderator))){
 					echo '<a href="' . sefRelToAbs(JB_LIVEURLREL . '&amp;func=post&amp;do=reply&amp;replyto=' . $thread . '&amp;catid=' . $catid) . '" >';
-					echo $fbIcons['topicreply'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['topicreply'] . '" border="0" alt="' . _GEN_POST_REPLY . '" title="' . _GEN_POST_REPLY . '"/>' : _GEN_POST_REPLY;
+					echo $fbIcons->topicreply ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->topicreply . '" border="0" alt="' . _GEN_POST_REPLY . '" title="' . _GEN_POST_REPLY . '"/>' : _GEN_POST_REPLY;
 					echo '</a>';
 				}
-				if($fbConfig['allowsubscriptions'] == 1 && ("" != $my_id || 0 != $my_id)){
+				if($fbConfig->allowsubscriptions == 1 && ("" != $my_id || 0 != $my_id)){
 					$database->setQuery("SELECT thread from #__fb_subscriptions where userid=$my_id and thread='$fb_thread'");
 					$fb_subscribed = $database->loadResult();
 					if($fb_subscribed == ""){
@@ -847,19 +847,19 @@ if($letPass || $is_Mod){
 						$fb_cansubscribe = 0;
 					}
 				}
-				if($my_id != 0 && $fbConfig['allowsubscriptions'] == 1 && $fb_cansubscribe == 1){
+				if($my_id != 0 && $fbConfig->allowsubscriptions == 1 && $fb_cansubscribe == 1){
 					?>
 					<a href="<?php echo sefRelToAbs(JB_LIVEURLREL . '&amp;func=post&amp;do=subscribe&amp;catid=' . $catid . '&amp;id=' . $id . '&amp;fb_thread=' . $fb_thread);?>">
-						<?php echo $fbIcons['subscribe'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['subscribe'] . '" border="0" title="' . _VIEW_SUBSCRIBETXT . '" alt="' . _VIEW_SUBSCRIBETXT . '" />' : _VIEW_SUBSCRIBE; ?></a>
+						<?php echo $fbIcons->subscribe ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->subscribe . '" border="0" title="' . _VIEW_SUBSCRIBETXT . '" alt="' . _VIEW_SUBSCRIBETXT . '" />' : _VIEW_SUBSCRIBE; ?></a>
 					<?php
 				}
-				if($my_id != 0 && $fbConfig['allowsubscriptions'] == 1 && $fb_cansubscribe == 0){
+				if($my_id != 0 && $fbConfig->allowsubscriptions == 1 && $fb_cansubscribe == 0){
 					?>
 					<a href="<?php echo sefRelToAbs(JB_LIVEURLREL . '&amp;func=myprofile&amp;do=unsubscribeitem&amp;thread=' . $fb_thread);?>">
-						<?php echo $fbIcons['unsubscribe'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['unsubscribe'] . '" border="0" title="' . _VIEW_UNSUBSCRIBETXT . '" alt="' . _VIEW_UNSUBSCRIBETXT . '" />' : _VIEW_UNSUBSCRIBE; ?></a>
+						<?php echo $fbIcons->unsubscribe ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->unsubscribe . '" border="0" title="' . _VIEW_UNSUBSCRIBETXT . '" alt="' . _VIEW_UNSUBSCRIBETXT . '" />' : _VIEW_UNSUBSCRIBE; ?></a>
 					<?php
 				}
-				if($fbConfig['allowfavorites'] == 1 && ("" != $my_id || 0 != $my_id)){
+				if($fbConfig->allowfavorites == 1 && ("" != $my_id || 0 != $my_id)){
 					$database->setQuery("SELECT thread from #__fb_favorites where userid=$my_id and thread='$fb_thread'");
 					$fb_favorited = $database->loadResult();
 					if($fb_favorited == ""){
@@ -868,16 +868,16 @@ if($letPass || $is_Mod){
 						$fb_canfavorite = 0;
 					}
 				}
-				if($my_id != 0 && $fbConfig['allowfavorites'] == 1 && $fb_canfavorite == 1){
+				if($my_id != 0 && $fbConfig->allowfavorites == 1 && $fb_canfavorite == 1){
 					?>
 					<a href="<?php echo sefRelToAbs(JB_LIVEURLREL . '&amp;func=post&amp;do=favorite&amp;catid=' . $catid . '&amp;id=' . $id . '&amp;fb_thread=' . $fb_thread);?>">
-						<?php echo $fbIcons['favorite'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['favorite'] . '" border="0" title="' . _VIEW_FAVORITETXT . '" alt="' . _VIEW_FAVORITETXT . '" />' : _VIEW_FAVORITE; ?></a>
+						<?php echo $fbIcons->favorite ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->favorite . '" border="0" title="' . _VIEW_FAVORITETXT . '" alt="' . _VIEW_FAVORITETXT . '" />' : _VIEW_FAVORITE; ?></a>
 					<?php
 				}
-				if($my_id != 0 && $fbConfig['allowfavorites'] == 1 && $fb_canfavorite == 0){
+				if($my_id != 0 && $fbConfig->allowfavorites == 1 && $fb_canfavorite == 0){
 					?>
 					<a href="<?php echo sefRelToAbs(JB_LIVEURLREL . '&amp;func=myprofile&amp;do=unfavoriteitem&amp;thread=' . $fb_thread);?>">
-						<?php echo $fbIcons['unfavorite'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['unfavorite'] . '" border="0" title="' . _VIEW_UNFAVORITETXT . '" alt="' . _VIEW_UNFAVORITETXT . '" />' : _VIEW_UNFAVORITE; ?></a>
+						<?php echo $fbIcons->unfavorite ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->unfavorite . '" border="0" title="' . _VIEW_UNFAVORITETXT . '" alt="' . _VIEW_UNFAVORITETXT . '" />' : _VIEW_UNFAVORITE; ?></a>
 					<?php
 				}
 				?>
@@ -908,7 +908,7 @@ if($letPass || $is_Mod){
 			<td>
 				<div id="fb_bottom_pathway">
 					<a href="<?php echo sefRelToAbs(JB_LIVEURLREL);?>">
-						<?php echo $fbIcons['forumlist'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['forumlist'] . '" border="0" alt="' . _GEN_FORUMLIST . '" title="' . _GEN_FORUMLIST . '">' : _GEN_FORUMLIST; ?> </a>
+						<?php echo $fbIcons->forumlist ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->forumlist . '" border="0" alt="' . _GEN_FORUMLIST . '" title="' . _GEN_FORUMLIST . '">' : _GEN_FORUMLIST; ?> </a>
 					<?php
 					if(file_exists($mosConfig_absolute_path . '/templates/' . $mainframe->getTemplate() . '/images/arrow.png')){
 						echo ' <img src="' . JB_JLIVEURL . '/templates/' . $mainframe->getTemplate() . '/images/arrow.png" alt="" /> ';
@@ -934,7 +934,7 @@ if($letPass || $is_Mod){
 		</tr>
 	</table>
 	<?php
-		if($fbConfig['foto']){
+		if($fbConfig->foto){
 			if(file_exists($mosConfig_absolute_path . '/components/com_fireboard/template/default/plugin/foto/fotopanel.php')){
 				include($mosConfig_absolute_path . '/components/com_fireboard/template/default/plugin/foto/fotopanel.php');
 				?>
@@ -957,7 +957,7 @@ if($letPass || $is_Mod){
 							<tr>
 								<th class="th-right">
 									<?php
-									if($fbConfig['enableForumJump']) require_once (JB_ABSSOURCESPATH . 'fb_forumjump.php');
+									if($fbConfig->enableForumJump) require_once (JB_ABSSOURCESPATH . 'fb_forumjump.php');
 									?>
 								</th>
 							</tr>

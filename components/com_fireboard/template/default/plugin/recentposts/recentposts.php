@@ -16,7 +16,11 @@
  *
  **/
 defined('_VALID_MOS') or die('Direct Access to this location is not allowed.');
-global $fbConfig, $mosConfig_absolute_path, $mosConfig_lang, $mosConfig_live_site, $mainframe;
+$fbConfig = FBJConfig::getInstance();
+$mosConfig_absolute_path = FBJConfig::getCfg('absolute_path');
+$mosConfig_lang = FBJConfig::getCfg('lang');
+$mosConfig_live_site = FBJConfig::getCfg('live_site');
+$mainframe = FBJConfig::mainframe();
 $fireboard_adm_path = "$mosConfig_absolute_path/administrator/components/com_fireboard";
 $fireboard_language_file = "$fireboard_adm_path/language/$mosConfig_lang.php";
 if(file_exists($fireboard_language_file)){
@@ -32,17 +36,17 @@ $source_file = "$mosConfig_absolute_path/components/com_fireboard/template/defau
 $source_file = "$mosConfig_absolute_path/components/com_fireboard/template/default/plugin/recentposts/tabber.js";
 $source_file = "$mosConfig_absolute_path/components/com_fireboard/template/default/plugin/recentposts/tabber-minimized.js";
 $source_file = "$mosConfig_absolute_path/components/com_fireboard/template/default/plugin/recentposts/function.tabber.php";
-$category = trim($fbConfig['latestCategory']);
-$count = $fbConfig['latestCount'];
-$count_per_page = intval($fbConfig['latestCountPerPage']);
-$show_author = $fbConfig['latestShowAuthor'];
-$singlesubject = $fbConfig['latestSingleSubject'];
-$replysubject = $fbConfig['latestReplySubject'];
-$subject_length = intval($fbConfig['latestSubjectLength']);
-$show_date = $fbConfig['latestShowDate'];
+$category = trim($fbConfig->latestCategory);
+$count = $fbConfig->latestCount;
+$count_per_page = intval($fbConfig->latestCountPerPage);
+$show_author = $fbConfig->latestShowAuthor;
+$singlesubject = $fbConfig->latestSingleSubject;
+$replysubject = $fbConfig->latestReplySubject;
+$subject_length = intval($fbConfig->latestSubjectLength);
+$show_date = $fbConfig->latestShowDate;
 $show_order_number = "1";
 $tooltips_enable = "1";
-$show_hits = $fbConfig['latestShowHits'];
+$show_hits = $fbConfig->latestShowHits;
 $topic_emoticons = array();
 $topic_emoticons[0] = JB_URLEMOTIONSPATH . 'default.gif';
 $topic_emoticons[1] = JB_URLEMOTIONSPATH . 'default.gif';

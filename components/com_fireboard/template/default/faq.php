@@ -16,7 +16,7 @@
 *
 **/
 defined ('_VALID_MOS') or die('Direct Access to this location is not allowed.');
-global $fbConfig;
+$fbConfig = FBJConfig::getInstance();
 ?>
 <div class="<?php echo $boardclass; ?>_bt_cvr1">
 <div class="<?php echo $boardclass; ?>_bt_cvr2">
@@ -36,7 +36,7 @@ global $fbConfig;
             <tr>
             <td class="fb_faqdesc" valign="top">
         <?php
-          $database->setQuery("SELECT introtext FROM #__content  WHERE id=".$fbConfig['help_cid']."");
+          $database->setQuery("SELECT introtext FROM #__content  WHERE id=".$fbConfig->help_cid."");
 		  $j_introtext = $database->loadResult();  
           echo $j_introtext; ?>
          </td>
@@ -58,7 +58,7 @@ global $fbConfig;
     <tr>
        <th class="th-right">
        <?php
-if ($fbConfig['enableForumJump'])
+if ($fbConfig->enableForumJump)
 require_once (JB_ABSSOURCESPATH . 'fb_forumjump.php');
 ?></th>
     </tr>

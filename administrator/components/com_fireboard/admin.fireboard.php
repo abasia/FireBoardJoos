@@ -17,8 +17,8 @@
  **/
 defined('_VALID_MOS') or die('Direct Access to this location is not allowed.');
 error_reporting(E_ALL ^ E_NOTICE);
-global $fbConfig;
-include_once (JPATH_BASE_ADMIN . '/components/com_fireboard/fireboard_config.php');
+include_once (JPATH_BASE_ADMIN . '/components/com_fireboard/fireboard.config.php');
+
 require_once (JPATH_BASE . "/components/com_fireboard/class.fireboard.php");
 require_once ($mainframe->getPath('admin_html'));
 if(file_exists($mainframe->getCfg('absolute_path') . '/administrator/components/com_fireboard/language/' . $mainframe->getCfg('lang') . '.php')){
@@ -34,8 +34,8 @@ $uid = mosGetParam($_REQUEST, 'uid', array(0));
 if(!is_array($uid)){
 	$uid = array($uid);
 }
-global $order;
 $order = mosGetParam($_REQUEST, 'order');
+
 $no_html = mosGetParam($_REQUEST, 'no_html');
 $pt_stop = "0";
 /* header  */
@@ -154,16 +154,16 @@ switch($task){
 		addModerator($option, $id, $cid, 0);
 		break;
 	case "showprofiles":
-		showProfiles($database, $option, $mosConfig_lang, $order);
+		showProfiles($option, $order);
 		break;
 	case "profiles":
-		showProfiles($database, $option, $mosConfig_lang, $order);
+		showProfiles($option, $order);
 		break;
 	case "userprofile":
 		editUserProfile($uid);
 		break;
 	case "showinstructions":
-		showInstructions($database, $option, $mosConfig_lang);
+		showInstructions();
 		break;
 	case "showCss":
 		showCss($option);
@@ -174,7 +174,7 @@ switch($task){
 		saveCss($file, $csscontent, $option);
 		break;
 	case "instructions":
-		showInstructions($database, $option, $mosConfig_lang);
+		showInstructions();
 		break;
 	case "saveuserprofile":
 		saveUserProfile($option);
@@ -284,7 +284,7 @@ function showAdministration($option){
 	}
 	$list = fbTreeRecurse(0, '', array(), $children, max(0, $levellimit - 1));
 	$total = count($list);
-	require_once ($GLOBALS['mosConfig_absolute_path'] . '/administrator/includes/pageNavigation.php');
+	require_once (FBJConfig::getCfg('absolute_path') . '/administrator/includes/pageNavigation.php');
 	$pageNav = new mosPageNav($total, $limitstart, $limit);
 	$levellist = mosHTML::integerSelectList(1, 20, 1, 'levellimit', 'size="1" onchange="document.adminForm.submit();"', $levellimit);
 	$list = array_slice($list, $pageNav->limitstart, $pageNav->limit);
@@ -296,7 +296,10 @@ function showAdministration($option){
 //-E D I T   F O R U M-------------------
 //---------------------------------------
 function editForum($uid, $option){
-	global $database, $my, $acl;
+	$acl = gacl::getInstance();
+	$database = FBJConfig::database();
+	$my = FBJConfig::my();
+
 	$row = new fbForum($database);
 	$row->load($uid);
 	if($uid){
@@ -357,7 +360,8 @@ function editForum($uid, $option){
 }
 
 function saveForum($option){
-	global $database, $my;
+	$database = FBJConfig::database();
+
 	$row = new fbForum($database);
 
 	if(!$row->bind($_POST)){
@@ -381,7 +385,8 @@ function saveForum($option){
 }
 
 function publishForum($cid = null, $publish = 1, $option){
-	global $database, $my;
+	$database = FBJConfig::database();
+	$my = FBJConfig::my();
 
 	if(!is_array($cid) || count($cid) < 1){
 		$action = $publish ? 'publish' : 'unpublish';
@@ -406,7 +411,8 @@ function publishForum($cid = null, $publish = 1, $option){
 }
 
 function deleteForum($cid = null, $option){
-	global $database, $my;
+	$database = FBJConfig::database();
+	$my = FBJConfig::my();
 
 	if(!is_array($cid) || count($cid) < 1){
 		$action = 'delete';
@@ -457,7 +463,7 @@ function deleteForum($cid = null, $option){
 }
 
 function cancelForum($option){
-	global $database;
+	$database = FBJConfig::database();
 	$row = new fbForum($database);
 	$row->bind($_POST);
 	$row->checkin();
@@ -465,7 +471,7 @@ function cancelForum($option){
 }
 
 function orderForum($uid, $inc, $option){
-	global $database;
+	$database = FBJConfig::database();
 	$row = new fbForum($database);
 	$row->load($uid);
 	$row->move($inc, "parent='$row->parent'");
@@ -476,10 +482,7 @@ function orderForum($uid, $inc, $option){
 // Config Functions
 //===============================
 function showConfig($option){
-	global $mosConfig_lang;
-	global $mosConfig_admin_template;
-	global $fbConfig;
-	$database = database::getInstance();
+	$fbConfig = FBJConfig::getInstance();
 	$mainframe = mosMainFrame::getInstance();
 
 	$configfile = $mainframe->getCfg('absolute_path') . "/administrator/components/com_fireboard/fireboard_config.php";
@@ -499,14 +502,14 @@ function showConfig($option){
 	$list[] = mosHTML::makeOption('flat', _COM_A_FLAT);
 	$list[] = mosHTML::makeOption('threaded', _COM_A_THREADED);
 	// build the html select list
-	$lists['default_view'] = mosHTML::selectList($list, 'cfg_default_view', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['default_view']);
+	$lists['default_view'] = mosHTML::selectList($list, 'cfg_default_view', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->default_view);
 	// source of avatar picture
 	$avlist = array();
 	$avlist[] = mosHTML::makeOption('fb', _FB_FIREBOARD);
 	$avlist[] = mosHTML::makeOption('clexuspm', _FB_CLEXUS);
 	$avlist[] = mosHTML::makeOption('cb', _FB_CB);
 	// build the html select list
-	$lists['avatar_src'] = mosHTML::selectList($avlist, 'cfg_avatar_src', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['avatar_src']);
+	$lists['avatar_src'] = mosHTML::selectList($avlist, 'cfg_avatar_src', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->avatar_src);
 	// private messaging system to use
 	$pmlist = array();
 	$pmlist[] = mosHTML::makeOption('no', _COM_A_NO);
@@ -515,14 +518,14 @@ function showConfig($option){
 	$pmlist[] = mosHTML::makeOption('uddeim', _FB_UDDEIM);
 	$pmlist[] = mosHTML::makeOption('jim', _FB_JIM);
 	$pmlist[] = mosHTML::makeOption('missus', _FB_MISSUS);
-	$lists['pm_component'] = mosHTML::selectList($pmlist, 'cfg_pm_component', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['pm_component']);
-	$lists['pm_component'] = mosHTML::selectList($pmlist, 'cfg_pm_component', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['pm_component']);
+	$lists['pm_component'] = mosHTML::selectList($pmlist, 'cfg_pm_component', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->pm_component);
+	$lists['pm_component'] = mosHTML::selectList($pmlist, 'cfg_pm_component', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->pm_component);
 	// Profile select
 	$prflist = array();
 	$prflist[] = mosHTML::makeOption('fb', _FB_FIREBOARD);
 	$prflist[] = mosHTML::makeOption('clexuspm', _FB_CLEXUS);
 	$prflist[] = mosHTML::makeOption('cb', _FB_CB);
-	$lists['fb_profile'] = mosHTML::selectList($prflist, 'cfg_fb_profile', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['fb_profile']);
+	$lists['fb_profile'] = mosHTML::selectList($prflist, 'cfg_fb_profile', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->fb_profile);
 	$yesno = array();
 	$yesno[] = mosHTML::makeOption('0', _COM_A_NO);
 	$yesno[] = mosHTML::makeOption('1', _COM_A_YES);
@@ -543,98 +546,100 @@ function showConfig($option){
 	while(list($key, $val) = each($filelist)){
 		$listitems[] = mosHTML::makeOption($val, $val);
 	}
-	$lists['badwords'] = mosHTML::selectList($yesno, 'cfg_badwords', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['badwords']);
-	$lists['jmambot'] = mosHTML::selectList($yesno, 'cfg_jmambot', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['jmambot']);
-	$lists['disemoticons'] = mosHTML::selectList($yesno, 'cfg_disemoticons', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['disemoticons']);
-	$lists['template'] = mosHTML::selectList($listitems, 'cfg_template', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['template']);
-	$lists['templateimagepath'] = mosHTML::selectList($listitems, 'cfg_templateimagepath', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['templateimagepath']);
-	$lists['regonly'] = mosHTML::selectList($yesno, 'cfg_regonly', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['regonly']);
-	$lists['board_offline'] = mosHTML::selectList($yesno, 'cfg_board_offline', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['board_offline']);
-	$lists['pubwrite'] = mosHTML::selectList($yesno, 'cfg_pubwrite', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['pubwrite']);
-	$lists['useredit'] = mosHTML::selectList($yesno, 'cfg_useredit', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['useredit']);
-	$lists['showHistory'] = mosHTML::selectList($yesno, 'cfg_showHistory', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['showHistory']);
-	$lists['joomlaStyle'] = mosHTML::selectList($yesno, 'cfg_joomlaStyle', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['joomlaStyle']);
-	$lists['showAnnouncement'] = mosHTML::selectList($yesno, 'cfg_showAnnouncement', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['showAnnouncement']);
-	$lists['avatarOnCat'] = mosHTML::selectList($yesno, 'cfg_avatarOnCat', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['avatarOnCat']);
-	$lists['showLatest'] = mosHTML::selectList($yesno, 'cfg_showLatest', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['showLatest']);
-	$lists['latestSingleSubject'] = mosHTML::selectList($yesno, 'cfg_latestSingleSubject', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['latestSingleSubject']);
-	$lists['latestReplySubject'] = mosHTML::selectList($yesno, 'cfg_latestReplySubject', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['latestReplySubject']);
-	$lists['latestShowDate'] = mosHTML::selectList($yesno, 'cfg_latestShowDate', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['latestShowDate']);
-	$lists['showChildCatIcon'] = mosHTML::selectList($yesno, 'cfg_showChildCatIcon', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['showChildCatIcon']);
-	$lists['latestShowHits'] = mosHTML::selectList($yesno, 'cfg_latestShowHits', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['latestShowHits']);
-	$lists['showStats'] = mosHTML::selectList($yesno, 'cfg_showStats', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['showStats']);
-	$lists['showWhoisOnline'] = mosHTML::selectList($yesno, 'cfg_showWhoisOnline', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['showWhoisOnline']);
-	$lists['showPopSubjectStats'] = mosHTML::selectList($yesno, 'cfg_showPopSubjectStats', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['showPopSubjectStats']);
-	$lists['showGenStats'] = mosHTML::selectList($yesno, 'cfg_showGenStats', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['showGenStats']);
-	$lists['showPopUserStats'] = mosHTML::selectList($yesno, 'cfg_showPopUserStats', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['showPopUserStats']);
-	$lists['allowsubscriptions'] = mosHTML::selectList($yesno, 'cfg_allowsubscriptions', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['allowsubscriptions']);
-	$lists['subscriptionschecked'] = mosHTML::selectList($yesno, 'cfg_subscriptionschecked', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['subscriptionschecked']);
-	$lists['allowfavorites'] = mosHTML::selectList($yesno, 'cfg_allowfavorites', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['allowfavorites']);
-	$lists['mailmod'] = mosHTML::selectList($yesno, 'cfg_mailmod', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['mailmod']);
-	$lists['mailadmin'] = mosHTML::selectList($yesno, 'cfg_mailadmin', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['mailadmin']);
-	$lists['showemail'] = mosHTML::selectList($yesno, 'cfg_showemail', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['showemail']);
-	$lists['askemail'] = mosHTML::selectList($yesno, 'cfg_askemail', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['askemail']);
-	$lists['changename'] = mosHTML::selectList($yesno, 'cfg_changename', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['changename']);
-	$lists['allowAvatar'] = mosHTML::selectList($yesno, 'cfg_allowAvatar', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['allowAvatar']);
-	$lists['allowAvatarUpload'] = mosHTML::selectList($yesno, 'cfg_allowAvatarUpload', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['allowAvatarUpload']);
-	$lists['allowAvatarGallery'] = mosHTML::selectList($yesno, 'cfg_allowAvatarGallery', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['allowAvatarGallery']);
-	$lists['avatar_src'] = mosHTML::selectList($avlist, 'cfg_avatar_src', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['avatar_src']);
+	$lists['badwords'] = mosHTML::selectList($yesno, 'cfg_badwords', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->badwords);
+	$lists['jmambot'] = mosHTML::selectList($yesno, 'cfg_jmambot', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->jmambot);
+	$lists['disemoticons'] = mosHTML::selectList($yesno, 'cfg_disemoticons', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->disemoticons);
+	$lists['template'] = mosHTML::selectList($listitems, 'cfg_template', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->template);
+	$lists['templateimagepath'] = mosHTML::selectList($listitems, 'cfg_templateimagepath', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->templateimagepath);
+	$lists['regonly'] = mosHTML::selectList($yesno, 'cfg_regonly', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->regonly);
+	$lists['board_offline'] = mosHTML::selectList($yesno, 'cfg_board_offline', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->board_offline);
+	$lists['pubwrite'] = mosHTML::selectList($yesno, 'cfg_pubwrite', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->pubwrite);
+	$lists['useredit'] = mosHTML::selectList($yesno, 'cfg_useredit', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->useredit);
+	$lists['showHistory'] = mosHTML::selectList($yesno, 'cfg_showHistory', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->showHistory);
+	$lists['joomlaStyle'] = mosHTML::selectList($yesno, 'cfg_joomlaStyle', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->joomlaStyle);
+	$lists['showAnnouncement'] = mosHTML::selectList($yesno, 'cfg_showAnnouncement', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->showAnnouncement);
+	$lists['avatarOnCat'] = mosHTML::selectList($yesno, 'cfg_avatarOnCat', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->avatarOnCat);
+	$lists['showLatest'] = mosHTML::selectList($yesno, 'cfg_showLatest', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->showLatest);
+	$lists['latestSingleSubject'] = mosHTML::selectList($yesno, 'cfg_latestSingleSubject', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->latestSingleSubject);
+	$lists['latestReplySubject'] = mosHTML::selectList($yesno, 'cfg_latestReplySubject', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->latestReplySubject);
+	$lists['latestShowDate'] = mosHTML::selectList($yesno, 'cfg_latestShowDate', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->latestShowDate);
+	$lists['showChildCatIcon'] = mosHTML::selectList($yesno, 'cfg_showChildCatIcon', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->showChildCatIcon);
+	$lists['latestShowHits'] = mosHTML::selectList($yesno, 'cfg_latestShowHits', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->latestShowHits);
+	$lists['showStats'] = mosHTML::selectList($yesno, 'cfg_showStats', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->showStats);
+	$lists['showWhoisOnline'] = mosHTML::selectList($yesno, 'cfg_showWhoisOnline', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->showWhoisOnline);
+	$lists['showPopSubjectStats'] = mosHTML::selectList($yesno, 'cfg_showPopSubjectStats', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->showPopSubjectStats);
+	$lists['showGenStats'] = mosHTML::selectList($yesno, 'cfg_showGenStats', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->showGenStats);
+	$lists['showPopUserStats'] = mosHTML::selectList($yesno, 'cfg_showPopUserStats', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->showPopUserStats);
+	$lists['allowsubscriptions'] = mosHTML::selectList($yesno, 'cfg_allowsubscriptions', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->allowsubscriptions);
+	$lists['subscriptionschecked'] = mosHTML::selectList($yesno, 'cfg_subscriptionschecked', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->subscriptionschecked);
+	$lists['allowfavorites'] = mosHTML::selectList($yesno, 'cfg_allowfavorites', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->allowfavorites);
+	$lists['mailmod'] = mosHTML::selectList($yesno, 'cfg_mailmod', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->mailmod);
+	$lists['mailadmin'] = mosHTML::selectList($yesno, 'cfg_mailadmin', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->mailadmin);
+	$lists['showemail'] = mosHTML::selectList($yesno, 'cfg_showemail', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->showemail);
+	$lists['askemail'] = mosHTML::selectList($yesno, 'cfg_askemail', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->askemail);
+	$lists['changename'] = mosHTML::selectList($yesno, 'cfg_changename', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->changename);
+	$lists['allowAvatar'] = mosHTML::selectList($yesno, 'cfg_allowAvatar', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->allowAvatar);
+	$lists['allowAvatarUpload'] = mosHTML::selectList($yesno, 'cfg_allowAvatarUpload', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->allowAvatarUpload);
+	$lists['allowAvatarGallery'] = mosHTML::selectList($yesno, 'cfg_allowAvatarGallery', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->allowAvatarGallery);
+	$lists['avatar_src'] = mosHTML::selectList($avlist, 'cfg_avatar_src', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->avatar_src);
 	$ip_opt[] = mosHTML::makeOption('gd2', 'GD2');
 	$ip_opt[] = mosHTML::makeOption('gd1', 'GD1');
 	$ip_opt[] = mosHTML::makeOption('none', _FB_IMAGE_PROCESSOR_NONE);
-	$lists['imageProcessor'] = mosHTML::selectList($ip_opt, 'cfg_imageProcessor', 'class="inputbox"', 'value', 'text', $fbConfig['imageProcessor']);
-	$lists['showstats'] = mosHTML::selectList($yesno, 'cfg_showstats', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['showstats']);
-	$lists['showranking'] = mosHTML::selectList($yesno, 'cfg_showranking', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['showranking']);
-	$lists['rankimages'] = mosHTML::selectList($yesno, 'cfg_rankimages', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['rankimages']);
-	$lists['username'] = mosHTML::selectList($yesno, 'cfg_username', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['username']);
-	$lists['showNew'] = mosHTML::selectList($yesno, 'cfg_showNew', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['showNew']);
-	$lists['allowImageUpload'] = mosHTML::selectList($yesno, 'cfg_allowImageUpload', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['allowImageUpload']);
-	$lists['allowImageRegUpload'] = mosHTML::selectList($yesno, 'cfg_allowImageRegUpload', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['allowImageRegUpload']);
-	$lists['allowFileUpload'] = mosHTML::selectList($yesno, 'cfg_allowFileUpload', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['allowFileUpload']);
-	$lists['allowFileRegUpload'] = mosHTML::selectList($yesno, 'cfg_allowFileRegUpload', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['allowFileRegUpload']);
-	$lists['editMarkUp'] = mosHTML::selectList($yesno, 'cfg_editMarkUp', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['editMarkUp']);
-	$lists['discussBot'] = mosHTML::selectList($yesno, 'cfg_discussBot', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['discussBot']);
-	$lists['enableRSS'] = mosHTML::selectList($yesno, 'cfg_enableRSS', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['enableRSS']);
-	$lists['postStats'] = mosHTML::selectList($yesno, 'cfg_postStats', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['postStats']);
-	$lists['showkarma'] = mosHTML::selectList($yesno, 'cfg_showkarma', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['showkarma']);
-	$lists['cb_profile'] = mosHTML::selectList($yesno, 'cfg_cb_profile', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['cb_profile']);
-	$lists['enablePDF'] = mosHTML::selectList($yesno, 'cfg_enablePDF', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['enablePDF']);
-	$lists['enableRulesPage'] = mosHTML::selectList($yesno, 'cfg_enableRulesPage', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['enableRulesPage']);
-	$lists['rules_infb'] = mosHTML::selectList($yesno, 'cfg_rules_infb', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['rules_infb']);
-	$lists['enableHelpPage'] = mosHTML::selectList($yesno, 'cfg_enableHelpPage', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['enableHelpPage']);
-	$lists['help_infb'] = mosHTML::selectList($yesno, 'cfg_help_infb', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['help_infb']);
-	$lists['enableForumJump'] = mosHTML::selectList($yesno, 'cfg_enableForumJump', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['enableForumJump']);
-	$lists['userlist_online'] = mosHTML::selectList($yesno, 'cfg_userlist_online', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['userlist_online']);
-	$lists['userlist_avatar'] = mosHTML::selectList($yesno, 'cfg_userlist_avatar', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['userlist_avatar']);
-	$lists['userlist_name'] = mosHTML::selectList($yesno, 'cfg_userlist_name', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['userlist_name']);
-	$lists['userlist_username'] = mosHTML::selectList($yesno, 'cfg_userlist_username', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['userlist_username']);
-	$lists['userlist_group'] = mosHTML::selectList($yesno, 'cfg_userlist_group', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['userlist_group']);
-	$lists['userlist_posts'] = mosHTML::selectList($yesno, 'cfg_userlist_posts', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['userlist_posts']);
-	$lists['userlist_karma'] = mosHTML::selectList($yesno, 'cfg_userlist_karma', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['userlist_karma']);
-	$lists['userlist_email'] = mosHTML::selectList($yesno, 'cfg_userlist_email', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['userlist_email']);
-	$lists['userlist_usertype'] = mosHTML::selectList($yesno, 'cfg_userlist_usertype', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['userlist_usertype']);
-	$lists['userlist_joindate'] = mosHTML::selectList($yesno, 'cfg_userlist_joindate', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['userlist_joindate']);
-	$lists['userlist_lastvisitdate'] = mosHTML::selectList($yesno, 'cfg_userlist_lastvisitdate', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['userlist_lastvisitdate']);
-	$lists['userlist_userhits'] = mosHTML::selectList($yesno, 'cfg_userlist_userhits', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['userlist_userhits']);
-	$lists['usernamechange'] = mosHTML::selectList($yesno, 'cfg_usernamechange', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['usernamechange']);
-	$lists['reportmsg'] = mosHTML::selectList($yesno, 'cfg_reportmsg', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['reportmsg']);
-	$lists['captcha'] = mosHTML::selectList($yesno, 'cfg_captcha', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['captcha']);
-	$lists['mailfull'] = mosHTML::selectList($yesno, 'cfg_mailfull', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['mailfull']);
-	$lists['chat'] = mosHTML::selectList($yesno, 'cfg_chat', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['chat']);
-	$lists['chat_guests'] = mosHTML::selectList($yesno, 'cfg_chat_guests', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['chat_guests']);
-	$lists['polls'] = mosHTML::selectList($yesno, 'cfg_polls', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['polls']);
-	$lists['fm'] = mosHTML::selectList($yesno, 'cfg_fm', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['fm']);
-	$lists['fm_guests'] = mosHTML::selectList($yesno, 'cfg_fm_guests', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['fm_guests']);
-	$lists['note'] = mosHTML::selectList($yesno, 'cfg_note', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['note']);
-	$lists['attach_guests'] = mosHTML::selectList($yesno, 'cfg_attach_guests', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['attach_guests']);
-	$lists['foto'] = mosHTML::selectList($yesno, 'cfg_foto', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['foto']);
-	$lists['gmap'] = mosHTML::selectList($yesno, 'cfg_gmap', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['gmap']);
-	$lists['puzzle'] = mosHTML::selectList($yesno, 'cfg_puzzle', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['puzzle']);
-	$lists['puzzle_numbers'] = mosHTML::selectList($yesno, 'cfg_puzzle_numbers', 'class="inputbox" size="1"', 'value', 'text', $fbConfig['puzzle_numbers']);
+	$lists['imageProcessor'] = mosHTML::selectList($ip_opt, 'cfg_imageProcessor', 'class="inputbox"', 'value', 'text', $fbConfig->imageProcessor);
+	$lists['showstats'] = mosHTML::selectList($yesno, 'cfg_showstats', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->showstats);
+	$lists['showranking'] = mosHTML::selectList($yesno, 'cfg_showranking', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->showranking);
+	$lists['rankimages'] = mosHTML::selectList($yesno, 'cfg_rankimages', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->rankimages);
+	$lists['username'] = mosHTML::selectList($yesno, 'cfg_username', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->username);
+	$lists['showNew'] = mosHTML::selectList($yesno, 'cfg_showNew', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->showNew);
+	$lists['allowImageUpload'] = mosHTML::selectList($yesno, 'cfg_allowImageUpload', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->allowImageUpload);
+	$lists['allowImageRegUpload'] = mosHTML::selectList($yesno, 'cfg_allowImageRegUpload', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->allowImageRegUpload);
+	$lists['allowFileUpload'] = mosHTML::selectList($yesno, 'cfg_allowFileUpload', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->allowFileUpload);
+	$lists['allowFileRegUpload'] = mosHTML::selectList($yesno, 'cfg_allowFileRegUpload', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->allowFileRegUpload);
+	$lists['editMarkUp'] = mosHTML::selectList($yesno, 'cfg_editMarkUp', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->editMarkUp);
+	$lists['discussBot'] = mosHTML::selectList($yesno, 'cfg_discussBot', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->discussBot);
+	$lists['enableRSS'] = mosHTML::selectList($yesno, 'cfg_enableRSS', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->enableRSS);
+	$lists['postStats'] = mosHTML::selectList($yesno, 'cfg_postStats', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->postStats);
+	$lists['showkarma'] = mosHTML::selectList($yesno, 'cfg_showkarma', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->showkarma);
+	$lists['cb_profile'] = mosHTML::selectList($yesno, 'cfg_cb_profile', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->cb_profile);
+	$lists['enablePDF'] = mosHTML::selectList($yesno, 'cfg_enablePDF', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->enablePDF);
+	$lists['enableRulesPage'] = mosHTML::selectList($yesno, 'cfg_enableRulesPage', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->enableRulesPage);
+	$lists['rules_infb'] = mosHTML::selectList($yesno, 'cfg_rules_infb', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->rules_infb);
+	$lists['enableHelpPage'] = mosHTML::selectList($yesno, 'cfg_enableHelpPage', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->enableHelpPage);
+	$lists['help_infb'] = mosHTML::selectList($yesno, 'cfg_help_infb', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->help_infb);
+	$lists['enableForumJump'] = mosHTML::selectList($yesno, 'cfg_enableForumJump', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->enableForumJump);
+	$lists['userlist_online'] = mosHTML::selectList($yesno, 'cfg_userlist_online', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->userlist_online);
+	$lists['userlist_avatar'] = mosHTML::selectList($yesno, 'cfg_userlist_avatar', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->userlist_avatar);
+	$lists['userlist_name'] = mosHTML::selectList($yesno, 'cfg_userlist_name', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->userlist_name);
+	$lists['userlist_username'] = mosHTML::selectList($yesno, 'cfg_userlist_username', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->userlist_username);
+	$lists['userlist_group'] = mosHTML::selectList($yesno, 'cfg_userlist_group', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->userlist_group);
+	$lists['userlist_posts'] = mosHTML::selectList($yesno, 'cfg_userlist_posts', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->userlist_posts);
+	$lists['userlist_karma'] = mosHTML::selectList($yesno, 'cfg_userlist_karma', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->userlist_karma);
+	$lists['userlist_email'] = mosHTML::selectList($yesno, 'cfg_userlist_email', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->userlist_email);
+	$lists['userlist_usertype'] = mosHTML::selectList($yesno, 'cfg_userlist_usertype', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->userlist_usertype);
+	$lists['userlist_joindate'] = mosHTML::selectList($yesno, 'cfg_userlist_joindate', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->userlist_joindate);
+	$lists['userlist_lastvisitdate'] = mosHTML::selectList($yesno, 'cfg_userlist_lastvisitdate', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->userlist_lastvisitdate);
+	$lists['userlist_userhits'] = mosHTML::selectList($yesno, 'cfg_userlist_userhits', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->userlist_userhits);
+	$lists['usernamechange'] = mosHTML::selectList($yesno, 'cfg_usernamechange', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->usernamechange);
+	$lists['reportmsg'] = mosHTML::selectList($yesno, 'cfg_reportmsg', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->reportmsg);
+	$lists['captcha'] = mosHTML::selectList($yesno, 'cfg_captcha', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->captcha);
+	$lists['mailfull'] = mosHTML::selectList($yesno, 'cfg_mailfull', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->mailfull);
+	$lists['chat'] = mosHTML::selectList($yesno, 'cfg_chat', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->chat);
+	$lists['chat_guests'] = mosHTML::selectList($yesno, 'cfg_chat_guests', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->chat_guests);
+	$lists['polls'] = mosHTML::selectList($yesno, 'cfg_polls', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->polls);
+	$lists['fm'] = mosHTML::selectList($yesno, 'cfg_fm', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->fm);
+	$lists['fm_guests'] = mosHTML::selectList($yesno, 'cfg_fm_guests', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->fm_guests);
+	$lists['note'] = mosHTML::selectList($yesno, 'cfg_note', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->note);
+	$lists['attach_guests'] = mosHTML::selectList($yesno, 'cfg_attach_guests', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->attach_guests);
+	$lists['foto'] = mosHTML::selectList($yesno, 'cfg_foto', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->foto);
+	$lists['gmap'] = mosHTML::selectList($yesno, 'cfg_gmap', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->gmap);
+	$lists['puzzle'] = mosHTML::selectList($yesno, 'cfg_puzzle', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->puzzle);
+	$lists['puzzle_numbers'] = mosHTML::selectList($yesno, 'cfg_puzzle_numbers', 'class="inputbox" size="1"', 'value', 'text', $fbConfig->puzzle_numbers);
 	HTML_SIMPLEBOARD::showConfig($fbConfig, $lists, $option);
 }
 
 function saveConfig($option){
+	// TODO - Записть конфигурации в файл
+	/*
 	global $mainframe;
 	$configfile = $mainframe->getCfg('absolute_path') . "/administrator/components/com_fireboard/fireboard_config.php";
 	@chmod($configfile, 0766);
@@ -660,23 +665,24 @@ function saveConfig($option){
 	} else{
 		mosRedirect("index2.php?option=$option", _FB_CFCNBO);
 	}
+	*/
 }
 
-function showInstructions($database, $option, $mosConfig_lang){
-	HTML_SIMPLEBOARD::showInstructions($database, $option, $mosConfig_lang);
+function showInstructions(){
+	HTML_SIMPLEBOARD::showInstructions();
 }
 
 //===============================
 // CSS functions
 //===============================
 function showCss($option){
-	global $fbConfig;
-	$file = "../components/com_fireboard/template/" . $fbConfig['template'] . "/forum.css";
+	$fbConfig = FBJConfig::getInstance();
+	$file = "../components/com_fireboard/template/" . $fbConfig->template . "/forum.css";
 	@chmod($file, 0766);
 	$permission = is_writable($file);
 	if(!$permission){
 		echo "<h1><span style='color:red'>" . _FB_WARNING . "</span></h1><BR>";
-		echo "<B>Your css file is <#__root>/components/com_fireboard/template/" . $fbConfig['template'] . "/forum.css</b><BR>";
+		echo "<B>Your css file is <#__root>/components/com_fireboard/template/" . $fbConfig->template . "/forum.css</b><BR>";
 		echo "<B>" . _FB_CHMOD1 . "</B><BR><BR>";
 	}
 	HTML_SIMPLEBOARD::showCss($file, $option);
@@ -705,7 +711,7 @@ function saveCss($file, $csscontent, $option){
 // Moderator Functions
 //===============================
 function newModerator($option, $id = null){
-	global $database;
+	$database = FBJConfig::database();
 	$limit = intval(mosGetParam($_POST, 'limit', 10));
 	$limitstart = intval(mosGetParam($_POST, 'limitstart', 0));
 	$database->setQuery("SELECT * FROM #__users AS a" . "\n LEFT JOIN #__fb_users AS b" . "\n ON a.id=b.userid" . "\n WHERE b.moderator=1 LIMIT $limitstart,$limit");
@@ -737,20 +743,19 @@ function newModerator($option, $id = null){
 }
 
 function addModerator($option, $id, $cid = null, $publish = 1){
-	global $database, $my;
+	$database = FBJConfig::database();
 	$numcid = count($cid);
-	$action = "";
 	if($publish == 1){
 		$action = 'add';
 	} else{
 		$action = 'remove';
 	}
-	if(!is_array($cid) || count($cid) < 1){
+	if(!is_array($cid) || $numcid < 1){
 		echo "<script> alert('" . _FB_SELECTMODTO . " $action'); window.history.go(-1);</script>\n";
 		exit;
 	}
 	if($action == 'add'){
-		for($i = 0, $n = count($cid); $i < $n; $i++){
+		for($i = 0, $n = $numcid; $i < $n; $i++){
 			$database->setQuery("INSERT INTO #__fb_moderation set catid='$id', userid='$cid[$i]'");
 			if(!$database->query()){
 				echo "<script> alert('" . $database->getErrorMsg() . "'); window.history.go(-1); </script>\n";
@@ -758,7 +763,7 @@ function addModerator($option, $id, $cid = null, $publish = 1){
 			}
 		}
 	} else{
-		for($i = 0, $n = count($cid); $i < $n; $i++){
+		for($i = 0, $n = $numcid; $i < $n; $i++){
 			$database->setQuery("DELETE FROM #__fb_moderation WHERE catid='$id' and userid='$cid[$i]'");
 			if(!$database->query()){
 				echo "<script> alert('" . $database->getErrorMsg() . "'); window.history.go(-1); </script>\n";
@@ -774,8 +779,9 @@ function addModerator($option, $id, $cid = null, $publish = 1){
 //===============================
 //   User Profile functions
 //===============================
-function showProfiles($database, $option, $mosConfig_lang, $order){
-	global $mainframe;
+function showProfiles($option, $order){
+	$database = FBJConfig::database();
+	$mainframe = FBJConfig::mainframe();
 	$limit = intval(mosGetParam($_POST, 'limit', 50));
 	$limitstart = intval(mosGetParam($_POST, 'limitstart', 0));
 	$search = $mainframe->getUserStateFromRequest("search{$option}", 'search', '');
@@ -800,11 +806,12 @@ function showProfiles($database, $option, $mosConfig_lang, $order){
 	}
 	require_once ("includes/pageNavigation.php");
 	$pageNavSP = new mosPageNav($total, $limitstart, $limit);
-	HTML_SIMPLEBOARD::showProfiles($option, $mosConfig_lang, $profileList, $countPL, $pageNavSP, $order, $search);
+	HTML_SIMPLEBOARD::showProfiles($option, $profileList, $countPL, $pageNavSP, $order, $search);
 }
 
 function editUserProfile($uid){
-	global $acl, $database;
+	$acl = gacl::getInstance();
+	$database = FBJConfig::database();
 	$database->setQuery("SELECT * FROM #__fb_users LEFT JOIN #__users on #__users.id=#__fb_users.userid WHERE userid=$uid[0]");
 	$userDetails = $database->loadObjectList();
 	$user = $userDetails[0];
@@ -851,7 +858,7 @@ function editUserProfile($uid){
 }
 
 function saveUserProfile($option){
-	global $database;
+	$database = FBJConfig::database();
 	$newview = mosGetParam($_POST, 'newview');
 	$newrank = mosGetParam($_POST, 'newrank');
 	$newgroup = mosGetParam($_POST, 'newgroup');
@@ -1010,9 +1017,8 @@ function douserssync($database, $option){
 // Upgrade tables to this version
 //===============================
 function upgradeTables($option){
-	global $database;
-	global $fbConfig;
-	$v = $fbConfig['version'];
+	$fbConfig = FBJConfig::getInstance();
+	$v = $fbConfig->version;
 	mosRedirect("index2.php?option=com_fireboard", "" . _FB_TABLESUPGRADED . " $v.");
 }
 
@@ -1199,7 +1205,6 @@ function replaceImage($database, $option, $imageName, $OxP){
 }
 
 function deleteFile($database, $option, $fileName){
-	global $mosConfig_admin_template;
 	unlink(FB_ABSUPLOADEDPATH . '/files/' . $fileName);
 	$database->setQuery("DELETE FROM #__fb_attachments where filelocation='" . FB_ABSUPLOADEDPATH . "/files/" . $fileName . "'");
 	$database->query();
@@ -1226,7 +1231,7 @@ function catTreeRecurse($id, $indent = "&nbsp;&nbsp;&nbsp;", $list, &$children, 
 }
 
 function showCategories($cat, $cname, $extras = "", $levellimit = "4"){
-	global $database, $mosConfig_lang;
+	$database = FBJConfig::database();
 	$database->setQuery("select id ,parent,name from
           #__fb_categories" . "\nORDER BY name");
 	$mitems = $database->loadObjectList();
@@ -1335,7 +1340,7 @@ function dircopy($srcdir, $dstdir, $verbose = false){
 //===============================
 /** @noinspection PhpInconsistentReturnPointsInspection */
 function showsmilies($option){
-	global $database, $mainframe, $mosConfig_lang;
+	$database = FBJConfig::database();
 	$limit = intval(mosGetParam($_POST, 'limit', 10));
 	$limitstart = intval(mosGetParam($_POST, 'limitstart', 0));
 	$database->setQuery("SELECT * FROM #__fb_smileys LIMIT $limitstart,$limit");
@@ -1352,11 +1357,12 @@ function showsmilies($option){
 	}
 	require_once ("includes/pageNavigation.php");
 	$pageNavSP = new mosPageNav($total, $limitstart, $limit);
-	HTML_SIMPLEBOARD::showsmilies($option, $mosConfig_lang, $smileytmp, $pageNavSP, $smileypath);
+	HTML_SIMPLEBOARD::showsmilies($option, $smileytmp, $pageNavSP, $smileypath);
 }
 
 function editsmiley($option, $id){
-	global $database, $mainframe, $mosConfig_lang;
+	$mosConfig_lang = FBJConfig::getCfg('lang');
+	$database = FBJConfig::database();
 	$database->setQuery("SELECT * FROM #__fb_smileys WHERE id = $id");
 	$smileytmp = $database->loadAssocList();
 	$smileycfg = $smileytmp[0];
@@ -1377,7 +1383,6 @@ function editsmiley($option, $id){
 }
 
 function newsmiley($option){
-	global $database, $mainframe;
 	$smiley_images = collect_smilies();
 	$smileypath = smileypath();
 	$smileypath = $smileypath['live'] . '/';
@@ -1389,7 +1394,7 @@ function newsmiley($option){
 }
 
 function savesmiley($option, $id = NULL){
-	global $database;
+	$database = FBJConfig::database();
 	$smiley_code = mosGetParam($_POST, 'smiley_code');
 	$smiley_location = mosGetParam($_POST, 'smiley_url');
 	$smiley_emoticonbar = (mosGetParam($_POST, 'smiley_emoticonbar')) ? mosGetParam($_POST, 'smiley_emoticonbar') : 0;
@@ -1422,18 +1427,19 @@ function savesmiley($option, $id = NULL){
 }
 
 function deletesmiley($option, $id){
-	global $database, $mainframe;
+	$database = FBJConfig::database();
 	$database->setQuery("DELETE FROM #__fb_smileys WHERE id = '$id'");
 	$database->query();
 	mosRedirect("index2.php?option=$option&task=showsmilies", _FB_SMILEY_DELETED);
 }
 
 function smileypath(){
-	global $mainframe, $mosConfig_lang;
-	global $fbConfig;
-	if(is_dir($mainframe->getCfg('absolute_path') . '/components/com_fireboard/template/' . $fbConfig['template'] . '/images/' . $mosConfig_lang . '/emoticons')){
-		$smiley_live_path = $mainframe->getCfg('live_site') . '/components/com_fireboard/template/' . $fbConfig['template'] . '/images/' . $mosConfig_lang . '/emoticons';
-		$smiley_abs_path = $mainframe->getCfg('absolute_path') . '/components/com_fireboard/template/' . $fbConfig['template'] . '/images/' . $mosConfig_lang . '/emoticons';
+	$mosConfig_lang = FBJConfig::getCfg('lang');
+	$mainframe = FBJConfig::mainframe();
+	$fbConfig = FBJConfig::getInstance();
+	if(is_dir($mainframe->getCfg('absolute_path') . '/components/com_fireboard/template/' . $fbConfig->template . '/images/' . $mosConfig_lang . '/emoticons')){
+		$smiley_live_path = $mainframe->getCfg('live_site') . '/components/com_fireboard/template/' . $fbConfig->template . '/images/' . $mosConfig_lang . '/emoticons';
+		$smiley_abs_path = $mainframe->getCfg('absolute_path') . '/components/com_fireboard/template/' . $fbConfig->template . '/images/' . $mosConfig_lang . '/emoticons';
 	} else{
 		$smiley_live_path = $mainframe->getCfg('live_site') . '/components/com_fireboard/template/default/images/' . $mosConfig_lang . '/emoticons';
 		$smiley_abs_path = $mainframe->getCfg('absolute_path') . '/components/com_fireboard/template/default/images/' . $mosConfig_lang . '/emoticons';
@@ -1458,8 +1464,8 @@ function collect_smilies(){
 	return $smiley_images;
 }
 
-function showRanks($option){
-	global $mainframe, $database, $mosConfig_lang, $order;
+function showRanks($option, $order){
+	$database = FBJConfig::database();
 	$limit = intval(mosGetParam($_POST, 'limit', 10));
 	$limitstart = intval(mosGetParam($_POST, 'limitstart', 0));
 	$database->setQuery("SELECT * FROM #__fb_ranks LIMIT $limitstart,$limit");
@@ -1472,15 +1478,16 @@ function showRanks($option){
 	}
 	require_once("includes/pageNavigation.php");
 	$pageNavSP = new mosPageNav($total, $limitstart, $limit);
-	HTML_SIMPLEBOARD::showRanks($option, $mosConfig_lang, $ranks, $pageNavSP, $order, $rankpath);
+	HTML_SIMPLEBOARD::showRanks($option, $ranks, $pageNavSP, $rankpath);
 }
 
 function rankpath(){
-	global $mainframe, $mosConfig_lang;
-	global $fbConfig;
-	if(is_dir($mainframe->getCfg('absolute_path') . '/components/com_fireboard/template/' . $fbConfig['template'] . '/images/' . $mosConfig_lang . '/ranks')){
-		$rank_live_path = $mainframe->getCfg('live_site') . '/components/com_fireboard/template/' . $fbConfig['template'] . '/images/' . $mosConfig_lang . '/ranks';
-		$rank_abs_path = $mainframe->getCfg('absolute_path') . '/components/com_fireboard/template/' . $fbConfig['template'] . '/images/' . $mosConfig_lang . '/ranks';
+	$mosConfig_lang = FBJConfig::getCfg('lang');
+	$mainframe = FBJConfig::mainframe();
+	$fbConfig = FBJConfig::getInstance();
+	if(is_dir($mainframe->getCfg('absolute_path') . '/components/com_fireboard/template/' . $fbConfig->template . '/images/' . $mosConfig_lang . '/ranks')){
+		$rank_live_path = $mainframe->getCfg('live_site') . '/components/com_fireboard/template/' . $fbConfig->template . '/images/' . $mosConfig_lang . '/ranks';
+		$rank_abs_path = $mainframe->getCfg('absolute_path') . '/components/com_fireboard/template/' . $fbConfig->template . '/images/' . $mosConfig_lang . '/ranks';
 	} else{
 		$rank_live_path = $mainframe->getCfg('live_site') . '/components/com_fireboard/template/default/images/' . $mosConfig_lang . '/ranks';
 		$rank_abs_path = $mainframe->getCfg('absolute_path') . '/components/com_fireboard/template/default/images/' . $mosConfig_lang . '/ranks';
@@ -1506,12 +1513,10 @@ function collectRanks(){
 }
 
 function newRank($option){
-	global $database, $mainframe;
 	$rank_images = collectRanks();
 	$rankpath = rankpath();
 	$rankpath = $rankpath['live'] . '/';
 	$filename_list = "";
-	$i = 0;
 	foreach($rank_images as $id => $row){
 		$filename_list .= '<option value="' . $rank_images[$id] . '">' . $rank_images[$id] . '</option>' . "\n";
 	}
@@ -1519,14 +1524,14 @@ function newRank($option){
 }
 
 function deleteRank($option, $id){
-	global $database, $mainframe;
-	$database->setQuery("DELETE FROM #__fb_ranks WHERE rank_id = '$id'");
+	$database = FBJConfig::database();
+	$database->setQuery("DELETE FROM #__fb_ranks WHERE rank_id = '".$id."'");
 	$database->query();
 	mosRedirect("index2.php?option=$option&task=ranks", _FB_RANK_DELETED);
 }
 
 function saveRank($option, $id = NULL){
-	global $database;
+	$database = FBJConfig::database();
 	$rank_title = mosGetParam($_POST, 'rank_title');
 	$rank_image = mosGetParam($_POST, 'rank_image');
 	$rank_special = mosGetParam($_POST, 'rank_special');
@@ -1560,7 +1565,7 @@ function saveRank($option, $id = NULL){
 }
 
 function editRank($option, $id){
-	global $database, $mainframe, $mosConfig_lang;
+	$database = FBJConfig::database();
 	$database->setQuery("SELECT * FROM #__fb_ranks WHERE rank_id = '$id'");
 	$ranks = $database->loadObjectList();
 	$rank_images = collectRanks();
@@ -1582,14 +1587,14 @@ function editRank($option, $id){
 			$filename_list .= '<option value="' . htmlspecialchars($img) . '"' . $selected . '>' . $img . '</option>';
 		}
 	}
-	HTML_SIMPLEBOARD::editRank($option, $mosConfig_lang, $edit_img, $filename_list, $path, $row);
+	HTML_SIMPLEBOARD::editRank($option, $edit_img, $filename_list, $path, $row);
 }
 
 //===============================
 //  FINISH smiley functions
 //===============================
 function com_install_fireboard($mode = 1){
-	global $database;
+	$database = FBJConfig::database();
 	$database->setQuery("SELECT id FROM #__components WHERE admin_menu_link = 'option=com_fireboard'");
 	$id = $database->loadResult();
 	$database->setQuery("UPDATE #__components " . "SET admin_menu_img  = '../administrator/components/com_fireboard/images/fbmenu.png'" . ",   admin_menu_link = 'option=com_fireboard' " . "WHERE id='$id'");
@@ -1833,7 +1838,6 @@ function com_install_fireboard($mode = 1){
 }
 
 function FB_GetAvailableModCats($catids){
-	global $database;
 	$list = JJ_categoryArray(1);
 	$this_treename = '';
 	$catid = 0;
@@ -1874,7 +1878,8 @@ function FB_gdVersion(){
 
 //////////////////////////////////////////// FB 1.9
 function reupgrade(){
-	global $database, $fbConfig, $mainframe;
+	$mainframe = FBJConfig::mainframe();
+	$database = FBJConfig::database();
 	$database->setQuery("ALTER TABLE #__fb_messages ADD KEY `ip` (`ip`);");
 	$database->query();
 	$output = '';
@@ -2148,14 +2153,14 @@ function reupgrade(){
 }
 
 function showGroups($option){
-	global $mainframe, $database, $mosConfig_lang;
+	$database = FBJConfig::database();
 	$database->setQuery("SELECT * FROM #__fb_groups");
 	$groups = $database->loadObjectList();
-	HTML_SIMPLEBOARD::showGroups($option, $mosConfig_lang, $groups);
+	HTML_SIMPLEBOARD::showGroups($option, $groups);
 }
 
 function banuser($banid){
-	global $mainframe, $database;
+	$database = FBJConfig::database();
 	$banid = intval(mosGetParam($_REQUEST, 'banid', 0));
 	if($banid){
 		$database->setQuery("SELECT ban FROM #__fb_users WHERE userid=" . $banid);
@@ -2184,7 +2189,7 @@ function banuser($banid){
 }
 
 function resetPuzzle(){
-	global $mainframe, $database;
+	$database = FBJConfig::database();
 	$database->setQuery("DELETE FROM #__fb_puzzle");
 	$database->query();
 	mosRedirect("index2.php?option=com_fireboard&task=showconfig", _AFB_PUZZ_RESETED);

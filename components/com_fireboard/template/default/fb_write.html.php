@@ -16,7 +16,8 @@
 *
 **/
 defined('_VALID_MOS') or die('Direct Access to this location is not allowed.');
-global $fbConfig,$mosConfig_live_site;
+$fbConfig = FBJConfig::getInstance();
+$mosConfig_live_site = FBJConfig::getCfg('live_site');
 $htmlText = stripslashes($htmlText);
 include_once(JB_ABSSOURCESPATH . 'fb_bb.js.php');
 ?>
@@ -42,7 +43,7 @@ include_once(JB_ABSSOURCESPATH . 'fb_bb.js.php');
             </td>
 
             <?php
-            if (($fbConfig['regonly'] == "1" || $fbConfig['changename'] == '0') && $my_id != "" && !$is_moderator) {
+            if (($fbConfig->regonly == "1" || $fbConfig->changename == '0') && $my_id != "" && !$is_moderator) {
                 echo "<td><input type=\"hidden\" name=\"fb_authorname\" size=\"35\" class=\"" . $boardclass . "inputbox postinput\"  maxlength=\"35\" value=\"$authorName\" /><b>$authorName</b></td>";
             }
             else
@@ -61,9 +62,9 @@ include_once(JB_ABSSOURCESPATH . 'fb_bb.js.php');
         </tr>
 
         <?php
-        if ($fbConfig['askemail'])
+        if ($fbConfig->askemail)
         {
-            if (($fbConfig['regonly'] == "1" || $fbConfig['changename'] == '0') && $my_id != "" && !$is_moderator) {
+            if (($fbConfig->regonly == "1" || $fbConfig->changename == '0') && $my_id != "" && !$is_moderator) {
                 echo "<tr><td class=\"fb_leftcolumn\"><strong>"
                          . _GEN_EMAIL . "*</strong>:</td><td><input type=\"hidden\" name=\"email\" size=\"35\" class=\"" . $boardclass . "inputbox postinput\" maxlength=\"35\" value=\"$my_email\" />$my_email</td></tr>";
             }
@@ -91,7 +92,7 @@ include_once(JB_ABSSOURCESPATH . 'fb_bb.js.php');
                     <strong><?php echo _GEN_SUBJECT; ?></strong>:
                 </td>
                 <td>
-                    <input type = "text" class = "<?php echo $boardclass; ?>inputbox postinput" name = "subject" size = "35" maxlength = "<?php echo $fbConfig['maxSubject'];?>" value = "<?php echo $resubject;?>"/>
+                    <input type = "text" class = "<?php echo $boardclass; ?>inputbox postinput" name = "subject" size = "35" maxlength = "<?php echo $fbConfig->maxSubject;?>" value = "<?php echo $resubject;?>"/>
                 </td>
             <?php
             }
@@ -102,7 +103,7 @@ include_once(JB_ABSSOURCESPATH . 'fb_bb.js.php');
                     <strong><?php echo _GEN_SUBJECT; ?></strong>:
                 </td>
                 <td>
-                    <input type = "hidden" class = "inputbox" name = "subject" size = "35" maxlength = "<?php echo $fbConfig['maxSubject'];?>" value = "<?php echo $resubject;?>"/><?php echo $resubject; ?>
+                    <input type = "hidden" class = "inputbox" name = "subject" size = "35" maxlength = "<?php echo $fbConfig->maxSubject;?>" value = "<?php echo $resubject;?>"/><?php echo $resubject; ?>
                 </td>
             <?php
             }
@@ -120,24 +121,24 @@ include_once(JB_ABSSOURCESPATH . 'fb_bb.js.php');
             <td class = "fb-topicicons">
                 <?php
 				$myicon = $message->topic_emoticon;
-                $topicToolbar = smile::topicToolbar($myicon, $fbConfig['rtewidth']);
+                $topicToolbar = smile::topicToolbar($myicon, $fbConfig->rtewidth);
                 echo $topicToolbar;
                 ?>
             </td>
         </tr>
         <?php
-        if (!$fbConfig['rte']) {
+        if (!$fbConfig->rte) {
             $useRte = 0;
         }
         else {
             $useRte = 1;
         }
-        $fbTextArea = smile::fbWriteTextarea('message', $htmlText, $fbConfig['rtewidth'], $fbConfig['rteheight'], $useRte, $fbConfig['disemoticons']);
+        $fbTextArea = smile::fbWriteTextarea('message', $htmlText, $fbConfig->rtewidth, $fbConfig->rteheight, $useRte, $fbConfig->disemoticons);
         echo $fbTextArea;
         if ($setFocus == 0) {
             echo "<script type=\"text/javascript\">document.postform.message.focus();</script>";
         }
-        if ($fbConfig['allowsubscriptions'] == 1)
+        if ($fbConfig->allowsubscriptions == 1)
         {
             if ($replyto == 0) {
                 $fb_thread = -1;
@@ -179,7 +180,7 @@ include_once(JB_ABSSOURCESPATH . 'fb_bb.js.php');
 				<td class = "fb_leftcolumn">
 					<strong><?php echo _COM_A_FILE;?></strong><br/>
 					<span style="font-size:10px;">
-						<?php echo _COM_A_FILEALLOWEDTYPES.':<br/>'.$fbConfig['fileTypes'];?>
+						<?php echo _COM_A_FILEALLOWEDTYPES.':<br/>'.$fbConfig->fileTypes;?>
 					</span>
 				</td>
 				<td>
@@ -203,7 +204,7 @@ include_once(JB_ABSSOURCESPATH . 'fb_bb.js.php');
 	}
 	else
 	{
-        if (($fbConfig['allowImageUpload'] || ($fbConfig['allowImageRegUpload'] && $my->id != 0) || $is_moderator) && ($no_upload == "0" || $no_image_upload == "0"))
+        if (($fbConfig->allowImageUpload || ($fbConfig->allowImageRegUpload && $my->id != 0) || $is_moderator) && ($no_upload == "0" || $no_image_upload == "0"))
         {
         ?>
 				<tr class = "<?php echo $boardclass; ?>sectiontableentry1">
@@ -217,7 +218,7 @@ include_once(JB_ABSSOURCESPATH . 'fb_bb.js.php');
             </tr>
         <?php
         }
-        if (($fbConfig['allowFileUpload'] || ($fbConfig['allowFileRegUpload'] && $my->id != 0) || $is_moderator) && ($no_upload == "0" || $no_file_upload == "0"))
+        if (($fbConfig->allowFileUpload || ($fbConfig->allowFileRegUpload && $my->id != 0) || $is_moderator) && ($no_upload == "0" || $no_file_upload == "0"))
         {
         ?>
             <tr class = "<?php echo $boardclass; ?>sectiontableentry2">
@@ -232,7 +233,7 @@ include_once(JB_ABSSOURCESPATH . 'fb_bb.js.php');
         <?php
         }
 	}
-        if ($my_id != 0 && $fbConfig['allowsubscriptions'] == 1 && $fb_cansubscribe == 1 && !$editmode)
+        if ($my_id != 0 && $fbConfig->allowsubscriptions == 1 && $fb_cansubscribe == 1 && !$editmode)
         {
         ?>
             <tr class = "<?php echo $boardclass; ?>sectiontableentry1">
@@ -241,7 +242,7 @@ include_once(JB_ABSSOURCESPATH . 'fb_bb.js.php');
                 </td>
                 <td>
                     <?php
-                    if ($fbConfig['subscriptionschecked'] == 1)
+                    if ($fbConfig->subscriptionschecked == 1)
                     {
                     ?>
                             <input type = "checkbox" name = "subscribeMe" value = "1" checked/>
@@ -260,7 +261,7 @@ include_once(JB_ABSSOURCESPATH . 'fb_bb.js.php');
             </tr>
         <?php
         }
-		if ($fbConfig['captcha'] == 1 && $my->id < 1) { ?>
+		if ($fbConfig->captcha == 1 && $my->id < 1) { ?>
         <tr class = "<?php echo $boardclass; ?>sectiontableentry1">
             <td class = "fb_leftcolumn">&nbsp;<strong><?php echo _FB_CAPDESC; ?></strong>&nbsp;</td>
             <td align="left" valign="middle" height="35px">&nbsp;<input name="txtNumber" type="text" id="txtNumber" value="" class="button" style="vertical-align:top" size="15">          
@@ -291,8 +292,8 @@ include_once(JB_ABSSOURCESPATH . 'fb_bb.js.php');
 <tr>
     <td>
         <?php
-        if ($fbConfig['askemail']) {
-            echo $fbConfig['showemail'] == '0' ? "<em>* - " . _POST_EMAIL_NEVER . "</em>" : "<em>* - " . _POST_EMAIL_REGISTERED . "</em>";
+        if ($fbConfig->askemail) {
+            echo $fbConfig->showemail == '0' ? "<em>* - " . _POST_EMAIL_NEVER . "</em>" : "<em>* - " . _POST_EMAIL_REGISTERED . "</em>";
         }
         ?>
     </td>
@@ -302,7 +303,7 @@ include_once(JB_ABSSOURCESPATH . 'fb_bb.js.php');
         <br/>
     <?php
     $no_upload = "0";
-    if ($fbConfig['showHistory'] == 1) {
+    if ($fbConfig->showHistory == 1) {
         listThreadHistory($replyto, $fbConfig, $database);
     }
 ?>

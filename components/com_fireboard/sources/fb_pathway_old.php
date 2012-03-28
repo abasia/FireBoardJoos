@@ -16,7 +16,7 @@
 *
 **/
 defined ('_VALID_MOS') or die('Direct Access to this location is not allowed.');
-global $fbConfig;
+$fbConfig = FBJConfig::getInstance();
 ?>
 <table border = "0" cellspacing = "0" cellpadding = "0" width = "100%" class = "contentpane">
     <tr>
@@ -47,12 +47,12 @@ global $fbConfig;
                 $database->loadObject($objCatInfo);
                 $database->setQuery("SELECT name,id FROM #__fb_categories WHERE id='$objCatInfo->parent'");
                 $database->loadObject($objCatParentInfo);
-                $mainframe->setPageTitle($objCatParentInfo->name . ' - ' . $objCatInfo->name . ' - ' . $fbConfig['board_title']);
+                $mainframe->setPageTitle($objCatParentInfo->name . ' - ' . $objCatInfo->name . ' - ' . $fbConfig->board_title);
                 $forumLocked = $objCatInfo->locked;
                 $forumReviewed = $objCatInfo->review;
                 if ($forumLocked)
                 {
-                    echo $fbIcons['forumlocked'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['forumlocked']
+                    echo $fbIcons->forumlocked ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->forumlocked
                              . '" border="0" alt="' . _GEN_LOCKED_FORUM . '" title="' . _GEN_LOCKED_FORUM . '"/>' : '  <img src="' . JB_URLEMOTIONSPATH . 'lock.gif"  border="0"   alt="' . _GEN_LOCKED_FORUM . '" title="' . _GEN_LOCKED_FORUM . '">';
                     $lockedForum = 1;
                 }
@@ -62,7 +62,7 @@ global $fbConfig;
 
                 if ($forumReviewed)
                 {
-                    echo $fbIcons['forummoderated'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['forummoderated']
+                    echo $fbIcons->forummoderated ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->forummoderated
                              . '" border="0" alt="' . _GEN_MODERATED . '" title="' . _GEN_MODERATED . '"/>' : '  <img src="' . JB_URLEMOTIONSPATH . 'review.gif" border="0"  alt="' . _GEN_MODERATED . '" title="' . _GEN_MODERATED . '">';
                     $moderatedForum = 1;
                 }

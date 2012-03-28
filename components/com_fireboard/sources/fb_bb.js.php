@@ -18,7 +18,7 @@
 ?>
 <script language = "JavaScript" type = "text/javascript">
 <?php
-global $fbConfig;
+$fbConfig = FBJConfig::getInstance();
 ?>
 var imageTag = false;
 var theSelection = false;
@@ -268,8 +268,8 @@ a_help = "<?php echo _BBCODE_CLOSE;?>";
 s_help = "<?php echo _BBCODE_COLOR;?>";
 f_help = "<?php echo _BBCODE_SIZE;?>";
 l_help = "<?php echo _BBCODE_LITEM;?>";
-iu_help = "<?php echo _IMAGE_DIMENSIONS.": ".$fbConfig['imageWidth']."x".$fbConfig['imageHeight']." - ".$fbConfig['imageSize']." KB";?>";
-fu_help = "<?php echo _FILE_TYPES.": ".$fbConfig['fileTypes']." - ".$fbConfig['fileSize']." KB";?>";
+iu_help = "<?php echo _IMAGE_DIMENSIONS.": ".$fbConfig->imageWidth."x".$fbConfig->imageHeight." - ".$fbConfig->imageSize." KB";?>";
+fu_help = "<?php echo _FILE_TYPES.": ".$fbConfig->fileTypes." - ".$fbConfig->fileSize." KB";?>";
 ip_help = "<?php echo _BBCODE_IMGPH;?>";
 fp_help = "<?php echo _BBCODE_FILEPH;?>";
 submit_help = "<?php echo _HELP_SUBMIT;?>";

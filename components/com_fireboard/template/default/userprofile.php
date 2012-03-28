@@ -16,11 +16,11 @@
  *
  **/
 defined('_VALID_MOS') or die('Direct Access to this location is not allowed.');
-global $fbConfig;
+$fbConfig = FBJConfig::getInstance();
 $rowItemid = mosGetParam($_REQUEST, 'Itemid');
 if($my->id){
 	if($do == "show"){
-		if(!$fbConfig['cb_profile']){
+		if(!$fbConfig->cb_profile){
 			unset($user);
 			$database->setQuery("SELECT * FROM #__fb_users as su " . "\nLEFT JOIN #__users as u on u.id=su.userid WHERE su.userid={$my->id}");
 			$database->loadObject($user);
@@ -31,10 +31,10 @@ if($my->id){
 			$fbavatar = $user->avatar;
 			$ordering = $user->ordering;
 			list($avWidth, $avHeight) = @getimagesize($avatar);
-			if($fbConfig['avatar_src'] == "pmspro"){
+			if($fbConfig->avatar_src == "pmspro"){
 				$database->setQuery("SELECT picture FROM #__mypms_profiles WHERE name='$username'");
 				$avatar = $database->loadResult();
-			} elseif($fbConfig['avatar_src'] == "cb"){
+			} elseif($fbConfig->avatar_src == "cb"){
 				$database->setQuery("SELECT avatar FROM #__comprofiler WHERE user_id='$my->id'");
 				$avatar = $database->loadResult();
 			} else{
@@ -58,7 +58,7 @@ if($my->id){
 		} else{
 			require_once(JB_ABSPATH . '/template/default/fb_pathway.php');
 		}
-		if(!$fbConfig['cb_profile']){
+		if(!$fbConfig->cb_profile){
 			?>
 		<div class="<?php echo $boardclass; ?>_bt_cvr1">
 			<div class="<?php echo $boardclass; ?>_bt_cvr2">
@@ -117,19 +117,19 @@ if($my->id){
 										<td class="td-1" colspan="2">
 											<strong><?php echo _GEN_SIGNATURE; ?></strong>:
 											<br/>
-											<i><?php echo $fbConfig['maxSig']; ?> <?php echo _CHARS; ?></i>
+											<i><?php echo $fbConfig->maxSig; ?> <?php echo _CHARS; ?></i>
 											<br/>
 											<input readonly type=text name="counter" size="3" maxlength=3 value="">
 											<br/>
 											<?php echo _HTML_YES; ?>
 										</td>
 										<td class="td-2">
-											<textarea style="width: <?php echo $fbConfig['rtewidth']?>px; height: 60px;"
+											<textarea style="width: <?php echo $fbConfig->rtewidth?>px; height: 60px;"
 													  class="inputbox"
-													  onMouseOver="textCounter(this.form.message,this.form.counter,<?php echo $fbConfig['maxSig'];?>);"
-													  onClick="textCounter(this.form.message,this.form.counter,<?php echo $fbConfig['maxSig'];?>);"
-													  onKeyDown="textCounter(this.form.message,this.form.counter,<?php echo $fbConfig['maxSig'];?>);"
-													  onKeyUp="textCounter(this.form.message,this.form.counter,<?php echo $fbConfig['maxSig'];?>);"
+													  onMouseOver="textCounter(this.form.message,this.form.counter,<?php echo $fbConfig->maxSig;?>);"
+													  onClick="textCounter(this.form.message,this.form.counter,<?php echo $fbConfig->maxSig;?>);"
+													  onKeyDown="textCounter(this.form.message,this.form.counter,<?php echo $fbConfig->maxSig;?>);"
+													  onKeyUp="textCounter(this.form.message,this.form.counter,<?php echo $fbConfig->maxSig;?>);"
 													  name="message"><?php echo $signature; ?></textarea>
 											<br/>
 											<input type="button" class="button" accesskey="b" name="addbbcode0"
@@ -177,7 +177,7 @@ if($my->id){
 											</select>
 											<br/>
 											<input type="text" name="helpbox" size="45" maxlength="100"
-												   style="width: <?php echo $fbConfig['rtewidth']?>px; font-size:9px"
+												   style="width: <?php echo $fbConfig->rtewidth?>px; font-size:9px"
 												   class="helpline" value="<?php echo _BBCODE_HINT;?>"/>
 											<br/>
 											<a href="javascript: bbstyle(-1)" onMouseOver="helpline('a')">
@@ -198,17 +198,17 @@ if($my->id){
 									<tr class="<?php echo $boardclass; ?>sectiontableentry1">
 									<td class="td-1" colspan="2">
 										<?php
-										if($fbConfig['allowAvatar']){
+										if($fbConfig->allowAvatar){
 											echo _YOUR_AVATAR . "</td><td class=\"td-2\">";
 
-											if($fbConfig['avatar_src'] == "clexuspm"){
+											if($fbConfig->avatar_src == "clexuspm"){
 												?>
 												<img src="<?php echo MyPMSTools::getAvatarLinkWithID($my->id)?>"
 													 alt=""/>
 												<br/> <a
 													href="<?php echo sefRelToAbs('index.php?option=com_mypms&amp;task=upload&amp;Itemid=' . _CLEXUSPM_ITEMID);?>"><?php echo _SET_NEW_AVATAR; ?></a>
 												<?php
-											} elseif($fbConfig['avatar_src'] == "cb"){
+											} elseif($fbConfig->avatar_src == "cb"){
 												if($avatar != ""){
 													?>
 													<img src="components/com_comprofiler/images/<?php echo $avatar;?>"
@@ -452,7 +452,7 @@ if($my->id){
 		} else{
 			echo _USER_UNSUBSCRIBE_YES . ".<br /><br />";
 		}
-		if($fbConfig['cb_profile']){
+		if($fbConfig->cb_profile){
 			echo _USER_RETURN_A . " <a href=\"index.php?option=com_comprofiler&amp;Itemid='" . FB_CB_ITEMID . "'&amp;tab=getForumTab\">" . _USER_RETURN_B . "</a><br /><br />";
 			?>
 		<script language="javascript">
@@ -475,7 +475,7 @@ if($my->id){
 		} else{
 			echo _USER_UNFAVORITE_YES . ".<br /><br />";
 		}
-		if($fbConfig['cb_profile']){
+		if($fbConfig->cb_profile){
 			echo _USER_RETURN_A . " <a href=\"index.php?option=com_comprofiler" . FB_CB_ITEMID_SUFFIX . "&amp;tab=getForumTab\">" . _USER_RETURN_B . "</a><br /><br />";
 			?>
 		<script language="javascript">
@@ -516,7 +516,7 @@ if($my->id){
 							<tr>
 								<th class="th-right">
 									<?php
-									if($fbConfig['enableForumJump']) require_once(JB_ABSSOURCESPATH . 'fb_forumjump.php');
+									if($fbConfig->enableForumJump) require_once(JB_ABSSOURCESPATH . 'fb_forumjump.php');
 									?>
 								</th>
 							</tr>

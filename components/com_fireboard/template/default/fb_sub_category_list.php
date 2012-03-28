@@ -16,7 +16,7 @@
 *
 **/
 defined ('_VALID_MOS') or die('Direct Access to this location is not allowed.');
-global $fbConfig;
+$fbConfig = FBJConfig::getInstance();
 ?>
 <?php
 $database->setQuery("SELECT id, name, locked,review, pub_access, pub_recurse, admin_access, admin_recurse FROM #__fb_categories WHERE parent='$catid'  and published='1' order by ordering");
@@ -149,7 +149,7 @@ else
                     echo '<tr class="' . $boardclass . '' . $tabclass[$k] . '" id="fb_cat'.$singlerow->id.'" >';
 					echo '<td class="td-1 " align="center">';
 					echo '<a href="' . sefRelToAbs(JB_LIVEURLREL . '&amp;func=showcat&amp;catid=' . $singlerow->id) . '">';
-                    if ($fbConfig['showNew'] && $my->id != 0)
+                    if ($fbConfig->showNew && $my->id != 0)
                     {
                         $newPostsAvailable = 0;
                         foreach ($newThreadsAll as $nta)
@@ -165,7 +165,7 @@ else
                                 echo "<img src=\"" . JB_URLCATIMAGES . "" . $singlerow->id . "_on.gif\" border=\"0\" class='forum-cat-image' alt=\" \" />";
                             }
                             else {
-                                echo $fbIcons['unreadforum'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['unreadforum'] . '" border="0" alt="' . _GEN_FORUM_NEWPOST . '" title="' . _GEN_FORUM_NEWPOST . '"/>' : $fbConfig['newChar'];
+                                echo $fbIcons->unreadforum ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->unreadforum . '" border="0" alt="' . _GEN_FORUM_NEWPOST . '" title="' . _GEN_FORUM_NEWPOST . '"/>' : $fbConfig->newChar;
                             }
                         }
                         else
@@ -174,7 +174,7 @@ else
                                 echo "<img src=\"" . JB_URLCATIMAGES . "" . $singlerow->id . "_off.gif\" border=\"0\" class='forum-cat-image' alt=\" \"  />";
                             }
                             else {
-                                echo $fbIcons['readforum'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['readforum'] . '" border="0" alt="' . _GEN_FORUM_NOTNEW . '" title="' . _GEN_FORUM_NOTNEW . '"/>' : $fbConfig['newChar'];
+                                echo $fbIcons->readforum ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->readforum . '" border="0" alt="' . _GEN_FORUM_NOTNEW . '" title="' . _GEN_FORUM_NOTNEW . '"/>' : $fbConfig->newChar;
                             }
                         }
                     }
@@ -184,7 +184,7 @@ else
                             echo "<img src=\"" . JB_URLCATIMAGES . "" . $singlerow->id . "_notlogin.gif\" border=\"0\" class='forum-cat-image' alt=\" \" />";
                         }
                         else {
-                            echo $fbIcons['notloginforum'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['notloginforum'] . '" border="0" alt="' . _GEN_FORUM_NOTNEW . '" title="' . _GEN_FORUM_NOTNEW . '"/>' : $fbConfig['newChar'];
+                            echo $fbIcons->notloginforum ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->notloginforum . '" border="0" alt="' . _GEN_FORUM_NOTNEW . '" title="' . _GEN_FORUM_NOTNEW . '"/>' : $fbConfig->newChar;
                         }
                     }
 					echo '</a>';
@@ -192,20 +192,20 @@ else
                     echo '<td class="td-2"  align="left"><div class="'
                              . $boardclass . 'thead-title fbl"><a href="' . sefRelToAbs(JB_LIVEURLREL . '&amp;func=showcat&amp;catid=' . $singlerow->id) . '">' . $singlerow->name . '</a>';
                     if ($cxThereisNewInForum == 1 && $my->id > 0) {
-                        echo '<img src="'.JB_URLICONSPATH.''.$fbIcons['favoritestar'].'" border="0" alt="'._FB_MYPROFILE_NEW_MESSAGE.'"/>&nbsp;<span style="font-size:10px;">('.$newPostsAvailable.')</span>';
+                        echo '<img src="'.JB_URLICONSPATH.''.$fbIcons->favoritestar.'" border="0" alt="'._FB_MYPROFILE_NEW_MESSAGE.'"/>&nbsp;<span style="font-size:10px;">('.$newPostsAvailable.')</span>';
                     }
                     $cxThereisNewInForum = 0;
                     if ($singlerow->locked)
                     {
                         echo
-                            $fbIcons['forumlocked'] ? '&nbsp;&nbsp;<img src="' . JB_URLICONSPATH . ''
-                                . $fbIcons['forumlocked'] . '" border="0" alt="' . _GEN_LOCKED_FORUM . '" title="' . _GEN_LOCKED_FORUM . '"/>' : '&nbsp;&nbsp;<img src="' . JB_URLEMOTIONSPATH . 'lock.gif"  border="0" alt="' . _GEN_LOCKED_FORUM . '">';
+                            $fbIcons->forumlocked ? '&nbsp;&nbsp;<img src="' . JB_URLICONSPATH . ''
+                                . $fbIcons->forumlocked . '" border="0" alt="' . _GEN_LOCKED_FORUM . '" title="' . _GEN_LOCKED_FORUM . '"/>' : '&nbsp;&nbsp;<img src="' . JB_URLEMOTIONSPATH . 'lock.gif"  border="0" alt="' . _GEN_LOCKED_FORUM . '">';
                         $lockedForum = 1;
                     }
                     if ($singlerow->review)
                     {
-                        echo $fbIcons['forummoderated'] ? '&nbsp;&nbsp;<img src="' . JB_URLICONSPATH . ''
-                                 . $fbIcons['forummoderated'] . '" border="0" alt="' . _GEN_MODERATED . '" title="' . _GEN_MODERATED . '"/>' : '&nbsp;&nbsp;<img src="' . JB_URLEMOTIONSPATH . 'review.gif" border="0"  alt="' . _GEN_MODERATED . '"/>';
+                        echo $fbIcons->forummoderated ? '&nbsp;&nbsp;<img src="' . JB_URLICONSPATH . ''
+                                 . $fbIcons->forummoderated . '" border="0" alt="' . _GEN_MODERATED . '" title="' . _GEN_MODERATED . '"/>' : '&nbsp;&nbsp;<img src="' . JB_URLEMOTIONSPATH . 'review.gif" border="0"  alt="' . _GEN_MODERATED . '"/>';
                         $moderatedForum = 1;
                     }
                     echo '</div>';
@@ -222,9 +222,9 @@ else
 
                         foreach ($forumparents as $forumparent)
                         {
-                            if ($fbConfig['showChildCatIcon'])
+                            if ($fbConfig->showChildCatIcon)
                             {
-                                if ($fbConfig['showNew'] && $my->id != 0)
+                                if ($fbConfig->showNew && $my->id != 0)
                                 {
                                     $database->setQuery("SELECT thread from #__fb_messages where catid='$forumparent->id' and hold='0' and time>$prevCheck group by thread");
                                     $newPThreadsAll = $database->loadObjectList();
@@ -243,8 +243,8 @@ else
                                             echo "<img src=\"" . JB_URLCATIMAGES . "" . $forumparent->id . "_on_childsmall.gif\" border=\"0\" class='forum-cat-image' alt=\" \" />";
                                         }
                                         else {
-                                            echo $fbIcons['unreadforum']
-                                                     ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['unreadforum_childsmall'] . '" border="0" alt="' . _GEN_FORUM_NEWPOST . '" title="' . _GEN_FORUM_NEWPOST . '" />' : $fbConfig['newChar'];
+                                            echo $fbIcons->unreadforum
+                                                     ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->unreadforum_childsmall . '" border="0" alt="' . _GEN_FORUM_NEWPOST . '" title="' . _GEN_FORUM_NEWPOST . '" />' : $fbConfig->newChar;
                                         }
                                     }
                                     else
@@ -253,8 +253,8 @@ else
                                             echo "<img src=\"" . JB_URLCATIMAGES . "" . $forumparent->id . "_off_childsmall.gif\" border=\"0\" class='forum-cat-image' alt=\" \" />";
                                         }
                                         else {
-                                            echo $fbIcons['readforum']
-                                                     ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['readforum_childsmall'] . '" border="0" alt="' . _GEN_FORUM_NOTNEW . '" title="' . _GEN_FORUM_NOTNEW . '" />' : $fbConfig['newChar'];
+                                            echo $fbIcons->readforum
+                                                     ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->readforum_childsmall . '" border="0" alt="' . _GEN_FORUM_NOTNEW . '" title="' . _GEN_FORUM_NOTNEW . '" />' : $fbConfig->newChar;
                                         }
                                     }
                                 }
@@ -264,8 +264,8 @@ else
                                         echo "<img src=\"" . JB_URLCATIMAGES . "" . $forumparent->id . "_notlogin_childsmall.gif\" border=\"0\" class='forum-cat-image' alt=\" \" />";
                                     }
                                     else {
-                                        echo $fbIcons['notloginforum']
-                                                 ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['notloginforum_childsmall'] . '" border="0" alt="' . _GEN_FORUM_NOTNEW . '" title="' . _GEN_FORUM_NOTNEW . '" />' : $fbConfig['newChar'];
+                                        echo $fbIcons->notloginforum
+                                                 ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->notloginforum_childsmall . '" border="0" alt="' . _GEN_FORUM_NOTNEW . '" title="' . _GEN_FORUM_NOTNEW . '" />' : $fbConfig->newChar;
                                     }
                                 }
                             }
@@ -307,8 +307,8 @@ else
 <?php echo _GEN_BY; ?>
  <a href = "<?php echo sefRelToAbs(FB_PROFILE_LINK_SUFFIX.''.$latestuserid)?>"><?php echo $latestname; ?></a>
                     | <?php echo $lastptime; ?> <a href = "<?php echo sefRelToAbs(JB_LIVEURLREL.'&amp;func=view&amp;catid='.$latestcatid.'&amp;id='.$latestid).'#'.$latestid;?>"> <?php
-    echo $fbIcons['latestpost'] ? '<img src="'
-             . JB_URLICONSPATH . '' . $fbIcons['latestpost'] . '" border="0" alt="' . _SHOW_LAST . '" title="' . _SHOW_LAST . '" />' : '  <img src="' . JB_URLEMOTIONSPATH . 'icon_newest_reply.gif" border="0"   alt="' . _SHOW_LAST . '" />'; ?> </a>
+    echo $fbIcons->latestpost ? '<img src="'
+             . JB_URLICONSPATH . '' . $fbIcons->latestpost . '" border="0" alt="' . _SHOW_LAST . '" title="' . _SHOW_LAST . '" />' : '  <img src="' . JB_URLEMOTIONSPATH . 'icon_newest_reply.gif" border="0"   alt="' . _SHOW_LAST . '" />'; ?> </a>
                             </div>
                         </td>
                         </tr>

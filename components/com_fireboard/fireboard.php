@@ -14,12 +14,18 @@
  *
  * Russian edition by Adeptus (c) 2007
  *
+ * @modification Gold Dragon 27.03.2012
  **/
-defined('_VALID_MOS') or die('Direct Access to this location is not allowed.');
+defined('_VALID_MOS') or die();
+
 $mtime = explode(" ", microtime());
 $tstart = $mtime[1] + $mtime[0];
 error_reporting(E_ALL ^ E_NOTICE);
-global $mosConfig_lang, $fbIcons, $database, $message, $mainframe, $fbConfig;
+
+$mainframe = mosMainFrame::getInstance();
+$database = database::getInstance();
+$mosConfig_lang = $mainframe->getCfg( 'lang' );
+
 $action = mosGetParam($_REQUEST, 'action', '');
 $attachfile = mosGetParam($_FILES['attachfile'], 'name', '');
 $attachimage = mosGetParam($_FILES['attachimage'], 'name', '');
@@ -52,15 +58,18 @@ $topic_emoticon = mosGetParam($_REQUEST, 'topic_emoticon', '');
 $userid = (int)mosGetParam($_REQUEST, 'userid', '');
 $view = mosGetParam($_REQUEST, 'view', '');
 $msgpreview = mosGetParam($_REQUEST, 'msgpreview', '');
-global $fbConfig;
-include_once ($mainframe->getCfg("absolute_path") . '/administrator/components/com_fireboard/fireboard_config.php');
-require_once ($mainframe->getCfg("absolute_path") . "/components/com_fireboard/class.fireboard.php");
+
+require_once (JPATH_BASE . DS . 'administrator' . DS . 'components' . DS . 'com_fireboard' . DS . 'fireboard.config.php');
+$fbConfig = FBJConfig::getInstance();
+
+require_once (JPATH_BASE . DS . 'components' . DS . 'com_fireboard' . DS . 'class.fireboard.php');
+
 if(file_exists(JB_ABSADMPATH . '/language/' . JB_LANG . '.php')){
 	include_once (JB_ABSADMPATH . '/language/' . JB_LANG . '.php');
 } else{
 	include_once (JB_ABSADMPATH . '/language/english.php');
 }
-if($fbConfig['pm_component'] == "clexuspm"){
+if($fbConfig->pm_component == "clexuspm"){
 	require_once ($mosConfig_absolute_path . '/components/com_mypms/class.mypms.php');
 	$ClexusPMconfig = new ClexusPMConfig();
 }
@@ -68,23 +77,24 @@ include_once (JB_ABSSOURCESPATH . 'fb_timeformat.class.php');
 define ('JB_SECONDS_IN_HOUR', 3600);
 define ('JB_SECONDS_IN_YEAR', 31536000);
 define ('JB_SESSION_TIMEOUT', 1800);
-define ('JB_OFFSET_BOARD', ($fbConfig['board_ofset'] * JB_SECONDS_IN_HOUR));
+define ('JB_OFFSET_BOARD', ($fbConfig->board_ofset * JB_SECONDS_IN_HOUR));
 $systime = time() + JB_OFFSET_BOARD;
 define ('JB_DB_MISSING_COLUMN', 1054);
 $settings = $_COOKIE['fboard_settings'];
-$str_FB_templ_path = JB_ABSPATH . '/template/' . ($fb_user_template ? $fb_user_template : $fbConfig['template']);
-$board_title = $fbConfig['board_title'];
+$str_FB_templ_path = JB_ABSPATH . '/template/' . ($fb_user_template ? $fb_user_template : $fbConfig->template);
+$board_title = $fbConfig->board_title;
 $fromBot = 0;
-$prefview = $fbConfig['default_view'];
-if($fbConfig['joomlaStyle'] < 1){
+$prefview = $fbConfig->default_view;
+if($fbConfig->joomlaStyle < 1){
 	$boardclass = "fb_";
 }
-$mainframe->prependMetaTag('description', $fbConfig['board_title']);
-$mainframe->prependMetaTag('keywords', $fbConfig['board_title']);
-$mainframe->setPageTitle($fbConfig['board_title']);
+$mainframe->prependMetaTag('description', $fbConfig->board_title);
+$mainframe->prependMetaTag('keywords', $fbConfig->board_title);
+$mainframe->setPageTitle($fbConfig->board_title);
 /////////////////////////////////////
 function fb_is_private_has_access($catid){
-	global $fbConfig, $database, $my;
+	$database = FBJConfig::database();
+	$my = FBJConfig::my();
 	$userid = $my->id;
 	$database->setQuery("select group_id from #__fb_users where userid=$userid");
 	$mygroup = $database->loadResult();
@@ -121,7 +131,7 @@ if($func == "getpreview"){
 	}
 	$message = jsEscape_decode($msgpreview, $ch_sfb);
 	$msgbody = smile::smileReplace($message, 0, _CLEXUSPM_LIVEPATH, $ClexusPMconfig->show_smiles);
-	$msgbody = smile::htmlwrap($msgbody, $fbConfig['wrap']);
+	$msgbody = smile::htmlwrap($msgbody, $fbConfig->wrap);
 	header("Content-Type: text/html; " . _ISO);
 	echo $msgbody;
 	die();
@@ -135,7 +145,7 @@ $mainframe->addCustomHeadTag('<script type="text/javascript" src="' . JB_JLIVEUR
 $mainframe->addCustomHeadTag('<script type="text/javascript">var $j = jQuery.noConflict(); $j(document).ready(function($) { $j(\'a[rel*=facebox]\').facebox();})</script>');
 $mainframe->addCustomHeadTag('<script type="text/javascript">jr_expandImg_url = "' . JB_URLIMAGESPATH . '";</script>');
 $mainframe->addCustomHeadTag('<script type="text/javascript" src="' . JB_COREJSURL . '"></script>');
-if($fbConfig['joomlaStyle'] < 1){
+if($fbConfig->joomlaStyle < 1){
 	$mainframe->addCustomHeadTag('<link type="text/css" rel="stylesheet" href="' . JB_TMPLTCSSURL . '" />');
 } else{
 	$mainframe->addCustomHeadTag('<link type="text/css" rel="stylesheet" href="' . JB_DIRECTURL . '/template/default/joomla.css" />');
@@ -177,7 +187,7 @@ if($func == 'fb_pdf'){
 	die();
 }
 $cbitemid = 0;
-if($fbConfig['cb_profile']){
+if($fbConfig->cb_profile){
 	$UElanguagePath = $mainframe->getCfg('absolute_path') . '/components/com_comprofiler/plugin/language';
 	$UElanguage = $mainframe->getCfg('lang');
 	if(!file_exists($UElanguagePath . '/' . $mosConfig_lang . '/' . $mosConfig_lang . '.php')){
@@ -186,19 +196,20 @@ if($fbConfig['cb_profile']){
 	include_once ($UElanguagePath . '/' . $UElanguage . '/' . $UElanguage . '.php');
 }
 $useIcons = 0;
-$fbIcons = 0;
 if(file_exists(JB_ABSTMPLTPATH . '/icons.php')){
 	include_once (JB_ABSTMPLTPATH . '/icons.php');
 	$useIcons = 1;
 } else{
 	include_once (JB_ABSPATH . '/template/default/icons.php');
 }
+$fbIcons = FBJIcons::getInstance();
+
 $my_id = $my->id;
-if($fbConfig['regonly'] && !$my_id){
+if($fbConfig->regonly && !$my_id){
 	echo _FORUM_UNAUTHORIZIED . "<br />";
 	echo _FORUM_UNAUTHORIZIED2;
-} else if($fbConfig['board_offline'] && !$is_admin){
-	echo $fbConfig['offline_message'];
+} else if($fbConfig->board_offline && !$is_admin){
+	echo $fbConfig->offline_message;
 } else{
 	if($my_id > 0){
 		setcookie("fboard_settings[member_id]", $my_id, time() + JB_SECONDS_IN_YEAR, '/');
@@ -254,16 +265,16 @@ if($fbConfig['regonly'] && !$my_id){
 		$database->query();
 		$prefview = $database->loadResult();
 		if($prefview == ""){
-			$prefview = $fbConfig['default_view'];
+			$prefview = $fbConfig->default_view;
 			$database->setQuery("insert into #__fb_users (userid,view,moderator) values ('$my_id','$prefview','$is_admin')");
 			if(!$database->query()) echo _PROBLEM_CREATING_PROFILE;
-			if($fbConfig['cb_profile']){
+			if($fbConfig->cb_profile){
 				$cbprefview = $prefview == "threaded" ? "_UE_FB_VIEWTYPE_THREADED" : "_UE_FB_VIEWTYPE_FLAT";
 
 				$database->setQuery("update #__comprofiler set fbviewtype='$cbprefview' where user_id='$my_id'");
 				if(!$database->query()) die (_AFB_DB_PROBLEM . $database->getErrorMsg());
 			}
-		} else if($fbConfig['cb_profile']){
+		} else if($fbConfig->cb_profile){
 			$database->setQuery("select fbviewtype from #__comprofiler where user_id='$my_id'");
 			if(!$database->query()) die (_AFB_DB_PROBLEM . $database->getErrorMsg());
 			$fbviewtype = $database->loadResult();
@@ -278,7 +289,7 @@ if($fbConfig['regonly'] && !$my_id){
 		$prevCheck = $systime;
 	}
 	if($view == "" && $settings['current_view'] == ""){
-		$view = $prefview == "" ? $fbConfig['default_view'] : $prefview;
+		$view = $prefview == "" ? $fbConfig->default_view : $prefview;
 		setcookie("fboard_settings[current_view]", $view, time() + JB_SECONDS_IN_YEAR, '/');
 	} else if($view == "" && $settings['current_view'] != ""){
 		$view = $settings['current_view'];
@@ -313,8 +324,8 @@ if($fbConfig['regonly'] && !$my_id){
 	$obj_FB_tmpl->readTemplatesFromFile("header.html");
 	$obj_FB_tmpl->addVar('jb-header', 'menu', $fbMenu);
 	$obj_FB_tmpl->addVar('jb-header', 'board_title', $board_title);
-	$obj_FB_tmpl->addVar('jb-header', 'css_path', JB_DIRECTURL . '/template/' . $fbConfig['template'] . '/forum.css');
-	$obj_FB_tmpl->addVar('jb-header', 'offline_message', $fbConfig['board_offline'] ? '<span id="fbOffline">' . _FORUM_IS_OFFLINE . '</span>' : '');
+	$obj_FB_tmpl->addVar('jb-header', 'css_path', JB_DIRECTURL . '/template/' . $fbConfig->template . '/forum.css');
+	$obj_FB_tmpl->addVar('jb-header', 'offline_message', $fbConfig->board_offline ? '<span id="fbOffline">' . _FORUM_IS_OFFLINE . '</span>' : '');
 	$obj_FB_tmpl->addVar('jb-header', 'searchbox', getSearchBox());
 	$obj_FB_tmpl->addVar('jb-header', 'pb_imgswitchurl', JB_URLIMAGESPATH . "shrink.gif");
 	$obj_FB_tmpl->displayParsedTemplate('jb-header');
@@ -324,7 +335,7 @@ if($fbConfig['regonly'] && !$my_id){
 		include (JB_ABSPATH . '/template/default/plugin/profilebox/profilebox.php');
 	}
 	//BEGIN: CHAT
-	if($fbConfig['chat']){
+	if($fbConfig->chat){
 		if($func == 'view' OR $func == 'listcat' OR $func == '' OR $func == NULL){
 			if(file_exists(JB_ABSPATH . '/template/default/plugin/chat/chatmy.php')) include (JB_ABSPATH . '/template/default/plugin/chat/chatmy.php');
 		}
@@ -536,7 +547,7 @@ if($fbConfig['regonly'] && !$my_id){
 		case 'search':
 			require_once (JB_ABSSOURCESPATH . 'fb_search.class.php');
 			$searchword = mosGetParam($_REQUEST, 'searchword', '');
-			$obj_FB_search = new jbSearch($database, $searchword, $my_id, $limitstart, $fbConfig['messages_per_page_search']);
+			$obj_FB_search = new jbSearch($database, $searchword, $my_id, $limitstart, $fbConfig->messages_per_page_search);
 			$obj_FB_search->show();
 			break;
 		case 'advsearch':
@@ -640,9 +651,8 @@ if($fbConfig['regonly'] && !$my_id){
 	</div>
 	<?php
 	}
-	echo '<div class="fb_credits">
-  <p>Форум <a href="http://www.bestofjoomla.com" target="_blank">FireBoard</a>. Русская редакция: <a href="http://adeptsite.info">Adeptus</a> v.2.0</p> ';
-	if($fbConfig['enableRSS']){
+	echo '<div class="fb_credits">';
+	if($fbConfig->enableRSS){
 		$rsslink = sefReltoAbs('index2.php?option=com_fireboard&amp;func=fb_rss&amp;no_html=1' . FB_FB_ITEMID_SUFFIX);
 		echo '<a href="' . $rsslink . '" target="_blank" ><img class="rsslink" src="' . JB_URLEMOTIONSPATH . 'rss.gif" border="0" alt="' . _LISTCAT_RSS . '" title="' . _LISTCAT_RSS . '" /></a>';
 	}

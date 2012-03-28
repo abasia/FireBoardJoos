@@ -16,7 +16,11 @@
 *
 **/
 defined ('_VALID_MOS') or die('Direct Access to this location is not allowed.');
-global $database, $mainframe, $my, $mosConfig_absolute_path;
+$database = FBJConfig::database();
+$mainframe = FBJConfig::mainframe();
+$my = FBJConfig::my();
+$mosConfig_absolute_path = FBJConfig::getCfg('absolute_path');
+
 include ($mosConfig_absolute_path . "/components/com_fireboard/template/default/smile.class.php");
 $now = date("Y-m-d H:i:s", FBTools::fbGetShowTime());
 $menu = new mosMenu($database);

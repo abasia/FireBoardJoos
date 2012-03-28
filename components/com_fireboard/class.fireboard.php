@@ -12,7 +12,10 @@
  */
 defined('_VALID_MOS') or die('Direct Access to this location is not allowed.');
 $Itemid = intval(mosGetParam($_REQUEST, 'Itemid'));
-global $fbConfig, $mosConfig_absolute_path, $mosConfig_live_site;
+$mosConfig_absolute_path = FBJConfig::getCfg('absolute_path');
+$mosConfig_live_site = FBJConfig::getCfg('live_site');
+$fbConfig = FBJConfig::getInstance();
+
 if(!defined("FB_FB_ITEMID")){
 	if($Itemid < 1){
 		$database->setQuery("SELECT id FROM #__menu WHERE link = 'index.php?option=com_fireboard' AND published = 1");
@@ -24,38 +27,38 @@ if(!defined("FB_FB_ITEMID")){
 	define("FB_FB_ITEMID", (int)$Itemid);
 	define("FB_FB_ITEMID_SUFFIX", "&amp;Itemid=" . FB_FB_ITEMID);
 	//Community Builder
-	if($fbConfig['cb_profile'] || $fbConfig['fb_profile'] == "cb"){
+	if($fbConfig->cb_profile || $fbConfig->fb_profile == "cb"){
 		$database->setQuery("SELECT id FROM #__menu WHERE link = 'index.php?option=com_comprofiler' AND published=1");
 		$CB_Itemid = $database->loadResult();
 		define("FB_CB_ITEMID", (int)$CB_Itemid);
 		define("FB_CB_ITEMID_SUFFIX", "&amp;Itemid=" . FB_CB_ITEMID);
 	}
 	//Clexus PM
-	if($fbConfig['pm_component'] == 'clexuspm' || $fbConfig['fb_profile'] == "clexuspm"){
+	if($fbConfig->pm_component == 'clexuspm' || $fbConfig->fb_profile == "clexuspm"){
 		$database->setQuery("SELECT id FROM #__menu WHERE link = 'index.php?option=com_mypms' AND published=1");
 		$CPM_Itemid = $database->loadResult();
 		define("FB_CPM_ITEMID", (int)$CPM_Itemid);
 		define("FB_CPM_ITEMID_SUFFIX", "&amp;Itemid=" . FB_CPM_ITEMID);
 	}
 	// UddeIM
-	if($fbConfig['pm_component'] == 'uddeim'){
+	if($fbConfig->pm_component == 'uddeim'){
 		$database->setQuery('SELECT id FROM #__menu WHERE link=`index.php?option=com_uddeim`');
 		$UIM_itemid = $database->loadResult();
 		define("FB_UIM_ITEMID", (int)$UIM_itemid);
 		define("FB_UIM_ITEMID_SUFFIX", "&amp;Itemid=" . FB_UIM_ITEMID);
 	}
 	// MISSUS
-	if($fbConfig['pm_component'] == 'missus'){
+	if($fbConfig->pm_component == 'missus'){
 		$database->setQuery('SELECT id FROM #__menu WHERE link=`index.php?option=com_missus`');
 		$MISSUS_itemid = $database->loadResult();
 		define("FB_MISSUS_ITEMID", (int)$MISSUS_itemid);
 		define("FB_MISSUS_ITEMID_SUFFIX", "&amp;Itemid=" . FB_MISSUS_ITEMID);
 	}
 	// PROFILE LINK
-	if($fbConfig['fb_profile'] == "cb"){
+	if($fbConfig->fb_profile == "cb"){
 		$profilelink = 'index.php?option=com_comprofiler&amp;task=userProfile&amp;user=';
 		define("FB_PROFILE_LINK_SUFFIX", "index.php?option=com_comprofiler&amp;task=userProfile&amp;Itemid=" . FB_CB_ITEMID . "&amp;user=");
-	} else if($fbConfig['fb_profile'] == "clexuspm"){
+	} else if($fbConfig->fb_profile == "clexuspm"){
 		$profilelink = 'index.php?option=com_mypms&amp;task=showprofile&amp;user=';
 		define("FB_PROFILE_LINK_SUFFIX", "index.php?option=com_mypms&amp;task=showprofile&amp;Itemid=" . FB_CPM_ITEMID . "&amp;user=");
 	} else{
@@ -94,15 +97,15 @@ $fb_user_img_template = strval(mosGetParam($_COOKIE, 'fb_user_img_template', '')
 if(strlen($fb_user_template) > 0){
 	$fb_cur_template = $fb_user_template;
 } else{
-	$fb_cur_template = $fbConfig['template'];
+	$fb_cur_template = $fbConfig->template;
 }
 if(strlen($fb_user_img_template) > 0){
 	$fb_cur_img_template = $fb_user_img_template;
 } else{
-	$fb_cur_img_template = $fbConfig['templateimagepath'];
+	$fb_cur_img_template = $fbConfig->templateimagepath;
 }
 define('JB_ABSTMPLTPATH', JB_ABSPATH . '/template/' . $fb_cur_template);
-define('JB_ABSTMPLTMAINIMGPATH', JB_ABSPATH . '/template/' . $fbConfig['templateimagepath']);
+define('JB_ABSTMPLTMAINIMGPATH', JB_ABSPATH . '/template/' . $fbConfig->templateimagepath);
 // IMAGES ABSOLUTE PATH
 define('JB_ABSIMAGESPATH', JB_ABSTMPLTMAINIMGPATH . '/images/' . JB_LANG . '/');
 // absolute images path
@@ -114,7 +117,7 @@ define('JB_ABSGRAPHPATH', JB_ABSIMAGESPATH . 'graph/');
 // absolute graph path
 define('JB_ABSRANKSPATH', JB_ABSIMAGESPATH . 'ranks/');
 // absolute ranks path
-define('JB_ABSCATIMAGESPATH', FB_ABSUPLOADEDPATH . '/' . $fbConfig['CatImagePath']);
+define('JB_ABSCATIMAGESPATH', FB_ABSUPLOADEDPATH . '/' . $fbConfig->CatImagePath);
 define('JB_TMPLTURL', JB_DIRECTURL . '/template/' . $fb_cur_template);
 define('JB_TMPLTMAINIMGURL', JB_DIRECTURL . '/template/' . $fb_cur_img_template);
 // IMAGES URL PATH
@@ -133,7 +136,7 @@ define('JB_URLGRAPHPATH', JB_URLIMAGESPATH . 'graph/');
 // url graph path
 define('JB_URLRANKSPATH', JB_URLIMAGESPATH . 'ranks/');
 // url ranks path
-define('JB_URLCATIMAGES', FB_LIVEUPLOADEDPATH . '/' . $fbConfig['CatImagePath']);
+define('JB_URLCATIMAGES', FB_LIVEUPLOADEDPATH . '/' . $fbConfig->CatImagePath);
 if(file_exists(JB_ABSTMPLTPATH . '/js/jquery-latest.pack.js')){
 	define('JB_JQURL', JB_DIRECTURL . '/template/' . $fb_cur_template . '/js/jquery-latest.pack.js');
 } else{
@@ -143,27 +146,6 @@ if(file_exists(JB_ABSTMPLTPATH . '/js/bojForumCore.js')){
 	define('JB_COREJSURL', JB_DIRECTURL . '/template/' . $fb_cur_template . '/js/bojForumCore.js');
 } else{
 	define('JB_COREJSURL', JB_DIRECTURL . '/template/default/js/bojForumCore.js');
-}
-/**
- * gets Itemid of CB profile, or by default of homepage
- */
-function JBgetCBprofileItemid($htmlspecialchars = false){
-	global $JB_CB__Cache_ProfileItemid, $database;
-	if(!$JB_CB__Cache_ProfileItemid){
-		$database->setQuery("SELECT id FROM #__menu WHERE link = 'index.php?option=com_comprofiler' AND published=1");
-		$Itemid = (int)$database->loadResult();
-		if(!$Itemid){
-			$query = "SELECT id" . "\n FROM #__menu" . "\n WHERE menutype = 'mainmenu'" . "\n AND published = 1" . "\n ORDER BY parent, ordering" . "\n LIMIT 1";
-			$database->setQuery($query);
-			$Itemid = (int)$database->loadResult();
-		}
-		$JB_CB__Cache_ProfileItemid = $Itemid;
-	}
-	if($JB_CB__Cache_ProfileItemid){
-		return $JB_CB__Cache_ProfileItemid;
-	} else{
-		return null;
-	}
 }
 
 function FB_fmodReplace($x, $y){
@@ -194,7 +176,7 @@ function FB_check_image_type(&$type){
 }
 
 function getFBGroupName($id){
-	global $database;
+	$database = FBJConfig::database();
 	$gr = '';
 	$database->setQuery("select id, title from #__fb_groups as g, #__fb_users as u where u.group_id = g.id and u.userid= $id");
 	$database->loadObject($gr);
@@ -224,18 +206,18 @@ class FBTools{
 	var $id = null;
 
 	public static function fbGetInternalTime($time = null){
-		global $fbConfig;
+		$fbConfig = FBJConfig::getInstance();
 		if($time === 0){
 			return 0;
 		}
 		if($time === null){
 			$time = time();
 		}
-		return $time + ($fbConfig['board_ofset'] * 3600);
+		return $time + ($fbConfig->board_ofset * 3600);
 	}
 
 	public static function fbGetShowTime($time = null, $space = 'FB'){
-		global $fbConfig;
+		$fbConfig = FBJConfig::getInstance();
 		if($time === 0){
 			return 0;
 		}
@@ -244,20 +226,20 @@ class FBTools{
 			$space = 'FB';
 		}
 		if($space == 'UTC'){
-			return $time + ($fbConfig['board_ofset'] * 3600);
+			return $time + ($fbConfig->board_ofset * 3600);
 		}
 		return $time;
 	}
 
 	public static function whoisID($id){
-		global $database, $mosConfig_live_site;
+		$database = FBJConfig::database();
 		$id = intval($database->getEscaped($id));
 		$database->setQuery("select username from #__users where id=$id");
 		return $database->loadResult();
 	}
 
 	function reCountBoards(){
-		global $database;
+		$database = FBJConfig::database();
 		include_once (JB_ABSSOURCESPATH . 'fb_db_iterator.class.php');
 		$database->setQuery("UPDATE `#__fb_categories` SET `id_last_msg`='0',`time_last_msg`='0',`numTopics`='0',`numPosts`='0'");
 		$database->query();
@@ -292,7 +274,7 @@ class FBTools{
 	}
 
 	public static function modifyCategoryStats($msg_id, $msg_parent, $msg_time, $msg_cat){
-		global $database;
+		$database = FBJConfig::database();
 		$database->setQuery("select id, parent, numTopics, numPosts,id_last_msg, time_last_msg from #__fb_categories order by id asc");
 		$cats = $database->loadObjectList();
 		foreach($cats as $c){
@@ -315,7 +297,7 @@ class FBTools{
 	}
 
 	public static function decreaseCategoryStats($msg_id, $msg_cat){
-		global $database;
+		$database = FBJConfig::database();
 		$database->setQuery("select id, parent, numTopics, numPosts,id_last_msg, time_last_msg from #__fb_categories order by id asc");
 		$cats = $database->loadObjectList();
 		foreach($cats as $c){
@@ -353,7 +335,6 @@ class FBTools{
 	}
 
 	public static function showBulkActionCats($disabled = 1){
-		global $database;
 		$options = array();
 		$options[] = mosHTML::makeOption('0', "&nbsp;");
 		$lists['parent'] = FB_GetAvailableForums(0, "", $options, $disabled);
@@ -361,7 +342,7 @@ class FBTools{
 	}
 
 	public static function fbDeletePosts($isMod, $return){
-		global $my, $database;
+		$database = FBJConfig::database();
 		if(!FBTools::isModOrAdmin() && !$isMod){
 			return;
 		}
@@ -439,7 +420,8 @@ class FBTools{
 	}
 
 	public static function isModOrAdmin($id = 0){
-		global $database, $my;
+		$database = FBJConfig::database();
+		$my = FBJConfig::my();
 		$userid = intval($id);
 		if($userid){
 			$user = new mosUser($database);
@@ -455,7 +437,7 @@ class FBTools{
 	}
 
 	public static function fbMovePosts($catid, $isMod, $return){
-		global $my, $database;
+		$database = FBJConfig::database();
 		if(!FBTools::isModOrAdmin() && !$isMod){
 			return;
 		}
@@ -485,7 +467,7 @@ class FBTools{
 	}
 
 	public static function isJoomla15(){
-		global $mainframe;
+		$mainframe = FBJConfig::mainframe();
 		return is_dir($mainframe->getCfg("absolute_path") . "/libraries/");
 	}
 
@@ -591,8 +573,7 @@ class fbForum extends mosDBTable{
 }
 
 function JJ_categoryArray($admin = 0){
-	global $database;
-	global $fbSession;
+	$database = FBJConfig::database();
 	$query = "SELECT c.*, c.parent" . "\n FROM #__fb_categories c";
 	if(!$admin){
 		$query .= "\n WHERE published =1 " . "\n AND ( pub_access = 0" // this will wait till a better session management system comes
@@ -640,7 +621,6 @@ function fbTreeRecurse($id, $indent, $list, &$children, $maxlevel = 9999, $level
 }
 
 function JJ_categoryParentList($catid, $action, $options = array()){
-	global $database;
 	$list = JJ_categoryArray();
 	$this_treename = '';
 	foreach($list as $item){
@@ -661,7 +641,6 @@ function JJ_categoryParentList($catid, $action, $options = array()){
 }
 
 function FB_GetAvailableForums($catid, $action, $options = array(), $disabled, $multiple = 0){
-	global $database;
 	$list = JJ_categoryArray();
 	$this_treename = '';
 	foreach($list as $item){
@@ -685,7 +664,7 @@ function FB_GetAvailableForums($catid, $action, $options = array(), $disabled, $
 //Begin Smilies mod
 //
 function generate_smilies(){
-	global $database;
+	$database = FBJConfig::database();
 	$inline_columns = 4;
 	$inline_rows = 5;
 	$database->setQuery("SELECT code, location, emoticonbar FROM #__fb_smileys ORDER BY id");

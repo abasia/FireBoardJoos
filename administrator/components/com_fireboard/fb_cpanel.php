@@ -17,7 +17,7 @@
 **/
 defined ('_VALID_MOS') or die('Direct Access to this location is not allowed.');
 error_reporting (E_ERROR);
-global $fbConfig;
+$fbConfig = FBJConfig::getInstance();
 ?>
 <style>
 .fbwelcome {
@@ -150,7 +150,7 @@ table.fbstat .col2 {
           <div style = "float:left;">
             <div class = "icon">
 			<?php
-			if ($fbConfig['re'])
+			if ($fbConfig->re)
 			{?>
 				<a href = "index2.php?option=com_fireboard&amp;task=reupgrade" style = "text-decoration:none;" title = "<?php echo _FB_DBUPGRADE;?>"><img src = "components/com_fireboard/images/upgrade.gif"  align = "middle" border = "0"/><br/><?php echo _FB_DBUPGRADE; ?></a>
 			<?php

@@ -823,7 +823,8 @@ class HTML_SIMPLEBOARD{
 	<?php
 	}
 
-	function showConfig(&$fbConfig, &$lists, $option){
+	function showConfig($lists, $option){
+		$fbConfig = FBJConfig::getInstance();
 		$tabs = new mosTabs(2);
 		?>
 	<div id="fbcongifcover">
@@ -852,7 +853,7 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top" width="25%"><?php echo _COM_A_BOARD_TITLE ?>
 					</td>
 					<td align="left" valign="top" width="25%">
-						<input type="text" name="cfg_board_title" value="<?php echo $fbConfig['board_title']; ?>"/>
+						<input type="text" name="cfg_board_title" value="<?php echo $fbConfig->board_title; ?>"/>
 						<input type="hidden" name="cfg_re" value="0"/>
 					</td>
 					<td align="left" valign="top"><?php echo _COM_A_BOARD_TITLE_DESC ?>
@@ -863,7 +864,7 @@ class HTML_SIMPLEBOARD{
 					</td>
 
 					<td align="left" valign="top">
-						<input type="text" name="cfg_email" value="<?php echo $fbConfig['email']; ?>"/>
+						<input type="text" name="cfg_email" value="<?php echo $fbConfig->email; ?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _COM_A_EMAIL_DESC ?>
 					</td>
@@ -880,7 +881,7 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top"><?php echo _COM_A_BOARD_OFSET ?>
 					</td>
 					<td align="left" valign="top">
-						<input type="text" name="cfg_board_ofset" value="<?php echo $fbConfig['board_ofset']; ?>"/>
+						<input type="text" name="cfg_board_ofset" value="<?php echo $fbConfig->board_ofset; ?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _COM_A_BOARD_OFSET_DESC ?>
 					</td>
@@ -890,7 +891,7 @@ class HTML_SIMPLEBOARD{
 					</td>
 					<td align="left" valign="top" colspan="2">
 						<textarea name="cfg_offline_message" rows="3"
-								  cols="50"><?php echo $fbConfig['offline_message']; ?></textarea>
+								  cols="50"><?php echo $fbConfig->offline_message; ?></textarea>
 					</td>
 				</tr>
 				<tr align="center" valign="middle">
@@ -952,7 +953,7 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top"><?php echo _AFB_POLL_MAX;?>
 					</td>
 					<td align="left" valign="top">
-						<input type="text" name="cfg_pollmax" value="<?php echo $fbConfig['pollmax']; ?>"/>
+						<input type="text" name="cfg_pollmax" value="<?php echo $fbConfig->pollmax; ?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _AFB_POLL_MAX_DESC;?>
 					</td>
@@ -973,7 +974,7 @@ class HTML_SIMPLEBOARD{
 		<td align="left" valign="top" width="25%"><?php echo _COM_A_THREADS ?>
 		</td>
 		<td align="left" valign="top" width="25%">
-			<input type="text" name="cfg_threads_per_page" value="<?php echo $fbConfig['threads_per_page']; ?>"/>
+			<input type="text" name="cfg_threads_per_page" value="<?php echo $fbConfig->threads_per_page; ?>"/>
 		</td>
 		<td align="left" valign="top"><?php echo _COM_A_THREADS_DESC ?>
 		</td>
@@ -982,7 +983,7 @@ class HTML_SIMPLEBOARD{
 		<td align="left" valign="top"><?php echo _COM_A_MESSAGES ?>
 		</td>
 		<td align="left" valign="top">
-			<input type="text" name="cfg_messages_per_page" value="<?php echo $fbConfig['messages_per_page']; ?>"/>
+			<input type="text" name="cfg_messages_per_page" value="<?php echo $fbConfig->messages_per_page; ?>"/>
 		</td>
 		<td align="left" valign="top"><?php echo _COM_A_MESSAGES_DESC ?>
 		</td>
@@ -992,7 +993,7 @@ class HTML_SIMPLEBOARD{
 		</td>
 		<td align="left" valign="top">
 			<input type="text" name="cfg_messages_per_page_search"
-				   value="<?php echo $fbConfig['messages_per_page_search']; ?>"/>
+				   value="<?php echo $fbConfig->messages_per_page_search; ?>"/>
 		</td>
 		<td align="left" valign="top"><?php echo _COM_A_MESSAGES_DESC_SEARCH ?>
 		</td>
@@ -1009,7 +1010,7 @@ class HTML_SIMPLEBOARD{
 		<td align="left" valign="top"><?php echo _COM_A_HISTLIM ?>
 		</td>
 		<td align="left" valign="top">
-			<input type="text" name="cfg_historyLimit" value="<?php echo $fbConfig['historyLimit'];?>"/>
+			<input type="text" name="cfg_historyLimit" value="<?php echo $fbConfig->historyLimit;?>"/>
 		</td>
 		<td align="left" valign="top"><?php echo _COM_A_HISTLIM_DESC ?>
 		</td>
@@ -1026,7 +1027,7 @@ class HTML_SIMPLEBOARD{
 		<td align="left" valign="top"><?php echo _COM_A_NEWCHAR ?>
 		</td>
 		<td align="left" valign="top">
-			<input type="text" name="cfg_newChar" value="<?php echo $fbConfig['newChar'];?>"/>
+			<input type="text" name="cfg_newChar" value="<?php echo $fbConfig->newChar;?>"/>
 		</td>
 		<td align="left" valign="top"><?php echo _COM_A_NEWCHAR_DESC ?>
 		</td>
@@ -1091,7 +1092,7 @@ class HTML_SIMPLEBOARD{
 		<td align="left" valign="top"><?php echo _FB_CATIMAGEPATH ?>
 		</td>
 		<td align="left" valign="top">
-			<input type="text" name="cfg_CatImagePath" value="<?php echo $fbConfig['CatImagePath'];?>"/>
+			<input type="text" name="cfg_CatImagePath" value="<?php echo $fbConfig->CatImagePath;?>"/>
 		</td>
 		<td align="left" valign="top"><?php echo _FB_CATIMAGEPATH_DESC ?>
 		</td>
@@ -1100,7 +1101,7 @@ class HTML_SIMPLEBOARD{
 		<td align="left" valign="top"><?php echo _FB_SHOW_CHILD_CATEGORY_COLON ?>
 		</td>
 		<td align="left" valign="top">
-			<input type="text" name="cfg_numchildcolumn" value="<?php echo $fbConfig['numchildcolumn'];?>"/>
+			<input type="text" name="cfg_numchildcolumn" value="<?php echo $fbConfig->numchildcolumn;?>"/>
 		</td>
 		<td align="left" valign="top"><?php echo _FB_SHOW_CHILD_CATEGORY_COLONDESC ?>
 		</td>
@@ -1117,7 +1118,7 @@ class HTML_SIMPLEBOARD{
 		<td align="left" valign="top"><?php echo _FB_ANN_MODID ?>
 		</td>
 		<td align="left" valign="top">
-			<input type="text" name="cfg_AnnModId" value="<?php echo $fbConfig['AnnModId'];?>"/>
+			<input type="text" name="cfg_AnnModId" value="<?php echo $fbConfig->AnnModId;?>"/>
 		</td>
 		<td align="left" valign="top"><?php echo _FB_ANN_MODID_DESC ?>
 		</td>
@@ -1126,7 +1127,7 @@ class HTML_SIMPLEBOARD{
 		<td align="left" valign="top"><?php echo _COM_A_TAWIDTH ?>
 		</td>
 		<td align="left" valign="top">
-			<input type="text" name="cfg_rtewidth" value="<?php echo $fbConfig['rtewidth'];?>"/>
+			<input type="text" name="cfg_rtewidth" value="<?php echo $fbConfig->rtewidth;?>"/>
 		</td>
 		<td align="left" valign="top"><?php echo _COM_A_TAWIDTH_DESC ?>
 		</td>
@@ -1135,7 +1136,7 @@ class HTML_SIMPLEBOARD{
 		<td align="left" valign="top"><?php echo _COM_A_TAHEIGHT ?>
 		</td>
 		<td align="left" valign="top">
-			<input type="text" name="cfg_rteheight" value="<?php echo $fbConfig['rteheight'];?>"/>
+			<input type="text" name="cfg_rteheight" value="<?php echo $fbConfig->rteheight;?>"/>
 		</td>
 		<td align="left" valign="top"><?php echo _COM_A_TAHEIGHT_DESC ?>
 		</td>
@@ -1160,7 +1161,7 @@ class HTML_SIMPLEBOARD{
 		<td align="left" valign="top"><?php echo _FB_RULESPAGE_CID ?>
 		</td>
 		<td align="left" valign="top"><input type="text" name="cfg_rules_cid"
-											 value="<?php echo $fbConfig['rules_cid'];?>"/>
+											 value="<?php echo $fbConfig->rules_cid;?>"/>
 		</td>
 		<td align="left" valign="top"><?php echo _FB_RULESPAGE_CID_DESC ?>
 		</td>
@@ -1169,7 +1170,7 @@ class HTML_SIMPLEBOARD{
 		<td align="left" valign="top"><?php echo _FB_RULESPAGE_LINK ?>
 		</td>
 		<td align="left" valign="top"><input type="text" name="cfg_rules_link"
-											 value="<?php echo $fbConfig['rules_link'];?>"/>
+											 value="<?php echo $fbConfig->rules_link;?>"/>
 		</td>
 		<td align="left" valign="top"><?php echo _FB_RULESPAGE_LINK_DESC ?>
 		</td>
@@ -1194,7 +1195,7 @@ class HTML_SIMPLEBOARD{
 		<td align="left" valign="top"><?php echo _FB_HELPPAGE_CID ?>
 		</td>
 		<td align="left" valign="top"><input type="text" name="cfg_help_cid"
-											 value="<?php echo $fbConfig['help_cid'];?>"/>
+											 value="<?php echo $fbConfig->help_cid;?>"/>
 		</td>
 		<td align="left" valign="top"><?php echo _FB_HELPPAGE_CID_DESC ?>
 		</td>
@@ -1203,7 +1204,7 @@ class HTML_SIMPLEBOARD{
 		<td align="left" valign="top"><?php echo _FB_HELPPAGE_LINK ?>
 		</td>
 		<td align="left" valign="top"><input type="text" name="cfg_help_link"
-											 value="<?php echo $fbConfig['help_link'];?>"/>
+											 value="<?php echo $fbConfig->help_link;?>"/>
 		</td>
 		<td align="left" valign="top"><?php echo _FB_HELPPAGE_LINK_DESC ?>
 		</td>
@@ -1279,7 +1280,7 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top"><?php echo _COM_A_POSTSTATSCOLOR ?>
 					</td>
 					<td align="left" valign="top">
-						<input type="text" name="cfg_statsColor" value="<?php echo $fbConfig['statsColor'];?>"/>
+						<input type="text" name="cfg_statsColor" value="<?php echo $fbConfig->statsColor;?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _COM_A_POSTSTATSCOLOR_DESC ?>
 					</td>
@@ -1292,64 +1293,64 @@ class HTML_SIMPLEBOARD{
 							<tr>
 								<td>
 									1: <img
-									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig['template'];?>/images/english/graph/col1m.png"
+									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig->template;?>/images/english/graph/col1m.png"
 									width="15" height="4">
 								</td>
 								<td>
 									2: <img
-									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig['template'];?>/images/english/graph/col2m.png"
+									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig->template;?>/images/english/graph/col2m.png"
 									width="15" height="4">
 								</td>
 								<td>
 									3: <img
-									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig['template'];?>/images/english/graph/col3m.png"
+									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig->template;?>/images/english/graph/col3m.png"
 									width="15" height="4">
 								</td>
 								<td>
 									4: <img
-									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig['template'];?>/images/english/graph/col4m.png"
+									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig->template;?>/images/english/graph/col4m.png"
 									width="15" height="4">
 								</td>
 								<td>
 									5: <img
-									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig['template'];?>/images/english/graph/col5m.png"
+									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig->template;?>/images/english/graph/col5m.png"
 									width="15" height="4">
 								</td>
 								<td>
 									6: <img
-									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig['template'];?>/images/english/graph/col6m.png"
+									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig->template;?>/images/english/graph/col6m.png"
 									width="15" height="4">
 								</td>
 							</tr>
 							<tr>
 								<td>
 									7: <img
-									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig['template'];?>/images/english/graph/col7m.png"
+									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig->template;?>/images/english/graph/col7m.png"
 									width="15" height="4">
 								</td>
 								<td>
 									8: <img
-									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig['template'];?>/images/english/graph/col8m.png"
+									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig->template;?>/images/english/graph/col8m.png"
 									width="15" height="4">
 								</td>
 								<td>
 									9: <img
-									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig['template'];?>/images/english/graph/col9m.png"
+									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig->template;?>/images/english/graph/col9m.png"
 									width="15" height="4">
 								</td>
 								<td>
 									10: <img
-									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig['template'];?>/images/english/graph/col10m.png"
+									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig->template;?>/images/english/graph/col10m.png"
 									width="15" height="4">
 								</td>
 								<td>
 									11: <img
-									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig['template'];?>/images/english/graph/col11m.png"
+									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig->template;?>/images/english/graph/col11m.png"
 									width="15" height="4">
 								</td>
 								<td>
 									12: <img
-									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig['template'];?>/images/english/graph/col12m.png"
+									src="<?php echo JPATH_SITE;?>/components/com_fireboard/template/<?php echo $fbConfig->template;?>/images/english/graph/col12m.png"
 									width="15" height="4">
 								</td>
 							</tr>
@@ -1376,7 +1377,7 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top"><?php echo _COM_A_USER_EDIT_TIME ?>
 					</td>
 					<td align="left" valign="top">
-						<input type="text" name="cfg_usereditTime" value="<?php echo $fbConfig['usereditTime'];?>"/>
+						<input type="text" name="cfg_usereditTime" value="<?php echo $fbConfig->usereditTime;?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _COM_A_USER_EDIT_TIME_DESC ?>
 					</td>
@@ -1386,7 +1387,7 @@ class HTML_SIMPLEBOARD{
 					</td>
 					<td align="left" valign="top">
 						<input type="text" name="cfg_usereditTimeGrace"
-							   value="<?php echo $fbConfig['usereditTimeGrace'];?>"/>
+							   value="<?php echo $fbConfig->usereditTimeGrace;?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _COM_A_USER_EDIT_TIMEGRACE_DESC ?>
 					</td>
@@ -1438,7 +1439,7 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top" width="25%"><?php echo _COM_A_WRAP ?>
 					</td>
 					<td align="left" valign="top" width="25%">
-						<input type="text" name="cfg_wrap" value="<?php echo $fbConfig['wrap'];?>"/>
+						<input type="text" name="cfg_wrap" value="<?php echo $fbConfig->wrap;?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _COM_A_WRAP_DESC ?>
 					</td>
@@ -1447,7 +1448,7 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top"><?php echo _COM_A_SUBJECTLENGTH ?>
 					</td>
 					<td align="left" valign="top">
-						<input type="text" name="cfg_maxSubject" value="<?php echo $fbConfig['maxSubject'];?>"/>
+						<input type="text" name="cfg_maxSubject" value="<?php echo $fbConfig->maxSubject;?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _COM_A_SUBJECTLENGTH_DESC ?>
 					</td>
@@ -1456,7 +1457,7 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top"><?php echo _COM_A_SIGNATURE ?>
 					</td>
 					<td align="left" valign="top">
-						<input type="text" name="cfg_maxSig" value="<?php echo $fbConfig['maxSig'];?>"/>
+						<input type="text" name="cfg_maxSig" value="<?php echo $fbConfig->maxSig;?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _COM_A_SIGNATURE_DESC ?>
 					</td>
@@ -1501,7 +1502,7 @@ class HTML_SIMPLEBOARD{
 					</td>
 					<td align="left" valign="top">
 						<input type="text" name="cfg_floodprotection"
-							   value="<?php echo $fbConfig['floodprotection'];?>"/>
+							   value="<?php echo $fbConfig->floodprotection;?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _COM_A_FLOOD_DESC ?>
 					</td>
@@ -1597,7 +1598,7 @@ class HTML_SIMPLEBOARD{
 					</td>
 					<td align="left" valign="top">
 						<input type="text" name="cfg_avatarSmallHeight"
-							   value="<?php echo $fbConfig['avatarSmallHeight'];?>"/>
+							   value="<?php echo $fbConfig->avatarSmallHeight;?>"/>
 					</td>
 				</tr>
 				<tr align="center" valign="middle">
@@ -1605,21 +1606,21 @@ class HTML_SIMPLEBOARD{
 					</td>
 					<td align="left" valign="top">
 						<input type="text" name="cfg_avatarSmallWidth"
-							   value="<?php echo $fbConfig['avatarSmallWidth'];?>"/>
+							   value="<?php echo $fbConfig->avatarSmallWidth;?>"/>
 					</td>
 				</tr>
 				<tr align="center" valign="middle">
 					<td align="left" valign="top"><?php echo _FB_AVATAR_MEDIUM_HEIGHT ?>
 					</td>
 					<td align="left" valign="top">
-						<input type="text" name="cfg_avatarHeight" value="<?php echo $fbConfig['avatarHeight'];?>"/>
+						<input type="text" name="cfg_avatarHeight" value="<?php echo $fbConfig->avatarHeight;?>"/>
 					</td>
 				</tr>
 				<tr align="center" valign="middle">
 					<td align="left" valign="top"><?php echo _FB_AVATAR_MEDIUM_WIDTH ?>
 					</td>
 					<td align="left" valign="top">
-						<input type="text" name="cfg_avatarWidth" value="<?php echo $fbConfig['avatarWidth'];?>"/>
+						<input type="text" name="cfg_avatarWidth" value="<?php echo $fbConfig->avatarWidth;?>"/>
 					</td>
 				</tr>
 				<tr align="center" valign="middle">
@@ -1627,7 +1628,7 @@ class HTML_SIMPLEBOARD{
 					</td>
 					<td align="left" valign="top">
 						<input type="text" name="cfg_avatarLargeHeight"
-							   value="<?php echo $fbConfig['avatarLargeHeight'];?>"/>
+							   value="<?php echo $fbConfig->avatarLargeHeight;?>"/>
 					</td>
 				</tr>
 				<tr align="center" valign="middle">
@@ -1635,21 +1636,21 @@ class HTML_SIMPLEBOARD{
 					</td>
 					<td align="left" valign="top">
 						<input type="text" name="cfg_avatarLargeWidth"
-							   value="<?php echo $fbConfig['avatarLargeWidth'];?>"/>
+							   value="<?php echo $fbConfig->avatarLargeWidth;?>"/>
 					</td>
 				</tr>
 				<tr align="center" valign="middle">
 					<td align="left" valign="top"><?php echo _COM_A_AVSIZE ?>
 					</td>
 					<td align="left" valign="top">
-						<input type="text" name="cfg_avatarSize" value="<?php echo $fbConfig['avatarSize'];?>"/>
+						<input type="text" name="cfg_avatarSize" value="<?php echo $fbConfig->avatarSize;?>"/>
 					</td>
 				</tr>
 				<tr align="center" valign="middle">
 					<td align="left" valign="top"><?php echo _FB_AVATAR_QUALITY ?>
 					</td>
 					<td align="left" valign="top">
-						<input type="text" name="cfg_avatarQuality" value="<?php echo $fbConfig['avatarQuality'];?>"/> %
+						<input type="text" name="cfg_avatarQuality" value="<?php echo $fbConfig->avatarQuality;?>"/> %
 					</td>
 				</tr>
 			</table>
@@ -1683,21 +1684,21 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top"><?php echo _COM_A_IMGHEIGHT ?>
 					</td>
 					<td align="left" valign="top">
-						<input type="text" name="cfg_imageHeight" value="<?php echo $fbConfig['imageHeight'];?>"/>
+						<input type="text" name="cfg_imageHeight" value="<?php echo $fbConfig->imageHeight;?>"/>
 					</td>
 				</tr>
 				<tr align="center" valign="middle">
 					<td align="left" valign="top"><?php echo _COM_A_IMGWIDTH ?>
 					</td>
 					<td align="left" valign="top">
-						<input type="text" name="cfg_imageWidth" value="<?php echo $fbConfig['imageWidth'];?>"/>
+						<input type="text" name="cfg_imageWidth" value="<?php echo $fbConfig->imageWidth;?>"/>
 					</td>
 				</tr>
 				<tr align="center" valign="middle">
 					<td align="left" valign="top"><?php echo _COM_A_IMGSIZE ?>
 					</td>
 					<td align="left" valign="top">
-						<input type="text" name="cfg_imageSize" value="<?php echo $fbConfig['imageSize'];?>"/>
+						<input type="text" name="cfg_imageSize" value="<?php echo $fbConfig->imageSize;?>"/>
 					</td>
 				</tr>
 			</table>
@@ -1731,7 +1732,7 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top"><?php echo _COM_A_FILEALLOWEDTYPES ?>
 					</td>
 					<td align="left" valign="top">
-						<input type="text" name="cfg_fileTypes" value="<?php echo $fbConfig['fileTypes'];?>"/>
+						<input type="text" name="cfg_fileTypes" value="<?php echo $fbConfig->fileTypes;?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _COM_A_FILEALLOWEDTYPES_DESC ?>
 					</td>
@@ -1740,7 +1741,7 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top"><?php echo _COM_A_FILESIZE ?>
 					</td>
 					<td align="left" valign="top">
-						<input type="text" name="cfg_fileSize" value="<?php echo $fbConfig['fileSize'];?>"/>
+						<input type="text" name="cfg_fileSize" value="<?php echo $fbConfig->fileSize;?>"/>
 					</td>
 				</tr>
 				<tr align="center" valign="middle">
@@ -1913,7 +1914,7 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top"><?php echo _AFB_FILEMANAGER_DIR;?>
 					</td>
 					<td align="left" valign="top">
-						<input type="text" name="cfg_fileman_dir" value="<?php echo $fbConfig['fileman_dir'];?>"/>
+						<input type="text" name="cfg_fileman_dir" value="<?php echo $fbConfig->fileman_dir;?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _AFB_FILEMANAGER_DIR_DESC;?>
 					</td>
@@ -1922,7 +1923,7 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top"><?php echo _AFB_FILEMANAGER_EXT;?>
 					</td>
 					<td align="left" valign="top">
-						<input type="text" name="cfg_fileman_ext" value="<?php echo $fbConfig['fileman_ext'];?>"/>
+						<input type="text" name="cfg_fileman_ext" value="<?php echo $fbConfig->fileman_ext;?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _AFB_FILEMANAGER_EXT_DESC;?>
 					</td>
@@ -1958,7 +1959,7 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top"><?php echo _AFB_GMAP_KEY;?>
 					</td>
 					<td align="left" valign="top">
-						<input type="text" name="cfg_gmap_key" value="<?php echo $fbConfig['gmap_key'];?>"/>
+						<input type="text" name="cfg_gmap_key" value="<?php echo $fbConfig->gmap_key;?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _AFB_GMAP_KEY_DESC;?>
 					</td>
@@ -2021,7 +2022,7 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top" width="25%"><?php echo _AFB_FOTO_MAXFILES;?>
 					</td>
 					<td align="left" valign="top" width="25%">
-						<input type="text" name="cfg_foto_maxfiles" value="<?php echo $fbConfig['foto_maxfiles'];?>"/>
+						<input type="text" name="cfg_foto_maxfiles" value="<?php echo $fbConfig->foto_maxfiles;?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _AFB_FOTO_MAXFILES_DESC;?>
 					</td>
@@ -2030,7 +2031,7 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top" width="25%"><?php echo _AFB_FOTO_GROUPS;?>
 					</td>
 					<td align="left" valign="top" width="25%">
-						<input type="text" name="cfg_foto_groups" value="<?php echo $fbConfig['foto_groups'];?>"/>
+						<input type="text" name="cfg_foto_groups" value="<?php echo $fbConfig->foto_groups;?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _AFB_FOTO_GROUPS_DESC;?>
 					</td>
@@ -2066,7 +2067,7 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top" width="25%"><?php echo _AFB_PUZZLE_ROWS;?>
 					</td>
 					<td align="left" valign="top" width="25%">
-						<input type="text" name="cfg_puzzle_rows" value="<?php echo $fbConfig['puzzle_rows'];?>"/>
+						<input type="text" name="cfg_puzzle_rows" value="<?php echo $fbConfig->puzzle_rows;?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _AFB_PUZZLE_ROWS_DESC;?>
 					</td>
@@ -2075,7 +2076,7 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top" width="25%"><?php echo _AFB_PUZZLE_COLS;?>
 					</td>
 					<td align="left" valign="top" width="25%">
-						<input type="text" name="cfg_puzzle_cols" value="<?php echo $fbConfig['puzzle_cols'];?>"/>
+						<input type="text" name="cfg_puzzle_cols" value="<?php echo $fbConfig->puzzle_cols;?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _AFB_PUZZLE_COLS_DESC;?>
 					</td>
@@ -2118,7 +2119,7 @@ class HTML_SIMPLEBOARD{
 				<td align="left" valign="top" width="25%"><?php echo _FB_ADMIN_CONFIG_USERLIST_ROWS ?>
 				</td>
 				<td align="left" valign="top" width="25%">
-					<input type="text" name="cfg_userlist_rows" value="<?php echo $fbConfig['userlist_rows'];?>"/>
+					<input type="text" name="cfg_userlist_rows" value="<?php echo $fbConfig->userlist_rows;?>"/>
 				</td>
 				<td align="left" valign="top"><?php echo _FB_ADMIN_CONFIG_USERLIST_ROWS_DESC ?>
 				</td>
@@ -2242,7 +2243,7 @@ class HTML_SIMPLEBOARD{
 					<td align="left" valign="top"><?php echo _FB_NUMBER_OF_LATEST_MESSAGES ?>
 					</td>
 					<td align="left" valign="top">
-						<input type="text" name="cfg_latestCount" value="<?php echo $fbConfig['latestCount']; ?>"/>
+						<input type="text" name="cfg_latestCount" value="<?php echo $fbConfig->latestCount; ?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _FB_NUMBER_OF_LATEST_MESSAGES_DESC ?>
 					</td>
@@ -2252,7 +2253,7 @@ class HTML_SIMPLEBOARD{
 					</td>
 					<td align="left" valign="top">
 						<input type="text" name="cfg_latestCountPerPage"
-							   value="<?php echo $fbConfig['latestCountPerPage']; ?>"/>
+							   value="<?php echo $fbConfig->latestCountPerPage; ?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _FB_COUNT_PER_PAGE_LATEST_MESSAGES_DESC ?>
 					</td>
@@ -2262,7 +2263,7 @@ class HTML_SIMPLEBOARD{
 					</td>
 					<td align="left" valign="top">
 						<input type="text" name="cfg_latestCategory"
-							   value="<?php echo $fbConfig['latestCategory']; ?>"/>
+							   value="<?php echo $fbConfig->latestCategory; ?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _FB_LATEST_CATEGORY_DESC ?>
 					</td>
@@ -2288,7 +2289,7 @@ class HTML_SIMPLEBOARD{
 					</td>
 					<td align="left" valign="top">
 						<input type="text" name="cfg_latestSubjectLength"
-							   value="<?php echo $fbConfig['latestSubjectLength']; ?>"/>
+							   value="<?php echo $fbConfig->latestSubjectLength; ?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _FB_LATEST_SUBJECT_LENGTH_DESC ?>
 					</td>
@@ -2314,7 +2315,7 @@ class HTML_SIMPLEBOARD{
 					</td>
 					<td align="left" valign="top">
 						<input type="text" name="cfg_latestShowAuthor"
-							   value="<?php echo $fbConfig['latestShowAuthor']; ?>" size="1"/>
+							   value="<?php echo $fbConfig->latestShowAuthor; ?>" size="1"/>
 					</td>
 					<td align="left" valign="top"><?php echo _FB_SHOW_AUTHOR_DESC ?>
 					</td>
@@ -2367,7 +2368,7 @@ class HTML_SIMPLEBOARD{
 					</td>
 					<td align="left" valign="top">
 						<input type="text" name="cfg_PopUserCount"
-							   value="<?php echo $fbConfig['PopUserCount']; ?>"/>
+							   value="<?php echo $fbConfig->PopUserCount; ?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _FB_USERNUM; ?>
 					</td>
@@ -2385,7 +2386,7 @@ class HTML_SIMPLEBOARD{
 					</td>
 					<td align="left" valign="top">
 						<input type="text" name="cfg_PopSubjectCount"
-							   value="<?php echo $fbConfig['PopSubjectCount']; ?>"/>
+							   value="<?php echo $fbConfig->PopSubjectCount; ?>"/>
 					</td>
 					<td align="left" valign="top"><?php echo _FB_NUMPOP; ?>
 					</td>
@@ -2408,13 +2409,13 @@ class HTML_SIMPLEBOARD{
 	</div>
 	<input type="hidden" name="task" value="showConfig"/>
 	<input type="hidden" name="option" value="<?php echo $option; ?>"/>
-	<input type="hidden" name="cfg_version" value="<?php echo $fbConfig['version']; ?>"/>
+	<input type="hidden" name="cfg_version" value="<?php echo $fbConfig->version; ?>"/>
 	</form>
 	</div><!-- closed div#fnconfigcover -->
 	<?php
 	}
 
-	function showInstructions($database, $option, $mosConfig_lang){
+	public static function showInstructions(){
 		?>
 	<table width="100%" border="0" cellpadding="2" cellspacing="2" class="adminheading">
 		<TR>
@@ -2469,8 +2470,8 @@ class HTML_SIMPLEBOARD{
 	<?php
 	}
 
-	function showProfiles($option, $mosConfig_lang, &$profileList, $countPL, $pageNavSP, $order, $search){
-		$database = database::getInstance();
+	public static function showProfiles($option, $profileList, $countPL, $pageNavSP, $order, $search){
+		$database = FBJConfig::database();
 		?>
 	<div class="fbfunctitle"><?php echo _FB_FUM; ?></div>
 	<form action="index2.php" method="POST" name="adminForm">
@@ -2718,7 +2719,7 @@ class HTML_SIMPLEBOARD{
 	}
 
 	function editUserProfile($user, $subslist, $selectRank, $selectGroup, $selectPref, $selectMod, $selectOrder, $uid, $modCats){
-		global $fbConfig;
+		$fbConfig = FBJConfig::getInstance();
 		$database = database::getInstance();
 
 		$signature = $user->signature;
@@ -2775,17 +2776,17 @@ class HTML_SIMPLEBOARD{
 			<tr>
 				<td width="150" valign="top" class="contentpane">
 					<?php echo _GEN_SIGNATURE; ?>:
-					<br/><?php echo $fbConfig['maxSig']; ?>
+					<br/><?php echo $fbConfig->maxSig; ?>
 					<input readonly type=text name=rem size=3 maxlength=3 value=""
 						   class="inputbox"> <?php echo _CHARS; ?><br/>
 					<?php echo _HTML_YES; ?>
 				</td>
 				<td align="left" valign="top" class="contentpane">
 					<textarea rows="6" class="inputbox"
-							  onMouseOver="textCounter(this.form.message,this.form.rem,<?php echo $fbConfig['maxSig'];?>);"
-							  onClick="textCounter(this.form.message,this.form.rem,<?php echo $fbConfig['maxSig'];?>);"
-							  onKeyDown="textCounter(this.form.message,this.form.rem,<?php echo $fbConfig['maxSig'];?>);"
-							  onKeyUp="textCounter(this.form.message,this.form.rem,<?php echo $fbConfig['maxSig'];?>);"
+							  onMouseOver="textCounter(this.form.message,this.form.rem,<?php echo $fbConfig->maxSig;?>);"
+							  onClick="textCounter(this.form.message,this.form.rem,<?php echo $fbConfig->maxSig;?>);"
+							  onKeyDown="textCounter(this.form.message,this.form.rem,<?php echo $fbConfig->maxSig;?>);"
+							  onKeyUp="textCounter(this.form.message,this.form.rem,<?php echo $fbConfig->maxSig;?>);"
 							  cols="50" name="message"><?php echo $signature; ?></textarea>
 					<br/>
 					<input type="button" class="button" accesskey="b" name="addbbcode0" value=" B "
@@ -2835,7 +2836,7 @@ class HTML_SIMPLEBOARD{
 						   class="options" value="<?php echo _BBCODE_HINT;?>"/>
 				</td>
 				<?php
-				if($fbConfig['allowAvatar']){
+				if($fbConfig->allowAvatar){
 					?>
 					<td class="contentpane" align="center">
 						<?php echo _FB_UAVATAR; ?><br/>
@@ -2862,7 +2863,7 @@ class HTML_SIMPLEBOARD{
 					<?php }?>
 				</td>
 				<?php
-				if($fbConfig['allowAvatar']){
+				if($fbConfig->allowAvatar){
 					?>
 					<td class="contentpane">
 						<?php if($avatar){ ?>
@@ -3053,7 +3054,7 @@ class HTML_SIMPLEBOARD{
 		echo '</tr></table>';
 	}
 
-	function showsmilies($option, $mosConfig_lang, &$smileytmp, $pageNavSP, $smileypath){
+	function showsmilies($option, $smileytmp, $pageNavSP, $smileypath){
 		?>
 	<div class="fbfunctitle"><?php echo _FB_EMOTICONS; ?></div>
 	<form action="index2.php" method="POST" name="adminForm">
@@ -3212,7 +3213,7 @@ class HTML_SIMPLEBOARD{
 		<?php
 	}
 
-	function showRanks($option, $mosConfig_lang, &$ranks, $pageNavSP, $order, $rankpath){
+	function showRanks($option, $ranks, $pageNavSP, $rankpath){
 		$mainframe = mosMainFrame::getInstance();
 		?>
 	<div class="fbfunctitle"><?php echo _FB_RANKS_MANAGE; ?></div>
@@ -3332,7 +3333,7 @@ class HTML_SIMPLEBOARD{
 		<?php
 	}
 
-	function editrank($option, $mosConfig_lang, $edit_img, $filename_list, $path, $row){
+	function editrank($option, $edit_img, $filename_list, $path, $row){
 		?>
 	<script language="javascript" type="text/javascript">
 		<!--
@@ -3375,7 +3376,7 @@ class HTML_SIMPLEBOARD{
 		<?php
 	}
 
-	function showGroups($option, $mosConfig_lang, $groups){
+	function showGroups($option, $groups){
 		$database = database::getInstance();
 		$mainframe = mosMainFrame::getInstance();
 		?>

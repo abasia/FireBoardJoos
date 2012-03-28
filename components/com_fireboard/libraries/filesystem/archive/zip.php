@@ -89,8 +89,6 @@ class JArchiveZip extends JObject
 	/**
 	 * Create a ZIP compressed file from an array of file data.
 	 *
-	 * @todo	Finish Implementation
-	 *
 	 * @access	public
 	 * @param	string	$archive	Path to save archive
 	 * @param	array	$files		Array of files to add to archive
@@ -398,7 +396,7 @@ class JArchiveZip extends JObject
 	/**
 	 * Adds a "file" to the ZIP archive.
 	 *
-	 * @todo Review and finish implementation
+	 *  Review and finish implementation
 	 *
 	 * @access	private
 	 * @param	array	$file		File data array to add
@@ -481,7 +479,7 @@ class JArchiveZip extends JObject
 	 * Creates the ZIP file.
 	 * Official ZIP file format: http://www.pkware.com/appnote.txt
 	 *
-	 * @todo Review and finish implementation
+	 * Review and finish implementation
 	 *
 	 * @access	private
 	 * @param	array	$contents	An array of existing zipped files.

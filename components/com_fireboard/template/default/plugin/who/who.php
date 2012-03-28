@@ -16,8 +16,8 @@
  *
  **/
 defined('_VALID_MOS') or die('Direct Access to this location is not allowed.');
-global $fbConfig;
-if($fbConfig['showWhoisOnline'] > 0){
+$fbConfig = FBJConfig::getInstance();
+if($fbConfig->showWhoisOnline > 0){
 	?>
 <div class="<?php echo $boardclass; ?>_bt_cvr1">
 	<div class="<?php echo $boardclass; ?>_bt_cvr2">

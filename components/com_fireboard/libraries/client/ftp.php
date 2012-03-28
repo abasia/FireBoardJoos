@@ -1093,7 +1093,7 @@ class JFTP extends JObject{
 		$dir_list = array();
 		$data = null;
 		$regs = null;
-		// TODO: Deal with recurse -- nightmare
+		// Deal with recurse -- nightmare
 		// For now we will just set it to false
 		$recurse = false;
 

@@ -55,7 +55,7 @@ class smile{
 	}
 
 	public static function getEmoticons($grayscale, $emoticonbar = 0){
-		global $database;
+		$database = FBJConfig::database();
 		$grayscale == 1 ? $column = "greylocation" : $column = "location";
 		$sql = "SELECT `code` , `$column` FROM `#__fb_smileys`";
 		if($emoticonbar == 1) $sql .= " where `emoticonbar` = 1";
@@ -74,7 +74,7 @@ class smile{
 	}
 
 	public static function topicToolbar($selected, $tawidth){
-		global $func;
+		global $func;	//TODO:GoDr удалить глобальную
 		if(!$selected) $selected = 1;
 		$selected = (int)$selected;
 		?>
@@ -168,9 +168,9 @@ class smile{
 	}
 
 	public static function fbWriteTextarea($areaname, $html, $width, $height, $useRte, $emoticons){
-		global $editmode;
-		global $fbConfig;
-		if($fbConfig['joomlaStyle'] < 1){
+		global $editmode;	//TODO:GoDr удалить глобальную
+		$fbConfig = FBJConfig::getInstance();
+		if($fbConfig->joomlaStyle < 1){
 			$boardclass = "fb_";
 		}
 		?>

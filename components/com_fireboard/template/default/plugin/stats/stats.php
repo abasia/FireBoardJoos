@@ -16,14 +16,14 @@
 *
 **/
 defined('_VALID_MOS') or die('Direct Access to this location is not allowed.');
-global $fbConfig,$Itemid;
-//$forumurl = 'index.php?option=com_fireboard';
+$Itemid = FBJConfig::getItemid();
+$fbConfig = FBJConfig::getInstance();
 $forumurl = sefReltoAbs(JB_LIVEURLREL);
-if ($fbConfig['fb_profile'] == "cb") {
+if ($fbConfig->fb_profile == "cb") {
 	$profilelink = sefReltoAbs('index.php?option=com_comprofiler&amp;task=userProfile&amp;user=');
 	$userlist = sefReltoAbs('index.php?option=com_comprofiler&amp;task=usersList');
 }
-else if ($fbConfig['fb_profile'] == "clexuspm") {
+else if ($fbConfig->fb_profile == "clexuspm") {
 	$profilelink = sefReltoAbs('index.php?option=com_mypms&amp;task=showprofile&amp;user=');
 }
 else {
@@ -55,7 +55,7 @@ else {
                     <td class = "td-1" align="left">
 						<?php echo _STAT_TOTAL_USERS; ?>:<b>
 						<?php
-						if ($fbConfig['fb_profile'] == "cb")
+						if ($fbConfig->fb_profile == "cb")
 						{?>
 						<a href = "<?php echo sefReltoAbs('index.php?option=com_comprofiler&amp;task=usersList');?>"><?php echo $totalmembers; ?>
 						</a></b>&nbsp;
@@ -69,7 +69,7 @@ else {
 						}
 						echo _STAT_LATEST_MEMBERS; ?>:<b>
 						<?php
-						if ($fbConfig['fb_profile'] == "cb")
+						if ($fbConfig->fb_profile == "cb")
 						{?>
 						<a href="<?php echo sefReltoAbs('index.php?option=com_comprofiler&amp;task=userProfile&amp;user='.$lastestmemberid);?>" title="<?php echo _STAT_PROFILE_INFO.'&nbsp;'; ?><?php echo $lastestmember;?>"><?php echo $lastestmember; ?></a></b>
 						<?php
@@ -116,7 +116,7 @@ $k = 0;
   <thead>
     <tr>
       <th colspan="3"> 
-      <div class = "fb_title_cover fbm"> <span class="fb_title fbxl"> <?php echo _STAT_POPULAR; ?> <b><?php echo $fbConfig['PopSubjectCount']; ?></b> <?php echo _STAT_POPULAR_USER_KGSG; ?></span> </div>
+      <div class = "fb_title_cover fbm"> <span class="fb_title fbxl"> <?php echo _STAT_POPULAR; ?> <b><?php echo $fbConfig->PopSubjectCount; ?></b> <?php echo _STAT_POPULAR_USER_KGSG; ?></span> </div>
       <img id = "BoxSwitch__<?php echo $boardclass ;?>popsubstats_tbody" class = "hideshow" src = "<?php echo JB_URLIMAGESPATH . 'shrink.gif' ; ?>" alt = ""/>
       </th>
     </tr>
@@ -167,7 +167,7 @@ $k = 0;
   <thead>
     <tr>
       <th colspan="3"> 
-      <div class = "fb_title_cover fbm"> <span class="fb_title fbxl"> <?php echo _STAT_POPULAR; ?> <b><?php echo $fbConfig['PopUserCount']; ?></b> <?php echo _STAT_POPULAR_USER_TMSG; ?></span> </div>
+      <div class = "fb_title_cover fbm"> <span class="fb_title fbxl"> <?php echo _STAT_POPULAR; ?> <b><?php echo $fbConfig->PopUserCount; ?></b> <?php echo _STAT_POPULAR_USER_TMSG; ?></span> </div>
       <img id = "BoxSwitch__<?php echo $boardclass ;?>popusermsgstats_tbody" class = "hideshow" src = "<?php echo JB_URLIMAGESPATH . 'shrink.gif' ; ?>" alt = ""/>
       </th>
     </tr>
@@ -218,7 +218,7 @@ $k = 0;
   <thead>
     <tr>
       <th colspan="3"> 
-      <div class = "fb_title_cover"> <span class="fb_title"> <?php echo _STAT_POPULAR; ?> <b><?php echo $fbConfig['PopUserCount']; ?></b> <?php echo _STAT_POPULAR_USER_GSG; ?></span> </div>
+      <div class = "fb_title_cover"> <span class="fb_title"> <?php echo _STAT_POPULAR; ?> <b><?php echo $fbConfig->PopUserCount; ?></b> <?php echo _STAT_POPULAR_USER_GSG; ?></span> </div>
       <img id = "BoxSwitch__<?php echo $boardclass ;?>popuserhitstats_tbody" class = "hideshow" src = "<?php echo JB_URLIMAGESPATH . 'shrink.gif' ; ?>" alt = ""/>
       </th>
     </tr>

@@ -18,8 +18,10 @@
 defined ('_VALID_MOS') or die('Direct Access to this location is not allowed.');
 function com_install() {
 	error_reporting (E_ERROR);
-    global $database, $mainframe;
-?>
+	$mainframe = FBJConfig::mainframe();
+	$database = FBJConfig::database();
+
+	?>
     <style>
         .fbscs
         {

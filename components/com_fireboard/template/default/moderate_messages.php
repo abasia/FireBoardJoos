@@ -16,7 +16,7 @@
  *
  **/
 defined('_VALID_MOS') or die('Direct Access to this location is not allowed.');
-global $my;
+$my = FBJConfig::my();
 $catid = (int)$catid;
 if(!$is_moderator){
 	die ("You are not a moderator!!<br />This error is logged and your IP address has been sent to the SuperAdmin(s) of this site; sorry..");
@@ -53,14 +53,14 @@ switch($action){
 	case 'list':
 		echo '<p class="sectionname"><?php echo _MESSAGE_ADMINISTRATION; ?></p>';
 		$database->setQuery("SELECT m.id,m.time,m.name,m.subject,m.hold,t.message FROM #__fb_messages AS m JOIN #__fb_messages_text as t ON m.id=t.mesid WHERE hold='1' AND catid=$catid ORDER BY id ASC");
-		if(!$database->query()) echo $database->getErrorMsg(); // TODO
+		if(!$database->query()) echo $database->getErrorMsg();
 		$allMes = $database->loadObjectList();
 		if(count($allMes) > 0) jbListMessages($allMes, $catid); else
 			echo '<p style="text-align:center">' . _MODERATION_MESSAGES . '</p>';
 		break;
 }
 function jbListMessages($allMes, $catid){
-	global $fbConfig;
+	$fbConfig = FBJConfig::getInstance();
 	echo '<form action="' . sefRelToAbs(JB_LIVEURLREL . '&amp;func=review') . '" name="moderation" method="post">';
 	?>
 <script>
@@ -99,7 +99,7 @@ function jbListMessages($allMes, $catid){
 		echo '<td valign="top">' . $message->name . '</td>';
 		echo '<td valign="top"><b>' . $message->subject . '<b></td>';
 		$fb_message_txt = stripslashes($message->message);
-		echo '<td valign="top">' . smile::smileReplace($fb_message_txt, 0, $fbConfig['disemoticons'], $smileyList) . '</td>';
+		echo '<td valign="top">' . smile::smileReplace($fb_message_txt, 0, $fbConfig->disemoticons, $smileyList) . '</td>';
 		echo '<td valign="top"><input type="checkbox" name="cid[]" value="' . $message->id . '" /></td>';
 		echo '</tr>';
 	}

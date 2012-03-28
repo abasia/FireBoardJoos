@@ -16,8 +16,9 @@
 *
 **/
 defined('_VALID_MOS') or die('Direct Access to this location is not allowed.');
-global $my, $database;
-global $fbConfig;
+$my = FBJConfig::my();
+$database = FBJConfig::database();
+$fbConfig = FBJConfig::getInstance();
 unset($user);
 $database->setQuery("SELECT email, name from #__users WHERE `id`={$my->id}");
 $database->loadObject($user);
@@ -155,7 +156,7 @@ $database->loadObject($user);
                             ?>
                                 <div id = "sc<?php echo $msg_id; ?>" class = "switchcontent">
                                     <?php
-                                    if ($fbConfig['username']) {
+                                    if ($fbConfig->username) {
                                         $authorName = $my->username;
                                     }
                                     else {
@@ -172,11 +173,11 @@ $database->loadObject($user);
                                 <input type = "hidden" name = "contentURL" value = "empty"/>
                                 <input type = "hidden" name = "fb_authorname" size = "35" class = "inputbox" maxlength = "35" value = "<?php echo $authorName;?>"/>
                                 <input type = "hidden" name = "email" size = "35" class = "inputbox" maxlength = "35" value = "<?php echo $user->email;?>"/>
-                                <input type = "hidden" name = "subject" size = "35" class = "inputbox" maxlength = "<?php echo $fbConfig['maxSubject'];?>" value = "<?php echo $resubject;?>"/>
+                                <input type = "hidden" name = "subject" size = "35" class = "inputbox" maxlength = "<?php echo $fbConfig->maxSubject;?>" value = "<?php echo $resubject;?>"/>
                                 <textarea class = "inputbox" name = "message" id = "message" style = "height: 100px; width: 100%; overflow:auto;"></textarea>
                                                                  <?php
 								// Begin captcha . Thanks Adeptus 
-								if ($fbConfig['captcha'] == 1 && $my->id < 1) { ?>
+								if ($fbConfig->captcha == 1 && $my->id < 1) { ?>
 								<?php echo _FB_CAPDESC.'&nbsp;'?>
 								<input name="txtNumber" type="text" id="txtNumber" value="" style="vertical-align:middle" size="10">&nbsp;
 								<img src="<?php echo JB_DIRECTURL ;?>/template/default/plugin/captcha/randomImage.php" alt="" /><br />
@@ -198,7 +199,7 @@ $database->loadObject($user);
         </tr>
 		<?php
 		////////////////////////mfu
-		if(file_exists($mosConfig_absolute_path.'/components/com_fireboard/template/default/plugin/mfu/mfu.php') && $fbConfig['mfu'] == '1')
+		if(file_exists($mosConfig_absolute_path.'/components/com_fireboard/template/default/plugin/mfu/mfu.php') && $fbConfig->mfu == '1')
 		{
 			Error_Reporting(E_ERROR);
 			$mydir = $mosConfig_absolute_path.'/images/fbfiles/files/'.$msg_id;
@@ -240,8 +241,8 @@ $database->loadObject($user);
 									{
 										$size = getimagesize($mydir.'/'.$myfile);
 										$max = $size[0];
-										if($fbConfig['mfu_max_img'] == 0 OR $fbConfig['mfu_max_img'] == NULL OR $fbConfig['mfu_max_img'] == '') $fbConfig['mfu_max_img'] = 100;
-										if($max > $fbConfig['mfu_max_img']) $max = $fbConfig['mfu_max_img'];
+										if($fbConfig->mfu_max_img == 0 OR $fbConfig->mfu_max_img == NULL OR $fbConfig->mfu_max_img == '') $fbConfig->mfu_max_img = 100;
+										if($max > $fbConfig->mfu_max_img) $max = $fbConfig->mfu_max_img;
 							?>
 										<a href="<?php echo $mydirrel.'/'.$myfile;?>" rel="facebox" title="">
 											<img src="<?php echo $mydirrel.'/'.$myfile;?>" width="<?php echo $max;?>" alt="" style="margin:5px; border:1px solid #555; vertical-align:top">
@@ -255,7 +256,7 @@ $database->loadObject($user);
 									$myext = strtolower(substr($myfile,-3));
 									if(!in_array($myext,$images))
 									{
-										if($fbConfig['attach_guests'] != 0 OR $my->id)
+										if($fbConfig->attach_guests != 0 OR $my->id)
 										{
 											$size = filesize($mydir.'/'.$myfile);
 											$size = number_format($size/1048576, 3, '.', '');
@@ -285,7 +286,7 @@ $database->loadObject($user);
             <td class = "fb-msgview-right-c" >  
                          <div class="fb_smalltext" >   
                    <?php 
-                            if ($fbConfig['reportmsg'] && $my->id > 0)
+                            if ($fbConfig->reportmsg && $my->id > 0)
 							{
                             	$link = sefRelToAbs('index.php?option=com_fireboard&amp;func=report&amp;Itemid='.FB_FB_ITEMID.'&amp;msg_id='.$msg_id.'&amp;catid='.$catid);
                             ?>                              
@@ -294,7 +295,7 @@ $database->loadObject($user);
 								</a>&nbsp;
                             <?php
 							}
-                            echo $fbIcons['msgip'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['msgip'] . '" border="0" alt="'. _FB_REPORT_LOGGED.'" />' . '' : '  <img src="' . JB_URLEMOTIONSPATH . 'ip.gif" border="0"   alt="'. _FB_REPORT_LOGGED.'" />'; ?><span class="fb_smalltext"><?php echo _FB_REPORT_LOGGED;?></span>
+                            echo $fbIcons->msgip ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->msgip . '" border="0" alt="'. _FB_REPORT_LOGGED.'" />' . '' : '  <img src="' . JB_URLEMOTIONSPATH . 'ip.gif" border="0"   alt="'. _FB_REPORT_LOGGED.'" />'; ?><span class="fb_smalltext"><?php echo _FB_REPORT_LOGGED;?></span>
                             <?php if($msg_ip) echo ''.$msg_ip_link.''.$msg_ip.'</a>'; else echo '&nbsp;';?>
                             </div>
        </td>
@@ -341,14 +342,14 @@ if ($msg_signature) {
                 if ($my->id > 0 && !$msg_closed)
                 {
                 echo
-                    $fbIcons['quickmsg']
-                        ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['quickmsg'] . '" border="0" alt="' . _FB_QUICKMSG . '" />' . '' : '  <img src="' . JB_URLEMOTIONSPATH . 'quickmsg.gif" border="0"   alt="' . _FB_QUICKMSG . '" />'; ?>
+                    $fbIcons->quickmsg
+                        ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->quickmsg . '" border="0" alt="' . _FB_QUICKMSG . '" />' . '' : '  <img src="' . JB_URLEMOTIONSPATH . 'quickmsg.gif" border="0"   alt="' . _FB_QUICKMSG . '" />'; ?>
                 <?php
                 }
                 ?>
                 </span>
                 <?php
-                if ($fbIcons['reply'])
+                if ($fbIcons->reply)
                 {
                     if ($msg_closed == "")
                     {

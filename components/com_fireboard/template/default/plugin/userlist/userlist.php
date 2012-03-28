@@ -16,17 +16,18 @@
  *
  **/
 defined('_VALID_MOS') or die('Direct Access to this location is not allowed.');
-global $base_url;
+global $base_url;	//TODO:GoDr убрать глобальную
 $base_url = "index.php?option=com_fireboard&amp;func=userlist" . FB_FB_ITEMID_SUFFIX;
 list_users();
 function list_users(){
-	global $database, $mosConfig_lang, $fbConfig;
+	$database = FBJConfig::database();
+	$fbConfig = FBJConfig::getInstance();
 	require_once("includes/pageNavigation.php");
 	$orderby = mosGetParam($_REQUEST, 'orderby', 'registerDate');
 	$direction = mosGetParam($_REQUEST, 'direction', 'ASC');
 	$search = mosGetParam($_REQUEST, 'search', '');
 	$limitstart = (int)mosGetParam($_REQUEST, 'limitstart', 0);
-	$limit = (int)mosGetParam($_REQUEST, 'limit', $fbConfig['userlist_rows']);
+	$limit = (int)mosGetParam($_REQUEST, 'limit', $fbConfig->userlist_rows);
 	$database->setQuery("SELECT count(id) FROM #__users");
 	$total_results = $database->loadResult();
 	$query = "SELECT count(id) FROM #__users";
@@ -68,7 +69,9 @@ function convertDate($date){
 
 class HTML_userlist_content{
 	public static function showlist($ulrows, $total_results, $pageNav, $limitstart, $query_ext, $search = ""){
-		global $base_url, $mosConfig_sitename, $fbConfig, $database;
+		global $base_url;	//TODO:GoDr убрать глобальную
+		$database = FBJConfig::database();
+		$fbConfig = FBJConfig::getInstance();
 		if($search == ""){
 			$search = _FB_USRL_SEARCH;
 		}
@@ -87,7 +90,7 @@ class HTML_userlist_content{
 		//-->
 	</script>
 	<?php
-		if($fbConfig['joomlaStyle'] < 1){
+		if($fbConfig->joomlaStyle < 1){
 			$boardclass = "fb_";
 		}
 		?>
@@ -140,21 +143,21 @@ class HTML_userlist_content{
 		<th class="th-1 frst <?php echo $boardclass; ?>sectiontableheader" align="center">
 		</th>
 		<?php
-		if($fbConfig['userlist_online']){
+		if($fbConfig->userlist_online){
 			?>
 			<th class="th-2 <?php echo $boardclass; ?>sectiontableheader" align="center">
 				<?php echo _FB_USRL_ONLINE; ?>
 			</th>
 			<?php
 		}
-		if($fbConfig['userlist_avatar']){
+		if($fbConfig->userlist_avatar){
 			?>
 			<th class="th-3 <?php echo $boardclass; ?>sectiontableheader" align="center">
 				<?php echo _FB_USRL_AVATAR; ?>
 			</th>
 			<?php
 		}
-		if($fbConfig['userlist_name']){
+		if($fbConfig->userlist_name){
 			?>
 			<th class="th-4 <?php echo $boardclass; ?>sectiontableheader" align="center">
 				<?php echo _FB_USRL_NAME; ?> <a
@@ -167,7 +170,7 @@ class HTML_userlist_content{
 			</th>
 			<?php
 		}
-		if($fbConfig['userlist_username']){
+		if($fbConfig->userlist_username){
 			?>
 			<th class="th-5 <?php echo $boardclass; ?>sectiontableheader" align="center">
 				<?php echo _FB_USRL_USERNAME; ?> <a
@@ -180,7 +183,7 @@ class HTML_userlist_content{
 			</th>
 			<?php
 		}
-		if($fbConfig['userlist_group']){
+		if($fbConfig->userlist_group){
 			?>
 			<th class="th-6 <?php echo $boardclass; ?>sectiontableheader" align="center">
 				<?php echo _FB_USRL_GROUP; ?> <a
@@ -193,7 +196,7 @@ class HTML_userlist_content{
 			</th>
 			<?php
 		}
-		if($fbConfig['userlist_posts']){
+		if($fbConfig->userlist_posts){
 			?>
 			<th class="th-7 <?php echo $boardclass; ?>sectiontableheader" align="center">
 				<?php echo _FB_USRL_POSTS; ?> <a
@@ -206,7 +209,7 @@ class HTML_userlist_content{
 			</th>
 			<?php
 		}
-		if($fbConfig['userlist_karma']){
+		if($fbConfig->userlist_karma){
 			?>
 			<th class="th-7 <?php echo $boardclass; ?>sectiontableheader" align="center">
 				<?php echo _FB_USRL_KARMA; ?> <a
@@ -219,7 +222,7 @@ class HTML_userlist_content{
 			</th>
 			<?php
 		}
-		if($fbConfig['userlist_email']){
+		if($fbConfig->userlist_email){
 			?>
 			<th class="th-8 <?php echo $boardclass; ?>sectiontableheader" align="center">
 				<?php echo _FB_USRL_EMAIL; ?> <a
@@ -232,7 +235,7 @@ class HTML_userlist_content{
 			</th>
 			<?php
 		}
-		if($fbConfig['userlist_usertype']){
+		if($fbConfig->userlist_usertype){
 			?>
 			<th class="th-9 <?php echo $boardclass; ?>sectiontableheader" align="center">
 				<?php echo _FB_USRL_USERTYPE; ?> <a
@@ -245,7 +248,7 @@ class HTML_userlist_content{
 			</th>
 			<?php
 		}
-		if($fbConfig['userlist_joindate']){
+		if($fbConfig->userlist_joindate){
 			?>
 			<th class="th-10 <?php echo $boardclass; ?>sectiontableheader" align="center">
 				<?php echo _FB_USRL_JOIN_DATE; ?> <a
@@ -258,7 +261,7 @@ class HTML_userlist_content{
 			</th>
 			<?php
 		}
-		if($fbConfig['userlist_lastvisitdate']){
+		if($fbConfig->userlist_lastvisitdate){
 			?>
 			<th class="th-11  <?php echo $boardclass; ?>sectiontableheader" align="center">
 				<?php echo _FB_USRL_LAST_LOGIN; ?> <a
@@ -274,7 +277,7 @@ class HTML_userlist_content{
 		?>
 		<th class="th-12 lst <?php echo $boardclass; ?>sectiontableheader" align="center">
 			<?php
-			if($fbConfig['userlist_userhits']){
+			if($fbConfig->userlist_userhits){
 				?>
 				<?php echo _FB_USRL_HITS; ?> <a
 					href="<?php echo sefRelToAbs("$base_url&amp;orderby=uhits&amp;direction=ASC"); ?>">
@@ -300,9 +303,9 @@ class HTML_userlist_content{
 			$nr = $i + $limitstart;
 			$profilelink = sefRelToAbs(FB_PROFILE_LINK_SUFFIX . "" . $ulrow->id);
 			$uslavatar = '';
-			if($fbConfig['avatar_src'] == "clexuspm"){
+			if($fbConfig->avatar_src == "clexuspm"){
 				$uslavatar = '<img  border="0" class="usl_avatar" src="' . MyPMSTools::getAvatarLinkWithID($ulrow->id, "s") . '" alt="" />';
-			} else if($fbConfig['avatar_src'] == "cb"){
+			} else if($fbConfig->avatar_src == "cb"){
 				$database->setQuery("SELECT avatar FROM #__comprofiler WHERE user_id='$ulrow->id' AND avatarapproved='1'");
 				$avatar = $database->loadResult();
 				$imgpath = JB_JLIVEURL . '/images/comprofiler/';
@@ -336,7 +339,7 @@ class HTML_userlist_content{
 										<?php echo $nr; ?>
 									</td>
 			<?php
-			if($fbConfig['userlist_online']){
+			if($fbConfig->userlist_online){
 				?>
 				<td class="td-2" align="center">
 					<?php
@@ -344,15 +347,15 @@ class HTML_userlist_content{
 					$database->setQuery($sql);
 					$isonline = $database->loadResult();
 					if($isonline && $ulrow->showOnline == 1){
-						echo $fbIcons['onlineicon'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['onlineicon'] . '" border="0" alt="' . _MODLIST_ONLINE . '" />' : '<img src="' . JB_URLEMOTIONSPATH . 'onlineicon.gif" border="0" alt="' . _MODLIST_ONLINE . '" />';
+						echo $fbIcons->onlineicon ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->onlineicon . '" border="0" alt="' . _MODLIST_ONLINE . '" />' : '<img src="' . JB_URLEMOTIONSPATH . 'onlineicon.gif" border="0" alt="' . _MODLIST_ONLINE . '" />';
 					} else{
-						echo $fbIcons['offlineicon'] ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons['offlineicon'] . '" border="0" alt="' . _MODLIST_OFFLINE . '" />' : '<img src="' . JB_URLEMOTIONSPATH . 'offlineicon.gif" border="0" alt="' . _MODLIST_OFFLINE . '" />';
+						echo $fbIcons->offlineicon ? '<img src="' . JB_URLICONSPATH . '' . $fbIcons->offlineicon . '" border="0" alt="' . _MODLIST_OFFLINE . '" />' : '<img src="' . JB_URLEMOTIONSPATH . 'offlineicon.gif" border="0" alt="' . _MODLIST_OFFLINE . '" />';
 					}
 					?>
 				</td>
 				<?php
 			}
-			if($fbConfig['userlist_avatar']){
+			if($fbConfig->userlist_avatar){
 				?>
 				<td class="td-3" align="center">
 					<?php
@@ -367,21 +370,21 @@ class HTML_userlist_content{
 				</td>
 				<?php
 			}
-			if($fbConfig['userlist_name']){
+			if($fbConfig->userlist_name){
 				?>
 				<td class="td-4  fbm" align="center">
 					<a href="<?php echo $profilelink;?>"><?php echo $ulrow->name; ?></a>
 				</td>
 				<?php
 			}
-			if($fbConfig['userlist_username']){
+			if($fbConfig->userlist_username){
 				?>
 				<td class="td-5  fbm" align="center">
 					<a href="<?php echo $profilelink;?>"><?php echo $ulrow->username; ?></a>
 				</td>
 				<?php
 			}
-			if($fbConfig['userlist_group']){
+			if($fbConfig->userlist_group){
 				?>
 				<td class="td-6  fbs" align="center">
 					<?php
@@ -399,36 +402,36 @@ class HTML_userlist_content{
 				</td>
 				<?php
 			}
-			if($fbConfig['userlist_posts']){
+			if($fbConfig->userlist_posts){
 				?>
 				<td class="td-7  fbs" align="center">
 					<?php echo $ulrow->posts; ?>
 				</td>
 				<?php
 			}
-			if($fbConfig['userlist_karma']){
+			if($fbConfig->userlist_karma){
 				?>
 				<td class="td-7 fbs" align="center">
 					<?php echo $ulrow->karma; ?>
 				</td>
 				<?php
 			}
-			if($fbConfig['userlist_email']){
+			if($fbConfig->userlist_email){
 				echo "\t\t<td class=\"td-8 fbs\"  align=\"center\"><a href=\"mailto:".$ulrow->email."\">$ulrow->email</a></td>\n";
 			}
-			if($fbConfig['userlist_usertype']){
+			if($fbConfig->userlist_usertype){
 				echo "\t\t<td  class=\"td-9 fbs\"  align=\"center\">$ulrow->usertype</td>\n";
 			}
-			if($fbConfig['userlist_joindate']){
+			if($fbConfig->userlist_joindate){
 				echo "\t\t<td  class=\"td-10 fbs\"  align=\"center\">" . convertDate($ulrow->registerDate) . "</td>\n";
 			}
-			if($fbConfig['userlist_lastvisitdate']){
+			if($fbConfig->userlist_lastvisitdate){
 				echo "\t\t<td  class=\"td-11 fbs\"  align=\"center\">" . convertDate($ulrow->lastvisitDate) . "</td>\n";
 			}
 			?>
 			<td class="td-12 lst fbs" align="center">
 				<?php
-				if($fbConfig['userlist_userhits']){
+				if($fbConfig->userlist_userhits){
 					echo $ulrow->uhits;
 				}
 				?>
@@ -489,7 +492,7 @@ class HTML_userlist_content{
 							<tr>
 								<th class="th-right">
 									<?php
-									if($fbConfig['enableForumJump']){
+									if($fbConfig->enableForumJump){
 										require_once(JB_ABSSOURCESPATH . 'fb_forumjump.php');
 									}
 									?>

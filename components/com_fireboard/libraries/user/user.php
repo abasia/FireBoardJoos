@@ -418,7 +418,7 @@ class JUser extends JObject{
 			}
 		}
 
-		// TODO: this will be deprecated as of the ACL implementation
+		// this will be deprecated as of the ACL implementation
 		$db =& JFactory::getDBO();
 
 		$gid = array_key_exists('gid', $array) ? $array['gid'] : $this->get('gid');

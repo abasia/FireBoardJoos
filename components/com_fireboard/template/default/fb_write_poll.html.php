@@ -16,7 +16,8 @@
 *
 **/
 defined('_VALID_MOS') or die('Direct Access to this location is not allowed.');
-global $fbConfig,$mosConfig_live_site;
+$fbConfig = FBJConfig::getInstance();
+$mosConfig_live_site = FBJConfig::getCfg('live_site');
 $htmlText = stripslashes($htmlText);
 include_once(JB_ABSSOURCESPATH . 'fb_bb.js.php');
 ?>
@@ -42,7 +43,7 @@ include_once(JB_ABSSOURCESPATH . 'fb_bb.js.php');
                 <strong><?php echo _GEN_NAME; ?></strong>:
             </td>
             <?php
-            if (($fbConfig['regonly'] == "1" || $fbConfig['changename'] == '0') && $my_id != "" && !$is_moderator) {
+            if (($fbConfig->regonly == "1" || $fbConfig->changename == '0') && $my_id != "" && !$is_moderator) {
                 echo "<td><input type=\"hidden\" name=\"fb_authorname\" size=\"35\" class=\"" . $boardclass . "inputbox postinput\"  maxlength=\"35\" value=\"$authorName\" /><b>$authorName</b></td>";
             }
             else
@@ -60,9 +61,9 @@ include_once(JB_ABSSOURCESPATH . 'fb_bb.js.php');
             ?>
         </tr>
         <?php
-        if ($fbConfig['askemail'])
+        if ($fbConfig->askemail)
         {
-            if (($fbConfig['regonly'] == "1" || $fbConfig['changename'] == '0') && $my_id != "" && !$is_moderator) {
+            if (($fbConfig->regonly == "1" || $fbConfig->changename == '0') && $my_id != "" && !$is_moderator) {
                 echo "<tr><td class=\"fb_leftcolumn\"><strong>"
                          . _GEN_EMAIL . "*</strong>:</td><td><input type=\"hidden\" name=\"email\" size=\"35\" class=\"" . $boardclass . "inputbox postinput\" maxlength=\"35\" value=\"$my_email\" />$my_email</td></tr>";
             }
@@ -90,7 +91,7 @@ include_once(JB_ABSSOURCESPATH . 'fb_bb.js.php');
                     <strong><?php echo _GEN_SUBJECT; ?></strong>:
                 </td>
                 <td>
-                    <input type = "text" class = "<?php echo $boardclass; ?>inputbox postinput" name = "subject" size = "35" maxlength = "<?php echo $fbConfig['maxSubject'];?>" value = "<?php echo $resubject;?>"/>
+                    <input type = "text" class = "<?php echo $boardclass; ?>inputbox postinput" name = "subject" size = "35" maxlength = "<?php echo $fbConfig->maxSubject;?>" value = "<?php echo $resubject;?>"/>
                 </td>
             <?php
             }
@@ -101,7 +102,7 @@ include_once(JB_ABSSOURCESPATH . 'fb_bb.js.php');
                     <strong><?php echo _GEN_SUBJECT; ?></strong>:
                 </td>
                 <td>
-                    <input type = "hidden" class = "inputbox" name = "subject" size = "35" maxlength = "<?php echo $fbConfig['maxSubject'];?>" value = "<?php echo $resubject;?>"/><?php echo $resubject; ?>
+                    <input type = "hidden" class = "inputbox" name = "subject" size = "35" maxlength = "<?php echo $fbConfig->maxSubject;?>" value = "<?php echo $resubject;?>"/><?php echo $resubject; ?>
                 </td>
             <?php
             }
@@ -118,14 +119,14 @@ include_once(JB_ABSSOURCESPATH . 'fb_bb.js.php');
             </td>
             <td class = "fb-topicicons">
                 <?php
-                $topicToolbar = smile::topicToolbar(9, $fbConfig['rtewidth']);
+                $topicToolbar = smile::topicToolbar(9, $fbConfig->rtewidth);
                 echo $topicToolbar;
                 ?>
             </td>
         </tr>
         <?php
 /////////////////////////////////// adeptus polls
-if ($fbConfig['polls'] == 1)
+if ($fbConfig->polls == 1)
 {?>
 	<tr>
 		<td colspan="2" style="border-left:1px solid #CCC; border-right:1px solid #CCC;">&nbsp;
@@ -137,7 +138,7 @@ if ($fbConfig['polls'] == 1)
 			<strong><?php echo _FB_POLL_QUESTION;?></strong>:
 		</td>
 		<td class = "fb-topicicons" style="border-right:1px solid #CCC;">
-			&nbsp;<input type= "text" name= "poll"  class = "<?php echo $boardclass;?>inputbox postinput" size= "35" maxlength = "<?php echo $fbConfig['maxSubject'];?>" value="" style="background-color:#FFFFDD"/>
+			&nbsp;<input type= "text" name= "poll"  class = "<?php echo $boardclass;?>inputbox postinput" size= "35" maxlength = "<?php echo $fbConfig->maxSubject;?>" value="" style="background-color:#FFFFDD"/>
 		</td>
 	</tr>
 	<tr>
@@ -145,11 +146,11 @@ if ($fbConfig['polls'] == 1)
 			<strong><?php echo _FB_POLL_VARS;?></strong>:
 		</td>
 		<td align="center" style="font-size:10px; color:#333333; border-right:1px solid #CCC;">
-			<?php echo _FB_POLL_MAX_DESC1.$fbConfig['pollmax'].'.&nbsp;&nbsp;'._FB_POLL_MAX_DESC2;?>
+			<?php echo _FB_POLL_MAX_DESC1.$fbConfig->pollmax.'.&nbsp;&nbsp;'._FB_POLL_MAX_DESC2;?>
 		</td>
 	</tr>
 	<?php
-	$i = $fbConfig['pollmax'];
+	$i = $fbConfig->pollmax;
 	if ($i > 5)
 	{
 	$i = 5;
@@ -161,7 +162,7 @@ if ($fbConfig['polls'] == 1)
 			<?php echo _FB_VARIANT.'&nbsp;'.$z.'&nbsp;';?>
 		</td>
 		<td align="left" style="border-right:1px solid #CCC;">
-			&nbsp;<input type = "text" class = "<?php echo $boardclass;?>inputbox postinput" name = "pollvar<?php echo $z;?>" size = "100" maxlength = "<?php echo $fbConfig['maxSubject'];?>" value="" style="background-color:#E0FCFB"/><br />
+			&nbsp;<input type = "text" class = "<?php echo $boardclass;?>inputbox postinput" name = "pollvar<?php echo $z;?>" size = "100" maxlength = "<?php echo $fbConfig->maxSubject;?>" value="" style="background-color:#E0FCFB"/><br />
 		</td>
 	</tr>
 	<?php
@@ -174,18 +175,18 @@ if ($fbConfig['polls'] == 1)
 	<?php
 }
 /////////////////////////////////// adeptus polls 
-        if (!$fbConfig['rte']) {
+        if (!$fbConfig->rte) {
             $useRte = 0;
         }
         else {
             $useRte = 1;
         }
-        $fbTextArea = smile::fbWriteTextarea('message', $htmlText, $fbConfig['rtewidth'], $fbConfig['rteheight'], $useRte, $fbConfig['disemoticons']);
+        $fbTextArea = smile::fbWriteTextarea('message', $htmlText, $fbConfig->rtewidth, $fbConfig->rteheight, $useRte, $fbConfig->disemoticons);
         echo $fbTextArea;
         if ($setFocus == 0) {
             echo "<script type=\"text/javascript\">document.postform.message.focus();</script>";
         }
-        if ($fbConfig['allowsubscriptions'] == 1)
+        if ($fbConfig->allowsubscriptions == 1)
         {
             if ($replyto == 0) {
                 $fb_thread = -1;
@@ -217,7 +218,7 @@ if ($fbConfig['polls'] == 1)
         </tr>
 <!-- /preview -->
 <?php
-        if (($fbConfig['allowImageUpload'] || ($fbConfig['allowImageRegUpload'] && $my->id != 0) || $is_moderator) && ($no_upload == "0" || $no_image_upload == "0"))
+        if (($fbConfig->allowImageUpload || ($fbConfig->allowImageRegUpload && $my->id != 0) || $is_moderator) && ($no_upload == "0" || $no_image_upload == "0"))
         {
         ?>
             <tr class = "<?php echo $boardclass; ?>sectiontableentry1">
@@ -231,7 +232,7 @@ if ($fbConfig['polls'] == 1)
             </tr>
         <?php
         }
-        if (($fbConfig['allowFileUpload'] || ($fbConfig['allowFileRegUpload'] && $my->id != 0) || $is_moderator) && ($no_upload == "0" || $no_file_upload == "0"))
+        if (($fbConfig->allowFileUpload || ($fbConfig->allowFileRegUpload && $my->id != 0) || $is_moderator) && ($no_upload == "0" || $no_file_upload == "0"))
         {
         ?>
             <tr class = "<?php echo $boardclass; ?>sectiontableentry2">
@@ -245,7 +246,7 @@ if ($fbConfig['polls'] == 1)
             </tr>
         <?php
         }
-        if ($my_id != 0 && $fbConfig['allowsubscriptions'] == 1 && $fb_cansubscribe == 1 && !$editmode)
+        if ($my_id != 0 && $fbConfig->allowsubscriptions == 1 && $fb_cansubscribe == 1 && !$editmode)
         {
         ?>
             <tr class = "<?php echo $boardclass; ?>sectiontableentry1">
@@ -254,7 +255,7 @@ if ($fbConfig['polls'] == 1)
                 </td>
                 <td>
                     <?php
-                    if ($fbConfig['subscriptionschecked'] == 1)
+                    if ($fbConfig->subscriptionschecked == 1)
                     {
                     ?>
                             <input type = "checkbox" name = "subscribeMe" value = "1" checked/>
@@ -273,7 +274,7 @@ if ($fbConfig['polls'] == 1)
             </tr>
         <?php
         }
-		if ($fbConfig['captcha'] == 1 && $my->id < 1) { ?>
+		if ($fbConfig->captcha == 1 && $my->id < 1) { ?>
         <tr class = "<?php echo $boardclass; ?>sectiontableentry1">
             <td class = "fb_leftcolumn">&nbsp;<strong><?php echo _FB_CAPDESC; ?></strong>&nbsp;</td>
             <td align="left" valign="middle" height="35px">&nbsp;<input name="txtNumber" type="text" id="txtNumber" value="" class="button" style="vertical-align:top" size="15">          
@@ -304,8 +305,8 @@ if ($fbConfig['polls'] == 1)
 <tr>
     <td>
         <?php
-        if ($fbConfig['askemail']) {
-            echo $fbConfig['showemail'] == '0' ? "<em>* - " . _POST_EMAIL_NEVER . "</em>" : "<em>* - " . _POST_EMAIL_REGISTERED . "</em>";
+        if ($fbConfig->askemail) {
+            echo $fbConfig->showemail == '0' ? "<em>* - " . _POST_EMAIL_NEVER . "</em>" : "<em>* - " . _POST_EMAIL_REGISTERED . "</em>";
         }
         ?>
     </td>
@@ -315,7 +316,7 @@ if ($fbConfig['polls'] == 1)
         <br/>
     <?php
     $no_upload = "0"; //reset the value.. you just never know..
-    if ($fbConfig['showHistory'] == 1) {
+    if ($fbConfig->showHistory == 1) {
         listThreadHistory($replyto, $fbConfig, $database);
     }
 ?>
