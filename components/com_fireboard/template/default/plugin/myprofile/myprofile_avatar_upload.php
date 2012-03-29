@@ -289,7 +289,6 @@ if($do == 'init'){
 		$dst_img = imagecreatetruecolor($fbConfig->avatarSmallWidth, $fbConfig->avatarSmallHeight);
 		imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $fbConfig->avatarSmallWidth, (int)$fbConfig->avatarSmallHeight, $srcWidth, $srcHeight);
 		imagejpeg($dst_img, $fileLocation_s, $fbConfig->avatarQuality);
-		;
 		imagedestroy($dst_img);
 	} else{
 		if($moved){

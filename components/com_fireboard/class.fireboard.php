@@ -137,28 +137,6 @@ function FB_fmodReplace($x, $y){
 	return $x - $i * $y;
 }
 
-function FB_check_image_type($type){
-	switch($type){
-		case 'jpeg':
-		case 'pjpeg':
-		case 'jpg':
-		case 'JPEG':
-		case 'PJPEG':
-		case 'JPG':
-			return '.jpg';
-			break;
-		case 'gif':
-		case 'GIF':
-			return '.gif';
-			break;
-		case 'png':
-		case 'PNG':
-			return '.png';
-			break;
-	}
-	return false;
-}
-
 function getFBGroupName($id){
 	$database = FBJConfig::database();
 	$gr = '';
