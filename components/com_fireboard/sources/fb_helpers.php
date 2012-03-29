@@ -38,7 +38,7 @@ function fbAssertOrGoTo($predicate, $msg, $url){
 	if(!$predicate){
 		$msg = fbJsEscape($msg);
 		$url = sefRelToAbs($url);
-		echo "<script> alert('$msg'); window.location=$url'; </script>\n";
+		echo "<script> alert('$msg'); window.location=".$url."'; </script>\n";
 	}
 }
 
