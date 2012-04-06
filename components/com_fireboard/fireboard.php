@@ -136,14 +136,16 @@ if($func == "getpreview"){
 	die();
 }
 ///////////////////////////////////// 
-$mainframe->addCustomHeadTag('<script type="text/javascript" src="' . JB_JQURL . '"></script>');
-$mainframe->addCustomHeadTag('<script type="text/javascript" src="' . JB_JLIVEURL . '/components/com_fireboard/facebox/facebox.js"></script>');
-$mainframe->addCustomHeadTag('<script type="text/javascript" src="' . JB_JLIVEURL . '/components/com_fireboard/template/default/js/modal.js"></script>');
-$mainframe->addCustomHeadTag('<script type="text/javascript" src="' . JB_JLIVEURL . '/components/com_fireboard/template/default/js/dimensions.js"></script>');
-$mainframe->addCustomHeadTag('<script type="text/javascript" src="' . JB_JLIVEURL . '/components/com_fireboard/template/default/js/hint.js"></script>');
-$mainframe->addCustomHeadTag('<script type="text/javascript">var $j = jQuery.noConflict(); $j(document).ready(function($) { $j(\'a[rel*=facebox]\').facebox();})</script>');
+$mainframe->addJS(JPATH_SITE . '/components/com_fireboard/template/default/js/modal.js');
+$mainframe->addJS(JPATH_SITE . '/components/com_fireboard/template/default/js/dimensions.js');
+$mainframe->addJS(JPATH_SITE . '/components/com_fireboard/template/default/js/hint.js');
+
+echo mosCommonHTML::loadJqueryPlugins('fancybox/jquery.fancybox', true, true);
+$mainframe->addCustomFooterTag('<script type="text/javascript">$(function(){$("a[rel*=fancybox]").fancybox();})</script>');
+
 $mainframe->addCustomHeadTag('<script type="text/javascript">jr_expandImg_url = "' . JB_URLIMAGESPATH . '";</script>');
 $mainframe->addCustomHeadTag('<script type="text/javascript" src="' . JB_COREJSURL . '"></script>');
+
 if($fbConfig->joomlaStyle < 1){
 	$mainframe->addCustomHeadTag('<link type="text/css" rel="stylesheet" href="' . JB_TMPLTCSSURL . '" />');
 } else{

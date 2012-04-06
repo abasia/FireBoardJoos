@@ -121,11 +121,7 @@ define('JB_URLGRAPHPATH', JB_URLIMAGESPATH . 'graph/');
 define('JB_URLRANKSPATH', JB_URLIMAGESPATH . 'ranks/');
 // url ranks path
 define('JB_URLCATIMAGES', FB_LIVEUPLOADEDPATH . '/' . $fbConfig->CatImagePath);
-if(file_exists(JB_ABSTMPLTPATH . '/js/jquery-latest.pack.js')){
-	define('JB_JQURL', JB_DIRECTURL . '/template/' . $fb_cur_template . '/js/jquery-latest.pack.js');
-} else{
-	define('JB_JQURL', JB_DIRECTURL . '/template/default/js/jquery-latest.pack.js');
-}
+
 if(file_exists(JB_ABSTMPLTPATH . '/js/bojForumCore.js')){
 	define('JB_COREJSURL', JB_DIRECTURL . '/template/' . $fb_cur_template . '/js/bojForumCore.js');
 } else{

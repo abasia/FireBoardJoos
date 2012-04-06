@@ -1,23 +1,23 @@
-var $j = jQuery.noConflict();
-$j.extend({
+//var $jj = jQuery.noConflict();
+$.extend({
 	ImpromptuDefaults: { prefix:'jqi', buttons:{ Ok:true }, loaded:function(){}, submit:function(){return true;}, callback:function(){}, opacity:0.6, zIndex: 999, overlayspeed:'slow', promptspeed:'fast', show:'show', focus:0, useiframe:false },
 	SetImpromptuDefaults: function(o){ 
-		$j.ImpromptuDefaults = $j.extend({},$j.ImpromptuDefaults,o);
+		$.ImpromptuDefaults = $.extend({},$.ImpromptuDefaults,o);
 	},
 	prompt: function(m,o){
-		o = $j.extend({},$j.ImpromptuDefaults,o);
-		var ie6 = ($j.browser.msie && $j.browser.version < 7);	
-		var b = $j(document.body);
-		var w = $j(window);
+		o = $.extend({},$.ImpromptuDefaults,o);
+		var ie6 = ($.browser.msie && $.browser.version < 7);
+		var b = $(document.body);
+		var w = $(window);
 		var msgbox = '<div class="'+ o.prefix +'box" id="'+ o.prefix +'box">';		
-		if(o.useiframe && (($j.browser.msie && $j('object, applet').length > 0) || ie6))
+		if(o.useiframe && (($.browser.msie && $('object, applet').length > 0) || ie6))
 			msgbox += '<iframe src="javascript:;" class="'+ o.prefix +'fade" id="'+ o.prefix +'fade"></iframe>';
 		else{ 
-			if(ie6) $j('select').css('visibility','hidden');
+			if(ie6) $('select').css('visibility','hidden');
 			msgbox +='<div class="'+ o.prefix +'fade" id="'+ o.prefix +'fade"></div>';
 		}	
 		msgbox += '<div class="'+ o.prefix +'" id="'+ o.prefix +'"><div class="'+ o.prefix +'container"><div class="'+ o.prefix +'close"></div><div class="'+ o.prefix +'message">'+ m +'</div><div class="'+ o.prefix +'buttons" id="'+ o.prefix +'buttons">';
-		$j.each(o.buttons,function(k,v){ msgbox += '<button name="'+ o.prefix +'button'+ k +'" id="'+ o.prefix +'button'+ k +'" value="'+ v +'">'+ k +'</button>'}) ;
+		$.each(o.buttons,function(k,v){ msgbox += '<button name="'+ o.prefix +'button'+ k +'" id="'+ o.prefix +'button'+ k +'" value="'+ v +'">'+ k +'</button>'}) ;
 		msgbox += '</div></div></div></div>';
 		var jqib =b.append(msgbox).children('#'+ o.prefix +'box');
 		var jqi = jqib.children('#'+ o.prefix);
@@ -71,14 +71,14 @@ $j.extend({
 				if(callCallback) o.callback(clicked,msg);
 				jqib.unbind('keypress',escapeKeyClosePrompt);
 				jqib.remove();
-				if(ie6 && !o.useiframe) $j('select').css('visibility','visible');
+				if(ie6 && !o.useiframe) $('select').css('visibility','visible');
 			});
 		}
 		positionPrompt();
 		stylePrompt();	
-		$j('#'+ o.prefix +'buttons').children('button').click(function(){ 
+		$('#'+ o.prefix +'buttons').children('button').click(function($){
 			var msg = jqi.children('.'+ o.prefix +'container').children('.'+ o.prefix +'message');
-			var clicked = o.buttons[$j(this).text()];	
+			var clicked = o.buttons[$(this).text()];
 			if(o.submit(clicked,msg))				
 				removePrompt(true,clicked,msg);
 		});

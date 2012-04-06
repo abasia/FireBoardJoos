@@ -16,6 +16,9 @@
  *
  **/
 defined('_VALID_MOS') or die('Direct Access to this location is not allowed.');
+echo mosCommonHTML::loadJqueryPlugins('fancybox/jquery.fancybox', true, true);
+$mainframe = mosMainFrame::getInstance();
+$mainframe->addJS(JPATH_SITE . '/includes/js/jquery/jquery.js');
 class HTML_SIMPLEBOARD{
 	function showFbHeader(){
 		error_reporting(E_ERROR);
@@ -118,192 +121,116 @@ class HTML_SIMPLEBOARD{
 		#fbcongifcover fieldset legend {
 			color: #666;
 		}
-
-			/*facebox*/
-		#facebox .b {
-			background: url(<?php echo JPATH_SITE; ?>/components/com_fireboard/template/default/images/b.png);
-		}
-
-		#facebox .tl {
-			background: url(<?php echo JPATH_SITE;?>/components/com_fireboard/template/default/images/tl.png);
-		}
-
-		#facebox .tr {
-			background: url(<?php echo JPATH_SITE;?>/components/com_fireboard/template/default/images/tr.png);
-		}
-
-		#facebox .bl {
-			background: url(<?php echo JPATH_SITE;?>/components/com_fireboard/template/default/images/bl.png);
-		}
-
-		#facebox .br {
-			background: url(<?php echo JPATH_SITE; ?>/components/com_fireboard/template/default/images/br.png);
-		}
-
-		#facebox {
-			position: absolute;
-			width: 100%;
-			top: 0;
-			left: 0;
-			z-index: 100;
-			text-align: left;
-		}
-
-		#facebox .popup {
-			position: relative;
-		}
-
-		#facebox table {
-			margin: auto;
-			border-collapse: collapse;
-		}
-
-		#facebox .body {
-			padding: 10px;
-			background: #fff;
-			width: 370px;
-		}
-
-		#facebox .loading {
-			text-align: center;
-		}
-
-		#facebox .image {
-			text-align: center;
-		}
-
-		#facebox img {
-			border: 0;
-		}
-
-		#facebox .footer {
-			border-top: 1px solid #DDDDDD;
-			padding-top: 5px;
-			margin-top: 10px;
-			text-align: right;
-		}
-
-		#facebox .tl, #facebox .tr, #facebox .bl, #facebox .br {
-			height: 10px;
-			width: 10px;
-			overflow: hidden;
-			padding: 0;
-		}
 	</style>
-	<script type="text/javascript"
-			src="<?php echo JPATH_SITE; ?>/components/com_fireboard/template/default/js/jquery-latest.pack.js"></script>
-	<script type="text/javascript"
-			src="<?php echo JPATH_SITE; ?>/components/com_fireboard/facebox/facebox.js"></script>
 	<script type="text/javascript"
 			src="<?php echo JPATH_SITE; ?>/components/com_fireboard/template/default/js/ipe.js"></script>
 	<script>
-		var $j = jQuery.noConflict();
-		$j(document).ready(function () {
-			$j("#toggler_left").click(function () {
-				$j(".togg1").slideToggle("slow");
+		$(document).ready(function () {
+			$("#toggler_left").click(function () {
+				$(".togg1").slideToggle("slow");
 			});
-			$j("#toggler_stat").click(function () {
-				$j(".fbstatscover").slideToggle("slow");
+			$("#toggler_stat").click(function () {
+				$(".fbstatscover").slideToggle("slow");
 			});
-			$j(".fbstatscover").hide();
+			$(".fbstatscover").hide();
 ///////////////////////////////////////////////////
-			$j("#exp_all").click(function () {
-				$j(".togg_basic").show();
-				$j(".togg_frontend").show();
-				$j(".togg_myuser").show();
-				$j(".togg_max").show();
-				$j(".togg_security").show();
-				$j(".togg_avatars").show();
-				$j(".togg_uploads").show();
-				$j(".togg_files").show();
-				$j(".togg_ranking").show();
-				$j(".togg_integration").show();
-				$j(".togg_plugins").show();
-				$j(".togg_resent").show();
-				$j(".togg_stats").show();
+			$("#exp_all").click(function () {
+				$(".togg_basic").show();
+				$(".togg_frontend").show();
+				$(".togg_myuser").show();
+				$(".togg_max").show();
+				$(".togg_security").show();
+				$(".togg_avatars").show();
+				$(".togg_uploads").show();
+				$(".togg_files").show();
+				$(".togg_ranking").show();
+				$(".togg_integration").show();
+				$(".togg_plugins").show();
+				$(".togg_resent").show();
+				$(".togg_stats").show();
 			});
-			$j("#hide_all").click(function () {
-				$j(".togg_basic").hide();
-				$j(".togg_frontend").hide();
-				$j(".togg_myuser").hide();
-				$j(".togg_max").hide();
-				$j(".togg_security").hide();
-				$j(".togg_avatars").hide();
-				$j(".togg_uploads").hide();
-				$j(".togg_files").hide();
-				$j(".togg_ranking").hide();
-				$j(".togg_integration").hide();
-				$j(".togg_plugins").hide();
-				$j(".togg_resent").hide();
-				$j(".togg_stats").hide();
+			$("#hide_all").click(function () {
+				$(".togg_basic").hide();
+				$(".togg_frontend").hide();
+				$(".togg_myuser").hide();
+				$(".togg_max").hide();
+				$(".togg_security").hide();
+				$(".togg_avatars").hide();
+				$(".togg_uploads").hide();
+				$(".togg_files").hide();
+				$(".togg_ranking").hide();
+				$(".togg_integration").hide();
+				$(".togg_plugins").hide();
+				$(".togg_resent").hide();
+				$(".togg_stats").hide();
 			});
 
-			$j("#basics").click(function () {
-				$j(".togg_basic").slideToggle("slow");
+			$("#basics").click(function () {
+				$(".togg_basic").slideToggle("slow");
 			});
-			$j(".togg_basic").hide();
+			$(".togg_basic").hide();
 
-			$j("#frontend").click(function () {
-				$j(".togg_frontend").slideToggle("slow");
+			$("#frontend").click(function () {
+				$(".togg_frontend").slideToggle("slow");
 			});
-			$j(".togg_frontend").hide();
+			$(".togg_frontend").hide();
 
-			$j("#myuser").click(function () {
-				$j(".togg_myuser").slideToggle("slow");
+			$("#myuser").click(function () {
+				$(".togg_myuser").slideToggle("slow");
 			});
-			$j(".togg_myuser").hide();
+			$(".togg_myuser").hide();
 
-			$j("#max").click(function () {
-				$j(".togg_max").slideToggle("slow");
+			$("#max").click(function () {
+				$(".togg_max").slideToggle("slow");
 			});
-			$j(".togg_max").hide();
+			$(".togg_max").hide();
 
-			$j("#security").click(function () {
-				$j(".togg_security").slideToggle("slow");
+			$("#security").click(function () {
+				$(".togg_security").slideToggle("slow");
 			});
-			$j(".togg_security").hide();
+			$(".togg_security").hide();
 
-			$j("#avatars").click(function () {
-				$j(".togg_avatars").slideToggle("slow");
+			$("#avatars").click(function () {
+				$(".togg_avatars").slideToggle("slow");
 			});
-			$j(".togg_avatars").hide();
+			$(".togg_avatars").hide();
 
-			$j("#uploads").click(function () {
-				$j(".togg_uploads").slideToggle("slow");
+			$("#uploads").click(function () {
+				$(".togg_uploads").slideToggle("slow");
 			});
-			$j(".togg_uploads").hide();
+			$(".togg_uploads").hide();
 
-			$j("#files").click(function () {
-				$j(".togg_files").slideToggle("slow");
+			$("#files").click(function () {
+				$(".togg_files").slideToggle("slow");
 			});
-			$j(".togg_files").hide();
+			$(".togg_files").hide();
 
-			$j("#ranking").click(function () {
-				$j(".togg_ranking").slideToggle("slow");
+			$("#ranking").click(function () {
+				$(".togg_ranking").slideToggle("slow");
 			});
-			$j(".togg_ranking").hide();
+			$(".togg_ranking").hide();
 
-			$j("#integration").click(function () {
-				$j(".togg_integration").slideToggle("slow");
+			$("#integration").click(function () {
+				$(".togg_integration").slideToggle("slow");
 			});
-			$j(".togg_integration").hide();
+			$(".togg_integration").hide();
 
-			$j("#plugins").click(function () {
-				$j(".togg_plugins").slideToggle("slow");
+			$("#plugins").click(function () {
+				$(".togg_plugins").slideToggle("slow");
 			});
-			$j(".togg_plugins").hide();
+			$(".togg_plugins").hide();
 
-			$j("#resent").click(function () {
-				$j(".togg_resent").slideToggle("slow");
+			$("#resent").click(function () {
+				$(".togg_resent").slideToggle("slow");
 			});
-			$j(".togg_resent").hide();
+			$(".togg_resent").hide();
 
-			$j("#stats").click(function () {
-				$j(".togg_stats").slideToggle("slow");
+			$("#stats").click(function () {
+				$(".togg_stats").slideToggle("slow");
 			});
-			$j(".togg_stats").hide();
+			$(".togg_stats").hide();
 			////////////////////////////////////////
-			$j('a[rel*=facebox]').facebox();
+			$('a[rel*=fancybox]').fancybox();
 		});
 	</script>
 <div id="fbadmin">
@@ -1813,7 +1740,7 @@ class HTML_SIMPLEBOARD{
 						<br/>
 						<br/>
 						<a href="<?php echo JPATH_SITE;?>/administrator/components/com_fireboard/fireboard_mosbot_help.php"
-						   rel="facebox">
+						   rel="fancybox">
 							<?php echo _COM_A_BOT_REFERENCE;?>
 						</a>
 					</td>
@@ -2961,7 +2888,7 @@ class HTML_SIMPLEBOARD{
 			echo $mesid == '' ? '<td>' : '<td>';
 			//echo $liveuploaded_path;
 			echo '<table style="border: 1px solid #ccc;"><tr><td height="90" width="130" align="center">';
-			echo $type ? '<center><a href="' . $liveuploaded_path . $uploaded[$i] . '" rel="facebox" title="' . _COM_A_IMGB_ENLARGE . '" alt="' . _COM_A_IMGB_ENLARGE . '">
+			echo $type ? '<center><a href="' . $liveuploaded_path . $uploaded[$i] . '" rel="fancybox" title="' . _COM_A_IMGB_ENLARGE . '" alt="' . _COM_A_IMGB_ENLARGE . '">
 				<img src="' . $liveuploaded_path . $uploaded[$i] . '" width="80px" border="0"></a></center>' : '<center><a href="' . $liveuploaded_path . $uploaded[$i] . '" title="' . _COM_A_IMGB_DOWNLOAD . '" alt="' . _COM_A_IMGB_DOWNLOAD . '">
 				<img src="/administrator/components/com_fireboard/images/fbfile.png" border="0"></a></center>';
 			echo '</td></tr><tr><td align="middle">';

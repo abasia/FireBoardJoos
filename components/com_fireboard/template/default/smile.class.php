@@ -424,7 +424,7 @@ class smile{
 			$c = 0;
 			if(strtolower(substr($words[$i], 0, 7)) == 'http://'){
 				$c = 1;
-				$word = '<a href=\"' . $words[$i] . '\" rel=\"facebox\">' . $word . '</a>';
+				$word = '<a href=\"' . $words[$i] . '\" rel=\"fancybox\">' . $word . '</a>';
 			} elseif(strtolower(substr($words[$i], 0, 8)) == 'https://'){
 				$c = 1;
 				$word = '<a href=\"' . $words[$i] . '\" target=\"_new\">' . $word . '</a>';

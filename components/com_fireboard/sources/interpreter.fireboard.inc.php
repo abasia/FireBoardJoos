@@ -297,7 +297,7 @@ class FireBoardBBCodeInterpreter extends BBCodeInterpreter{
 											((isset($tag->options['size']))?'" width="'.htmlspecialchars($tag->options['size']):'').
 											'" border="0" style="max-width:'.(int)$GLOBALS['fbConfig']['rtewidth'].'px;" /></a>';*/
 					$tag_new = '<br/>
-						<a href="' . $between . '" rel="facebox"><img src="' . $between . '" width="100px"/></a>';
+						<a href="' . $between . '" rel="fancybox"><img src="' . $between . '" width="100px"/></a>';
 					return TAGPARSER_RET_REPLACED;
 				}
 				return TAGPARSER_RET_NOTHING;

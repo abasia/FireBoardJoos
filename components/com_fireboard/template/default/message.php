@@ -244,7 +244,7 @@ $database->loadObject($user);
 										if($fbConfig->mfu_max_img == 0 OR $fbConfig->mfu_max_img == NULL OR $fbConfig->mfu_max_img == '') $fbConfig->mfu_max_img = 100;
 										if($max > $fbConfig->mfu_max_img) $max = $fbConfig->mfu_max_img;
 							?>
-										<a href="<?php echo $mydirrel.'/'.$myfile;?>" rel="facebox" title="">
+										<a href="<?php echo $mydirrel.'/'.$myfile;?>" rel="fancybox" title="">
 											<img src="<?php echo $mydirrel.'/'.$myfile;?>" width="<?php echo $max;?>" alt="" style="margin:5px; border:1px solid #555; vertical-align:top">
 										</a>
 									<?php

@@ -1,5 +1,4 @@
-var $j = jQuery.noConflict();
-$j.fn.editInPlace = function(options) {
+$.fn.editInPlace = function(options) {
 	var settings = {
 		url: "",
 		params: "",
@@ -26,7 +25,7 @@ $j.fn.editInPlace = function(options) {
 		}
 	};
 	if(options) {
-		$j.extend(settings, options);
+		$.extend(settings, options);
 	}
 	if(settings.saving_image != ""){
 		var loading_image = new Image();
@@ -43,35 +42,35 @@ $j.fn.editInPlace = function(options) {
 							 .replace(/"/g, "&quot;");
   };
 	return this.each(function(){
-		if($j(this).html() == "") $j(this).html(settings.default_text);
+		if($(this).html() == "") $(this).html(settings.default_text);
 		var editing = false;
-		var original_element = $j(this);
+		var original_element = $(this);
 		var click_count = 0;
-		$j(this)
+		$(this)
 		.mouseover(function(){
-			$j(this).css("background", settings.bg_over);
+			$(this).css("background", settings.bg_over);
 		})
 		.mouseout(function(){
-			$j(this).css("background", settings.bg_out);
+			$(this).css("background", settings.bg_out);
 		})
 		.click(function(){
 			click_count++;
 			if(!editing)
 			{
 				editing = true;
-				var original_html = $j(this).html();
+				var original_html = $(this).html();
 				var buttons_code  = settings.save_button + ' ' + settings.cancel_button;
-				if (original_html == settings.default_text) $j(this).html('');
+				if (original_html == settings.default_text) $(this).html('');
 				if (settings.field_type == "textarea")
 				{
 					var use_field_type = '<textarea name="inplace_value" class="inplace_field" rows="' + settings.textarea_rows +
-										 '" cols="' + settings.textarea_cols + '">' + $j(this).text().trim().escape_html() +
+										 '" cols="' + settings.textarea_cols + '">' + $(this).text().trim().escape_html() +
 										 '</textarea>';
 				}
 				else if(settings.field_type == "text")
 				{
 					var use_field_type = '<input type="text" name="inplace_value" class="inplace_field" value="' +
-											$j(this).text().trim().escape_html() + '" />';
+											$(this).text().trim().escape_html() + '" />';
 				}
 				else if(settings.field_type == "select")
 				{
@@ -85,12 +84,12 @@ $j.fn.editInPlace = function(options) {
                         }
 						use_field_type += '</select>';
 				}
-				$j(this).html('<form class="inplace_form" style="display: inline; margin: 0; padding: 0;">' + use_field_type + ' ' + buttons_code + '</form>');
+				$(this).html('<form class="inplace_form" style="display: inline; margin: 0; padding: 0;">' + use_field_type + ' ' + buttons_code + '</form>');
 			}
 			if(click_count == 1)
 			{
 				original_element.children("form").children(".inplace_field").focus().select();
-				$j(document).keyup(function(event){
+				$(document).keyup(function(event){
 				    if (event.keyCode == 27) {
 				        editing = false;
 						click_count = 0;
@@ -108,7 +107,7 @@ $j.fn.editInPlace = function(options) {
 				});
 				original_element.children("form").children(".inplace_save").click(function(){
 					original_element.css("background", settings.bg_out);
-					var new_html = $j(this).parent().children(0).val();
+					var new_html = $(this).parent().children(0).val();
 					if(settings.saving_image != ""){
 						var saving_message = '<img src="' + settings.saving_image + '" alt="Ждите..." />';
 					} else {
@@ -134,7 +133,7 @@ $j.fn.editInPlace = function(options) {
 						original_element.html(original_html);
 						alert("Введите значение!");
 					} else {
-						$j.ajax({
+						$.ajax({
 							url: settings.url,
 							type: "POST",
 							data: settings.update_value + '=' + new_html + '&' + settings.element_id + '=' + 

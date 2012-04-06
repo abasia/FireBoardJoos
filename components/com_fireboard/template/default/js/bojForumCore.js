@@ -1,6 +1,5 @@
 /*<![CDATA[*/
-var $j = jQuery.noConflict();
-$j.cookie = function(name, value, options)
+$.cookie = function(name, value, options)
 {
     if (typeof value != 'undefined')
     {
@@ -33,7 +32,7 @@ $j.cookie = function(name, value, options)
             var cookies = document.cookie.split(';');
             for (var i = 0; i < cookies.length; i++)
             {
-                var cookie = $j.trim(cookies[i]);
+                var cookie = $.trim(cookies[i]);
                 if (cookie.substring(0, name.length + 1) == (name + '='))
                 {
                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
@@ -54,48 +53,48 @@ function JRshrinkHeaderMulti(mode, imgId, cid)
     {
         cMod = 1;
     }
-    $j.cookie("upshrink_" + imgId, cMod);
-    $j("#" + imgId).attr("src", window.jr_expandImg_url + (cMod ? "expand.gif" : "shrink.gif"));
+    $.cookie("upshrink_" + imgId, cMod);
+    $("#" + imgId).attr("src", window.jr_expandImg_url + (cMod ? "expand.gif" : "shrink.gif"));
     if (cMod)
     {
-        $j("#" + cid).hide();
+        $("#" + cid).hide();
     }
     else
     {
-        $j("#" + cid).show();
+        $("#" + cid).show();
     }
 }
 function fbGetPreview(content, sitemid) {
     var templatePath = document.postform.templatePath.value;
     var content = escape(content);
-    $j.ajax({url:"index2.php",
+    $.ajax({url:"index2.php",
     data : { msgpreview : content, Itemid : sitemid , option: "com_fireboard" , func: "getpreview" , no_html: 1},
     type: "POST",
     beforeSend : function (req){
-        $j('#previewContainer').show();
-        $j('#previewMsg'). html("<img src='"+templatePath+"/images/preview_loading.gif' />");    
+        $('#previewContainer').show();
+        $('#previewMsg'). html("<img src='"+templatePath+"/images/preview_loading.gif' />");
     },
     success : function (req){
-        $j('#previewMsg'). html(req)
+        $('#previewMsg'). html(req)
         return;
     }
     });
     return false;
 }
-$j(function()
+$(function()
 {
-    $j(".hideshow").click(function()
+    $(".hideshow").click(function()
     {
-        var imgId = $j(this).attr("id");
+        var imgId = $(this).attr("id");
         var cId = imgId.split("__")[1];
-        var cVal = $j.cookie("upshrink_" + imgId);
+        var cVal = $.cookie("upshrink_" + imgId);
         JRshrinkHeaderMulti(cVal, imgId, cId);
     }).each(function()
     {
-        var imgId = $j(this).attr("id");
+        var imgId = $(this).attr("id");
         var cId = imgId.split("__")[1];
 
-        if ($j.cookie("upshrink_" + imgId) == 1)
+        if ($.cookie("upshrink_" + imgId) == 1)
         {
             JRshrinkHeaderMulti(0, imgId, cId);
         }
