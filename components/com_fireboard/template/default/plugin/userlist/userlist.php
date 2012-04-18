@@ -304,7 +304,17 @@ class HTML_userlist_content{
 			$profilelink = sefRelToAbs(FB_PROFILE_LINK_SUFFIX . "" . $ulrow->id);
 			$uslavatar = '';
 			if($fbConfig->avatar_src == "joostina"){
-				$uslavatar = '<img  border="0" class="usl_avatar" src="' . MyPMSTools::getAvatarLinkWithID($ulrow->id, "s") . '" alt="" />';
+				$user = new mosUser($database);
+				$user->load(intval($ulrow->userid));
+				if($user->avatar != ""){
+					if(!file_exists(JPATH_SITE . '/images/avatars/' . $user->avatar)){
+						$msg_avatar = '<span class="fb_avatar"><img src="' . JPATH_SITE . '/images/avatars/' . $user->avatar . '" /></span><br/>';
+					} else{
+						$msg_avatar = '<span class="fb_avatar"><img src="' . JPATH_SITE . '/images/avatars/none.jpg" /></span><br/>';
+					}
+				} else{
+					$msg_avatar = '<span class="fb_avatar"><img src="' . JPATH_SITE . '/images/avatars/none.jpg" /></span><br/>';
+				}
 			}else{
 				$database->setQuery("SELECT avatar FROM #__fb_users WHERE userid='$ulrow->id'");
 				$avatar = $database->loadResult();

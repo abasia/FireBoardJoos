@@ -31,12 +31,7 @@ if($my->id){
 			$fbavatar = $user->avatar;
 			$ordering = $user->ordering;
 			list($avWidth, $avHeight) = @getimagesize($avatar);
-			if($fbConfig->avatar_src == "pmspro"){
-				$database->setQuery("SELECT picture FROM #__mypms_profiles WHERE name='$username'");
-				$avatar = $database->loadResult();
-			}else{
-				$avatar = $fbavatar;
-			}
+			$avatar = $fbavatar;
 		}
 		$database->setQuery("select thread from #__fb_subscriptions where userid=$my->id");
 		$subslist = $database->loadObjectList();

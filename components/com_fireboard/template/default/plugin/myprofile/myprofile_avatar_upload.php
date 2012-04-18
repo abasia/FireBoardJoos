@@ -183,8 +183,7 @@ if($do == 'init'){
 										function switch_avatar_category(gallery) {
 											if (gallery == "")
 												return;
-
-											location.href = "<?php echo JB_LIVEURLREL . '&amp;func=uploadavatar&amp;gallery=';?>" + gallery;
+											location.href = "<?php echo str_replace('&amp;', '&', JB_LIVEURLREL . '&amp;func=uploadavatar&amp;gallery=');?>" + gallery;
 										}
 										//-->
 									</script>
@@ -253,11 +252,11 @@ if($do == 'init'){
 	// имя загружаемого аватара
 	$newFileName = $my->id . "." . $avatarExt;
 	//Filename Medium + proper path
-	$fileLocation = FB_ABSUPLOADEDPATH . DS ."avatars".DS . $newFileName;
+	$fileLocation = FB_ABSUPLOADEDPATH . DS . "avatars" . DS . $newFileName;
 	//Filename Small + proper path
-	$fileLocation_s = FB_ABSUPLOADEDPATH . DS . "avatars".DS."s_".$newFileName;
+	$fileLocation_s = FB_ABSUPLOADEDPATH . DS . "avatars" . DS . "s_" . $newFileName;
 	//Filename Large + proper path
-	$fileLocation_l = FB_ABSUPLOADEDPATH . DS . "avatars".DS."l_" .$newFileName;
+	$fileLocation_l = FB_ABSUPLOADEDPATH . DS . "avatars" . DS . "l_" . $newFileName;
 
 	$maxAvSize = $fbConfig->avatarSize * 1024;
 	if($_FILES['avatar']['size'] > $maxAvSize){
@@ -329,7 +328,7 @@ if($do == 'init'){
 	@chmod($fileLocation_l, 0777);
 	@chmod($fileLocation_s, 0777);
 	$newFileName = FBTools::fbRemoveXSS($newFileName);
-	$database->setQuery("UPDATE #__fb_users SET avatar='".$newFileName."' WHERE userid=".$my->id);
+	$database->setQuery("UPDATE #__fb_users SET avatar='" . $newFileName . "' WHERE userid=" . $my->id);
 	$database->query();
 	echo " <strong>" . _UPLOAD_UPLOADED . "</strong>...<br/><br/>";
 	echo '<a href="' . sefRelToAbs(JB_LIVEURLREL . '&amp;func=myprofile&amp;do=show') . '">' . _GEN_CONTINUE . ".</a>";
@@ -345,7 +344,8 @@ if($do == 'init'){
 	if($newAvatar == ''){
 		mosRedirect(JB_LIVEURL . '&amp;func=uploadavatar', _UPLOAD_ERROR_CHOOSE);
 	}
-	$database->setQuery("UPDATE #__fb_users SET avatar='{$newAvatar}' WHERE userid={$my->id}");
+	$sql = "UPDATE #__fb_users SET avatar='".$newAvatar."' WHERE userid=".$my->id;
+	$database->setQuery($sql);
 	if(!$database->query()){
 		echo _USER_PROFILE_NOT_A . " <strong><span style='color:red'>" . _USER_PROFILE_NOT_B . "</span></strong> " . _USER_PROFILE_NOT_C . ".<br /><br />";
 	} else{

@@ -330,6 +330,7 @@ if($fbConfig->regonly && !$my_id){
 	$obj_FB_tmpl->addVar('jb-header', 'searchbox', getSearchBox());
 	$obj_FB_tmpl->addVar('jb-header', 'pb_imgswitchurl', JB_URLIMAGESPATH . "shrink.gif");
 	$obj_FB_tmpl->displayParsedTemplate('jb-header');
+
 	if(file_exists(JB_ABSTMPLTPATH . '/plugin/profilebox/profilebox.php')){
 		include (JB_ABSTMPLTPATH . '/plugin/profilebox/profilebox.php');
 	} else{

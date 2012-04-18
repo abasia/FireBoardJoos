@@ -30,7 +30,7 @@ $fbConfig = FBJConfig::getInstance();
 						<tr>
 							<th>
 								<div class="fb_title_cover">
-									<span class="fb_title"><?php echo _USER_PROFILE; ?> <?php echo $username; ?></span>
+									<span class="fb_title"><?php echo sprintf(_USER_PROFILE, $username); ?></span>
 								</div>
 							</th>
 						</tr>

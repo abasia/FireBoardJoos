@@ -54,7 +54,15 @@ function showprf($userid){
 	if($fbConfig->allowAvatar){
 		$Avatarname = $userinfo->username;
 		if($fbConfig->avatar_src == "joostina"){
-			$msg_avatar = '<span class="fb_avatar"><img src="' . MyPMSTools::getAvatarLinkWithID($userid, "b") . '" alt="" /></span>';
+			if($userinfo->avatar != ""){
+				if(!file_exists(JPATH_SITE . '/images/avatars/' . $userinfo->avatar)){
+					$msg_avatar = '<span class="fb_avatar"><img src="' . JPATH_SITE . '/images/avatars/' . $userinfo->avatar . '" /></span><br/>';
+				} else{
+					$msg_avatar = '<span class="fb_avatar"><img src="' . JPATH_SITE . '/images/avatars/none.jpg" /></span><br/>';
+				}
+			} else{
+				$msg_avatar = '<span class="fb_avatar"><img src="' . JPATH_SITE . '/images/avatars/none.jpg" /></span><br/>';
+			}
 		}else{
 			$avatar = $userinfo->avatar;
 			if($avatar != ''){

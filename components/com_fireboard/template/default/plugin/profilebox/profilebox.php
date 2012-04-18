@@ -19,29 +19,44 @@ defined('_VALID_MOS') or die('Direct Access to this location is not allowed.');
 $fbConfig = FBJConfig::getInstance();
 $mosConfig_absolute_path = FBJConfig::getCfg('absolute_path');
 $mosConfig_live_site = FBJConfig::getCfg('live_site');
-$database->setQuery("SELECT * FROM #__fb_users as su LEFT JOIN #__users as u on u.id=su.userid WHERE su.userid={$my->id}");
+
+$sql = "SELECT su.*, u.*, u.avatar AS suavatar, su.avatar AS fbavatar
+		FROM #__fb_users AS su
+		LEFT JOIN #__users AS u on u.id=su.userid
+		WHERE su.userid=". $my->id;
+$database->setQuery($sql);
 $database->loadObject($_user);
+
 $prefview = $_user->view;
 $username = $_user->name;
 $moderator = $_user->moderator;
-$fbavatar = $_user->avatar;
 $jr_username = $_user->username;
-$avatar = $fbavatar;
 $jr_avatar = '';
 
 if($fbConfig->avatar_src == "joostina"){
-	$jr_avatar = '<img src="' . MyPMSTools::getAvatarLinkWithID($my->id) . '" alt=" " />';
-	$jr_profilelink = '<a href="' . sefRelToAbs(JB_LIVEURLREL . '&amp;func=myprofile&amp;do=show') . '" >' . _PROFILEBOX_MYPROFILE . '</a>';
+	$avatar = $_user->suavatar;
+	if($avatar != ""){
+		if(!file_exists(JPATH_SITE . '/images/avatars/' . $avatar)){
+			$jr_avatar = '<img src="' . JPATH_SITE . '/images/avatars/' . $avatar . '" alt="" />';
+		} else{
+			$jr_avatar = '<img src="' . JPATH_SITE . '/images/avatars/none.jpg" alt="" />';
+		}
+		$jr_profilelink = '<a href="' . sefRelToAbs(JB_LIVEURLREL . '&amp;func=myprofile&amp;do=show') . '" >' . _PROFILEBOX_MYPROFILE . '</a>';
+	}else{
+		$jr_avatar = '<img src="' . JPATH_SITE . '/images/avatars/none.jpg" alt="" />';
+		$jr_profilelink = '<a href="' . sefRelToAbs(JB_LIVEURLREL . '&amp;func=myprofile&amp;do=show') . '" >' . _PROFILEBOX_MYPROFILE . '</a>';
+	}
 }else{
+	$avatar = $_user->fbavatar;
 	if($avatar != ""){
 		if(!file_exists(FB_ABSUPLOADEDPATH . '/avatars/s_' . $avatar)){
 			$jr_avatar = '<img src="' . FB_LIVEUPLOADEDPATH . '/avatars/' . $avatar . '" alt="" />';
 		} else{
-			$jr_avatar = '<img src="' . FB_LIVEUPLOADEDPATH . '/avatars/s_' . $avatar . '" alt="" />';
+			$jr_avatar = '<img src="' . FB_LIVEUPLOADEDPATH . '/avatars/nophoto.jpg" alt="" />';
 		}
 		$jr_profilelink = '<a href="' . sefRelToAbs(JB_LIVEURLREL . '&amp;func=myprofile&amp;do=show') . '" >' . _PROFILEBOX_MYPROFILE . '</a>';
 	} else{
-		$jr_avatar = '<img src="' . FB_LIVEUPLOADEDPATH . '/avatars/s_nophoto.jpg" alt="" />';
+		$jr_avatar = '<img src="' . FB_LIVEUPLOADEDPATH . '/avatars/nophoto.jpg" alt="" />';
 		$jr_profilelink = '<a href="' . sefRelToAbs(JB_LIVEURLREL . '&amp;func=myprofile&amp;do=show') . '" >' . _PROFILEBOX_MYPROFILE . '</a>';
 	}
 }

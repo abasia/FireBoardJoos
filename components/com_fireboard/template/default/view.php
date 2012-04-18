@@ -361,7 +361,17 @@ if($letPass || $is_Mod){
 				if($fbConfig->allowAvatar){
 					$Avatarname = $userinfo->username;
 					if($fbConfig->avatar_src == "joostina"){
-						$msg_avatar = '<span class="fb_avatar"><img src="' . MyPMSTools::getAvatarLinkWithID($fmessage->userid) . '" /></span><br/>';
+						$user = new mosUser($database);
+						$user->load(intval($userinfo->userid));
+						if($user->avatar != ""){
+							if(!file_exists(JPATH_SITE . '/images/avatars/' . $user->avatar)){
+								$msg_avatar = '<span class="fb_avatar"><img src="' . JPATH_SITE . '/images/avatars/' . $user->avatar . '" /></span><br/>';
+							} else{
+								$msg_avatar = '<span class="fb_avatar"><img src="' . JPATH_SITE . '/images/avatars/none.jpg" /></span><br/>';
+							}
+						} else{
+							$msg_avatar = '<span class="fb_avatar"><img src="' . JPATH_SITE . '/images/avatars/none.jpg" /></span><br/>';
+						}
 					}else{
 						$avatar = $userinfo->avatar;
 						if($avatar != ''){
