@@ -250,7 +250,7 @@ if($letPass || $is_Mod){
 	</table>
 	<!-- /top nav -->
 	<?php //////////////////////////// adept poll
-		if($fbConfig->polls == 1 && $my->id != 0){
+		if($fbConfig->polls == 1){
 			if($poll == 'answer'){
 				$database->setQuery("INSERT INTO #__fb_pollsresults (threadid,answeruserid,answer) VALUES ($thread,$my->id,$myresult)");
 				$database->query();
@@ -262,7 +262,7 @@ if($letPass || $is_Mod){
 				$alredypoll = $database->loadResult();
 				$database->setQuery("SELECT closed FROM #__fb_polls WHERE threadid=$thread");
 				$closed = $database->loadResult();
-				if($alredypoll > 0 OR $closed){
+				if($alredypoll > 0 OR $closed OR $my->id == 0){
 					if(file_exists(JB_ABSTMPLTPATH . '/plugin/polls/pollresults.php')){
 						include_once (JB_ABSTMPLTPATH . '/plugin/polls/pollresults.php');
 					} else{
